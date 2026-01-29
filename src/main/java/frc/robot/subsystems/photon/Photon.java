@@ -44,8 +44,8 @@ public class Photon {
      * @param factory Factory function to create camera implementations
      */
     public Photon(
-        Consumer<VisionMeasurement> onMeasurement,
-        Function<VisionConstants.CameraConfig, CameraIO> factory
+        Function<VisionConstants.CameraConfig, CameraIO> factory,
+        Consumer<VisionMeasurement> onMeasurement
     ) {
         this.onMeasurement = onMeasurement;
         this.cameras = Arrays.stream(CameraConfig.values())

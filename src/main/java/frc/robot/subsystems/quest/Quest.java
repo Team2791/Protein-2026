@@ -89,6 +89,55 @@ public class Quest {
         );
     }
 
+	/**
+	 * Get the estimated heading at a timestamp from the Quest device.
+	 * @param timestamp The timestamp to query
+	 * @return The estimated heading
+	 */
+	public Optional<Rotation2d> headingAt(double timestamp) {
+		// find two closest frames
+		PoseFrame[] frames = this.quest.data.readings;
+		PoseFrame before = null;
+		PoseFrame after = null;
+
+		for (PoseFrame frame : frames) {
+			if (!frame.isTracking()) continue;
+			double ts = frame.dataTimestamp();
+			if (ts <= timestamp) {
+				if (before == null || ts > before.dataTimestamp()) {
+					before = frame;
+				}
+			} else {
+				if (after == null || ts < after.dataTimestamp()) {
+					after = frame;
+				}
+			}
+
+			if (before != null && after != null) break;
+		}
+
+		if (before == null || after == null) return Optional.empty();
+
+		// interpolate between the two frames
+		Rotation2d a = before
+			.questPose3d()
+			.transformBy(kBotToQuest.inverse())
+			.toPose2d()
+			.getRotation();
+			
+		Rotation2d b = after
+			.questPose3d()
+			.transformBy(kBotToQuest.inverse())
+			.toPose2d()
+			.getRotation();
+
+		double t =
+			(timestamp - before.dataTimestamp()) /
+			(after.dataTimestamp() - before.dataTimestamp());
+
+		return Optional.of(a.interpolate(b, t));
+	}
+
     /**
      * Periodic update method called every robot tick.
      *

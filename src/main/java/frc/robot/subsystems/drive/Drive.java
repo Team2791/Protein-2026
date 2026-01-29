@@ -24,16 +24,22 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.subsystems.photon.CameraPhoton;
+import frc.robot.subsystems.photon.CameraReplay;
+import frc.robot.subsystems.photon.Photon;
 import frc.robot.subsystems.quest.Meta3S;
 import frc.robot.subsystems.quest.Quest;
 import frc.robot.subsystems.quest.QuestReplay;
 import frc.robot.util.VisionMeasurement;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -71,7 +77,27 @@ public class Drive extends SubsystemBase {
   );
 
   /** the questnav used for primary vision things */
-  final Quest quest;
+  final Quest quest = new Quest(
+    switch (Constants.currentMode) {
+      case REAL -> new Meta3S();
+      case REPLAY -> new QuestReplay();
+      case SIM -> new QuestReplay();
+    },
+    this::addVisionMeasurement
+  );
+
+  /** vision measurements collected before robot start */
+  final List<VisionMeasurement> calibrators = new ArrayList<>();
+
+  /** photonvision, used to calibrate starting position */
+  final Photon photon = new Photon(
+    switch (Constants.currentMode) {
+      case REAL -> CameraPhoton::new;
+      case REPLAY -> CameraReplay::new;
+      case SIM -> CameraReplay::new;
+    },
+    this.calibrators::add
+  );
 
   public Drive(
     GyroIO gyroIO,
@@ -80,15 +106,6 @@ public class Drive extends SubsystemBase {
     ModuleIO blModuleIO,
     ModuleIO brModuleIO
   ) {
-    this.quest = new Quest(
-      switch (Constants.currentMode) {
-        case REAL -> new Meta3S();
-        case REPLAY -> new QuestReplay();
-        case SIM -> new QuestReplay();
-      },
-      this::addVisionMeasurement
-    );
-
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
@@ -119,6 +136,13 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // Collect updates when disabled; calibrate once enabled.
+    // although calibrate() is called many times, it only acts once
+    // since we clear the calibrators list at the end of the method.
+    if (DriverStation.isDisabled()) photon.update();
+    else calibrate();
+    quest.update();
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
@@ -161,10 +185,15 @@ public class Drive extends SubsystemBase {
         lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
       }
 
+      Optional<Rotation2d> questHeading = quest.headingAt(sampleTimestamps[i]);
+
       // Update gyro angle
       if (gyroInputs.connected) {
         // Use the real gyro angle
         rawGyroRotation = gyroInputs.odometryYawPositions[i];
+      } else if (questHeading.isPresent()) {
+        // Use the Quest heading if available
+        rawGyroRotation = questHeading.get();
       } else {
         // Use the angle delta from the kinematics and module deltas
         Twist2d twist = kinematics.toTwist2d(moduleDeltas);
@@ -313,9 +342,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Adds a new timestamped vision measurement. */
-  public void addVisionMeasurement(
-    VisionMeasurement measurement
-  ) {
+  public void addVisionMeasurement(VisionMeasurement measurement) {
     poseEstimator.addVisionMeasurement(
       measurement.estimate2(),
       measurement.timestamp(),
@@ -326,6 +353,49 @@ public class Drive extends SubsystemBase {
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
     return maxSpeedMetersPerSec;
+  }
+
+  /**
+   * Calibrate the initial pose of the robot
+   *
+   * Photon/AprilTag measurements are recorded and collected while the robot is disabled.
+   * Once enabled, we average the latest few measurements and set our starting pose to that.
+   */
+  private void calibrate() {
+    if (calibrators.isEmpty()) return;
+
+    // Average all calibrator measurements
+    double x = 0;
+    double y = 0;
+    double sin = 0;
+    double cos = 0;
+    int n = 0;
+
+    for (VisionMeasurement vm : calibrators) {
+      double age = Timer.getFPGATimestamp() - vm.timestamp();
+      if (age > 15) continue; // Ignore old measurements
+
+      Pose2d est = vm.estimate2();
+
+      x += est.getX();
+      y += est.getY();
+      sin += est.getRotation().getSin();
+      cos += est.getRotation().getCos();
+      n++;
+    }
+
+    x /= n;
+    y /= n;
+    sin /= n;
+    cos /= n;
+
+    Pose2d avg = new Pose2d(x, y, new Rotation2d(cos, sin));
+
+    // Reset odometry and gyro to the averaged pose
+    this.setPose(avg);
+
+    // Clear calibrators for next use
+    calibrators.clear();
   }
 
   /** Returns the maximum angular speed in radians per sec. */
