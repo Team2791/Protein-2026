@@ -21,67 +21,6 @@ public final class ControlConstants {
 
     private ControlConstants() {}
 
-    /** Gyroscope direction multiplier ({@code -1.0} inverts gyro readings). */
-    public static final double kGyroFactor = -1.0;
-
-    /**
-     * Drive motor velocity control PID constants.
-     *
-     * <p>These gains control the closed-loop velocity regulation for each
-     * swerve module's drive motor.
-     */
-    public static final class ModuleDrive {
-
-        private ModuleDrive() {}
-
-        /** Proportional gain for velocity error. */
-        public static final double kP = 0.004;
-        /** Integral gain for accumulated velocity error. */
-        public static final double kI = 1e-10;
-        /** Derivative gain for velocity error rate of change. */
-        public static final double kD = 0.0002;
-
-        /** Static friction feedforward (volts). TODO: Tune with characterization. */
-        public static final double kS = 0.0;
-        /** Velocity feedforward (volts per meter/second). TODO: Tune with characterization. */
-        public static final double kV = 0.0;
-        /** Acceleration feedforward (volts per meter/second²). TODO: Tune with characterization. */
-        public static final double kA = 0.0;
-
-        /** Minimum motor output (duty cycle). */
-        public static final double kMin = -1.0;
-        /** Maximum motor output (duty cycle). */
-        public static final double kMax = 1.0;
-    }
-
-    /**
-     * Turn motor position control PID constants.
-     *
-     * <p>These gains control the closed-loop position regulation for each
-     * swerve module's steering motor.
-     */
-    public static final class ModuleTurn {
-
-        private ModuleTurn() {}
-
-        /** Proportional gain for angular position error. */
-        public static final double kP = 2.00;
-        /** Integral gain for accumulated angular error. */
-        public static final double kI = 0.00;
-        /** Derivative gain for angular error rate of change. */
-        public static final double kD = 0.00;
-
-        /** Minimum controller output. */
-        public static final double kMinOutput = -1.0;
-        /** Maximum controller output. */
-        public static final double kMaxOutput = 1.0;
-
-        /** Minimum angle for continuous input (radians). */
-        public static final double kMinInput = 0;
-        /** Maximum angle for continuous input (radians, wraps at 2π). */
-        public static final double kMaxInput = kTau;
-    }
-
     /**
      * Autonomous trajectory following PID constants.
      *
@@ -149,7 +88,7 @@ public final class ControlConstants {
      * Slew rate limiters for driver input smoothing.
      *
      * <p>Limits acceleration of joystick commands to prevent abrupt movements
-     * and reduce mechanical stress on the drive.
+     * and reduce mechanical stress on the drivetrain.
      */
     public static final class SlewRateLimit {
 

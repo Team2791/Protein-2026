@@ -35,7 +35,6 @@ public class GameConstants {
      * Red alliance coordinate system origin.
      *
      * <p>Located at the far corner of the field with {@code 180°} rotation.
-     * Used by {@link frc.robot.util.AllianceUtil} for coordinate flipping.
      */
     public static final Pose2d kRedOrigin = new Pose2d(
         kFieldLength,
