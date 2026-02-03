@@ -90,14 +90,14 @@ public class Drive extends SubsystemBase {
   final List<VisionMeasurement> calibrators = new ArrayList<>();
 
   /** photonvision, used to calibrate starting position */
-  final Photon photon = new Photon(
-    switch (Constants.currentMode) {
-      case REAL -> CameraPhoton::new;
-      case REPLAY -> CameraReplay::new;
-      case SIM -> CameraReplay::new;
-    },
-    this.calibrators::add
-  );
+  // final Photon photon = new Photon(
+  // switch (Constants.currentMode) {
+  // case REAL -> CameraPhoton::new;
+  // case REPLAY -> CameraReplay::new;
+  // case SIM -> CameraReplay::new;
+  // },
+  // this.calibrators::add
+  // );
 
   public Drive(
     GyroIO gyroIO,
@@ -139,8 +139,8 @@ public class Drive extends SubsystemBase {
     // Collect updates when disabled; calibrate once enabled.
     // although calibrate() is called many times, it only acts once
     // since we clear the calibrators list at the end of the method.
-    if (DriverStation.isDisabled()) photon.update();
-    else calibrate();
+    // if (DriverStation.isDisabled()) photon.update();
+    // else calibrate();
     quest.update();
 
     odometryLock.lock(); // Prevents odometry updates while reading data
@@ -179,7 +179,7 @@ public class Drive extends SubsystemBase {
           modules[moduleIndex].getOdometryPositions()[i];
         moduleDeltas[moduleIndex] = new SwerveModulePosition(
           modulePositions[moduleIndex].distanceMeters -
-            lastModulePositions[moduleIndex].distanceMeters,
+          lastModulePositions[moduleIndex].distanceMeters,
           modulePositions[moduleIndex].angle
         );
         lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
@@ -256,8 +256,10 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
-   * return to their normal orientations the next time a nonzero velocity is requested.
+   * Stops the drive and turns the modules to an X arrangement to resist movement.
+   * The modules will
+   * return to their normal orientations the next time a nonzero velocity is
+   * requested.
    */
   public void stopWithX() {
     Rotation2d[] headings = new Rotation2d[4];
@@ -282,7 +284,10 @@ public class Drive extends SubsystemBase {
       .andThen(sysId.dynamic(direction));
   }
 
-  /** Returns the module states (turn angles and drive velocities) for all of the modules. */
+  /**
+   * Returns the module states (turn angles and drive velocities) for all of the
+   * modules.
+   */
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -292,7 +297,10 @@ public class Drive extends SubsystemBase {
     return states;
   }
 
-  /** Returns the module positions (turn angles and drive positions) for all of the modules. */
+  /**
+   * Returns the module positions (turn angles and drive positions) for all of the
+   * modules.
+   */
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
@@ -358,8 +366,10 @@ public class Drive extends SubsystemBase {
   /**
    * Calibrate the initial pose of the robot
    *
-   * Photon/AprilTag measurements are recorded and collected while the robot is disabled.
-   * Once enabled, we average the latest few measurements and set our starting pose to that.
+   * Photon/AprilTag measurements are recorded and collected while the robot is
+   * disabled.
+   * Once enabled, we average the latest few measurements and set our starting
+   * pose to that.
    */
   private void calibrate() {
     if (calibrators.isEmpty()) return;
