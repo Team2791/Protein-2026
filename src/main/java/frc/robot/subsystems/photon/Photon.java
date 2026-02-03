@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * Photon vision subsystem for camera-based pose estimation.
@@ -65,18 +66,12 @@ public class Photon {
 
         // Process vision measurements from each camera
         for (CameraIO camera : cameras) {
-            Logger.processInputs(
-                String.format("Camera/%s", camera.config.name),
-                camera.data
-            );
+            String path = String.format("Camera/%s", camera.config.name);
+            Logger.processInputs(path, camera.data);
 
-            VisionMeasurement measurement = camera.data.measurement;
-
-            // Only report valid measurements
-            if (measurement == null) continue;
-
-            // Send measurement to listener (typically drivetrain)
-            onMeasurement.accept(measurement);
+            for (PhotonPipelineResult result : camera.data.results) {
+                this.onMeasurement.accept(camera.measurementOf(result));
+            }
         }
     }
 }

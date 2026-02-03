@@ -46,7 +46,7 @@ public final class VisionConstants {
          * <p>
          * TODO: Define actual {@link Transform3d} from robot center to camera.
          */
-        kCamera("camera", new Transform3d());
+        kCamera("camera", new Transform3d(), false);
 
         /** Camera name for PhotonVision NetworkTables. */
         public final String name;
@@ -54,9 +54,13 @@ public final class VisionConstants {
         /** Transform from robot center to camera (robot coords → camera coords). */
         public final Transform3d bot2cam;
 
-        CameraConfig(String name, Transform3d bot2cam) {
+        /** The camera may be used as a dashboard stream, skipping vision use (AKA: driver mode) */
+        public final boolean passthrough;
+
+        CameraConfig(String name, Transform3d bot2cam, boolean passthrough) {
             this.name = name;
             this.bot2cam = bot2cam;
+            this.passthrough = passthrough;
         }
     }
 

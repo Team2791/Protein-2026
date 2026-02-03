@@ -2,9 +2,7 @@ package frc.robot.subsystems.photon;
 
 import frc.robot.alerter.Alerter;
 import frc.robot.constants.VisionConstants;
-import java.util.List;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * Concrete implementation of {@link CameraIO} for PhotonVision-compatible cameras.
@@ -35,6 +33,7 @@ public class CameraPhoton extends CameraIO {
     public CameraPhoton(VisionConstants.CameraConfig config) {
         super(config);
         camera = new PhotonCamera(config.name);
+        camera.setDriverMode(config.passthrough);
 
         Alerter.getInstance().register(
             String.format("Camera `%s`", config.name()),
@@ -43,23 +42,9 @@ public class CameraPhoton extends CameraIO {
         );
     }
 
-    /**
-     * Gets all unread pipeline results from the camera.
-     *
-     * @return List of all new results since last call
-     */
     @Override
-    protected List<PhotonPipelineResult> results() {
-        return camera.getAllUnreadResults();
-    }
-
-    /**
-     * Sets whether the camera should display driver view or processing view.
-     *
-     * @param enabled true for driver view (camera feed), false for processing (pipeline output)
-     */
-    @Override
-    public void setDriverMode(boolean enabled) {
-        camera.setDriverMode(enabled);
+    public void update() {
+        this.data.connected = camera.isConnected();
+        this.data.results = camera.getAllUnreadResults();
     }
 }

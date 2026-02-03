@@ -3,14 +3,12 @@ package frc.robot.subsystems.photon;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.constants.VisionConstants;
 import frc.robot.util.VisionMeasurement;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
@@ -27,13 +25,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  *   <li>Calculates measurement uncertainty based on number and distance of detected tags
  *   <li>Provides pose measurements to the drivetrain for odometry correction
  * </ul>
- *
- * <p>Subclasses must implement {@link #results()} and {@link #setDriverMode(boolean)} to handle camera-specific operations.
- * Measurement uncertainty is automatically adjusted based on:
- * <ul>
- *   <li>Number of tags detected (single vs multi-tag)
- *   <li>Distance to tags (farther tags = less confidence)
- * </ul>
  */
 public abstract class CameraIO {
 
@@ -43,8 +34,11 @@ public abstract class CameraIO {
 
         CameraData() {}
 
-        /** The current vision measurement, if available. */
-        public VisionMeasurement measurement = null;
+        /** Whether or not the camera is connected */
+        public boolean connected = false;
+
+        /** The current list of photonvision results */
+        public List<PhotonPipelineResult> results = List.of();
     }
 
     /** Logged data from this camera. */
@@ -53,14 +47,8 @@ public abstract class CameraIO {
     /** Configuration for this camera (name, position, etc.). */
     public final VisionConstants.CameraConfig config;
 
-    /** Standard deviations for measurement uncertainty. */
-    private Matrix<N3, N1> stdDevs = VisionConstants.StdDevs.kSingleTag;
-
     /** PhotonVision pose estimator for AprilTag-based localization. */
     private final PhotonPoseEstimator estimator;
-
-    /** Latest pipeline result from the camera. */
-    private PhotonPipelineResult latestResult;
 
     /**
      * Constructs a camera IO instance.
@@ -79,76 +67,32 @@ public abstract class CameraIO {
     }
 
     /**
-     * Gets the latest pipeline results from the camera.
-     *
-     * <p>Implemented by subclasses to handle camera-specific result retrieval
-     * (e.g., USB cameras vs coprocessor cameras).
-     *
-     * @return List of pipeline results since last call
-     */
-    protected abstract List<PhotonPipelineResult> results();
-
-    /**
      * Sets whether the camera should display driver view or processing view.
      *
      * @param enabled true for driver view, which exposes a camera feed
      */
-    public abstract void setDriverMode(boolean enabled);
+    public abstract void update();
 
     /**
-     * Updates the camera and processes vision results.
-     *
-     * <p>This method:
-     * <ul>
-     *   <li>Queries the camera for new pipeline results
-     *   <li>Updates pose estimation with each result
-     *   <li>Calculates measurement uncertainty based on number/distance of tags
-     *   <li>Stores the latest measurement for use by the drivetrain
-     * </ul>
+     * Computes the {@code VisionMeasurement} of a set of results.
      */
-    public void update() {
-        List<PhotonPipelineResult> results = results();
+    public VisionMeasurement measurementOf(PhotonPipelineResult result) {
         Optional<EstimatedRobotPose> estimation = Optional.empty();
 
         // Process all available results
-        for (PhotonPipelineResult result : results) {
-            estimation = estimator.estimateCoprocMultiTagPose(result);
-            updateStdDevs(estimation, result.getTargets());
-        }
+        estimation = estimator.estimateCoprocMultiTagPose(result);
+        Matrix<N3, N1> stdDevs = stdDevsOf(estimation, result.getTargets());
 
         // Store measurement if pose estimation succeeded
-        estimation.ifPresent(estimatedRobotPose -> {
-            data.measurement = new VisionMeasurement(
-                estimatedRobotPose.estimatedPose,
-                stdDevs,
-                estimatedRobotPose.timestampSeconds
-            );
-        });
-        latestResult = results.isEmpty() ? null : results.get(0);
-    }
+        if (estimation.isEmpty()) return null;
 
-    /**
-     * Calculates the distance to the nearest detected AprilTag.
-     *
-     * <p>Used to determine if tags are too far away to be reliable.
-     *
-     * @return Distance in meters, or {@link Double#MAX_VALUE} if no targets visible
-     */
-    double nearestTarget() {
-        if (latestResult == null) return Double.MAX_VALUE;
+        EstimatedRobotPose est = estimation.get();
 
-        OptionalDouble min = latestResult.targets
-            .stream()
-            .mapToDouble(c ->
-                c.bestCameraToTarget
-                    .getTranslation()
-                    .toTranslation2d()
-                    .getDistance(new Translation2d())
-            )
-            .min();
-
-        if (min.isEmpty()) return Double.MAX_VALUE;
-        else return min.getAsDouble();
+        return new VisionMeasurement(
+            est.estimatedPose,
+            stdDevs,
+            est.timestampSeconds
+        );
     }
 
     /**
@@ -165,68 +109,53 @@ public abstract class CameraIO {
      * @param estimation The estimated robot pose, if available
      * @param targets The detected targets used for estimation
      */
-    void updateStdDevs(
+    private final Matrix<N3, N1> stdDevsOf(
         Optional<EstimatedRobotPose> estimation,
         List<PhotonTrackedTarget> targets
     ) {
-        if (estimation.isEmpty()) {
-            stdDevs = VisionConstants.StdDevs.kSingleTag;
-        } else {
-            Matrix<N3, N1> devsEst = VisionConstants.StdDevs.kSingleTag;
-            int numTags = 0;
-            double avgDist = 0;
+        if (estimation.isEmpty()) return VisionConstants.StdDevs.kSingleTag;
 
-            // Calculate average distance to detected tags
-            for (PhotonTrackedTarget target : targets) {
-                Optional<Pose3d> tagPose = estimator
-                    .getFieldTags()
-                    .getTagPose(target.getFiducialId());
-                if (tagPose.isEmpty()) continue;
+        Matrix<N3, N1> devsEst = VisionConstants.StdDevs.kSingleTag;
+        int numTags = 0;
+        double avgDist = 0;
 
-                numTags++;
-                double dist = tagPose
-                    .get()
-                    .toPose2d()
-                    .getTranslation()
-                    .getDistance(
-                        estimation
-                            .get()
-                            .estimatedPose.toPose2d()
-                            .getTranslation()
-                    );
+        // Calculate average distance to detected tags
+        for (PhotonTrackedTarget target : targets) {
+            Optional<Pose3d> tagPose = estimator
+                .getFieldTags()
+                .getTagPose(target.getFiducialId());
 
-                avgDist += dist;
-            }
+            if (tagPose.isEmpty()) continue;
 
-            if (numTags == 0) {
-                // No valid tags detected
-                stdDevs = VisionConstants.StdDevs.kSingleTag;
-            } else {
-                avgDist /= numTags;
-                double untrusted = Double.MAX_VALUE;
-
-                // Use multi-tag strategy if we have multiple tags
-                if (numTags > 1) devsEst = VisionConstants.StdDevs.kMultiTag;
-
-                // Single tag detection at long range is unreliable
-                if (numTags == 1 && avgDist > 4) devsEst = VecBuilder.fill(
-                    untrusted,
-                    untrusted,
-                    untrusted
+            numTags++;
+            double dist = tagPose
+                .get()
+                .toPose2d()
+                .getTranslation()
+                .getDistance(
+                    estimation.get().estimatedPose.toPose2d().getTranslation()
                 );
-                // Scale uncertainty by distance squared
-                else devsEst = devsEst.times(1 + ((avgDist * avgDist) / 30));
-                stdDevs = devsEst;
-            }
-        }
-    }
 
-    /**
-     * Gets the latest result from the camera.
-     *
-     * @return The latest pipeline result, or null if no result is available
-     */
-    public PhotonPipelineResult getLatestResult() {
-        return latestResult;
+            avgDist += dist;
+        }
+
+        if (numTags == 0) {
+            return VisionConstants.StdDevs.kSingleTag;
+        }
+
+        avgDist /= numTags;
+        final double untrusted = Double.MAX_VALUE;
+
+        // Use multi-tag devs if we have multiple tags
+        if (numTags > 1) return VisionConstants.StdDevs.kMultiTag;
+
+        // Single tag detection at long range is unreliable
+        if (numTags == 1 && avgDist > 4) return VecBuilder.fill(
+            untrusted,
+            untrusted,
+            untrusted
+        );
+        // Scale uncertainty by distance squared
+        else return devsEst.times(1 + ((avgDist * avgDist) / 30));
     }
 }

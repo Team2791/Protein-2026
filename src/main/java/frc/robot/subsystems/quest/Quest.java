@@ -6,6 +6,7 @@ import static frc.robot.constants.VisionConstants.kQuestDevs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.quest.QuestIO.QuestData;
 import frc.robot.util.VisionMeasurement;
 import gg.questnav.questnav.PoseFrame;
 import java.util.Arrays;
@@ -70,6 +71,14 @@ public class Quest {
     }
 
     /**
+     * Get the Quest's data
+     * @return a copy of the quest's data
+     */
+    public QuestData data() {
+        return quest.data.clone();
+    }
+
+    /**
      * Get the latest heading from the Quest device.
      * @return The latest heading, if available
      */
@@ -89,54 +98,54 @@ public class Quest {
         );
     }
 
-	/**
-	 * Get the estimated heading at a timestamp from the Quest device.
-	 * @param timestamp The timestamp to query
-	 * @return The estimated heading
-	 */
-	public Optional<Rotation2d> headingAt(double timestamp) {
-		// find two closest frames
-		PoseFrame[] frames = this.quest.data.readings;
-		PoseFrame before = null;
-		PoseFrame after = null;
+    /**
+     * Get the estimated heading at a timestamp from the Quest device.
+     * @param timestamp The timestamp to query
+     * @return The estimated heading
+     */
+    public Optional<Rotation2d> headingAt(double timestamp) {
+        // find two closest frames
+        PoseFrame[] frames = this.quest.data.readings;
+        PoseFrame before = null;
+        PoseFrame after = null;
 
-		for (PoseFrame frame : frames) {
-			if (!frame.isTracking()) continue;
-			double ts = frame.dataTimestamp();
-			if (ts <= timestamp) {
-				if (before == null || ts > before.dataTimestamp()) {
-					before = frame;
-				}
-			} else {
-				if (after == null || ts < after.dataTimestamp()) {
-					after = frame;
-				}
-			}
+        int lo = 0;
+        int hi = frames.length - 1;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            PoseFrame frame = frames[mid];
+            double ts = frame.dataTimestamp();
 
-			if (before != null && after != null) break;
-		}
+            if (ts <= timestamp) {
+                if (frame.isTracking()) before = frame;
+                lo = mid + 1;
+            } else {
+                if (frame.isTracking()) after = frame;
+                hi = mid + 1;
+            }
+        }
 
-		if (before == null || after == null) return Optional.empty();
+        if (before == null || after == null) return Optional.empty();
 
-		// interpolate between the two frames
-		Rotation2d a = before
-			.questPose3d()
-			.transformBy(kBotToQuest.inverse())
-			.toPose2d()
-			.getRotation();
-			
-		Rotation2d b = after
-			.questPose3d()
-			.transformBy(kBotToQuest.inverse())
-			.toPose2d()
-			.getRotation();
+        // interpolate between the two frames
+        Rotation2d a = before
+            .questPose3d()
+            .transformBy(kBotToQuest.inverse())
+            .toPose2d()
+            .getRotation();
 
-		double t =
-			(timestamp - before.dataTimestamp()) /
-			(after.dataTimestamp() - before.dataTimestamp());
+        Rotation2d b = after
+            .questPose3d()
+            .transformBy(kBotToQuest.inverse())
+            .toPose2d()
+            .getRotation();
 
-		return Optional.of(a.interpolate(b, t));
-	}
+        double t =
+            (timestamp - before.dataTimestamp()) /
+            (after.dataTimestamp() - before.dataTimestamp());
+
+        return Optional.of(a.interpolate(b, t));
+    }
 
     /**
      * Periodic update method called every robot tick.

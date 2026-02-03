@@ -1,8 +1,6 @@
 package frc.robot.subsystems.photon;
 
 import frc.robot.constants.VisionConstants;
-import java.util.List;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * Replay implementation of {@link CameraIO} for simulation/log replay.
@@ -20,10 +18,5 @@ public class CameraReplay extends CameraIO {
     }
 
     @Override
-    protected List<PhotonPipelineResult> results() {
-        return List.of();
-    }
-
-    @Override
-    public void setDriverMode(boolean enabled) {}
+    public void update() {}
 }
