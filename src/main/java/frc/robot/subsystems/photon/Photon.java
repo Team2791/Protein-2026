@@ -67,10 +67,12 @@ public class Photon {
         // Process vision measurements from each camera
         for (CameraIO camera : cameras) {
             String path = String.format("Camera/%s", camera.config.name);
-            Logger.processInputs(path, camera.data);
 
             for (PhotonPipelineResult result : camera.data.results) {
-                this.onMeasurement.accept(camera.measurementOf(result));
+                VisionMeasurement measurement = camera.measurementOf(result);
+                Logger.recordOutput(path + "/Measurement", measurement);
+
+                this.onMeasurement.accept(measurement);
             }
         }
     }

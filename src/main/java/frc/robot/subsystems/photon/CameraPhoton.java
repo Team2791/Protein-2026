@@ -3,6 +3,7 @@ package frc.robot.subsystems.photon;
 import frc.robot.alerter.Alerter;
 import frc.robot.constants.VisionConstants;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * Concrete implementation of {@link CameraIO} for PhotonVision-compatible cameras.
@@ -44,7 +45,9 @@ public class CameraPhoton extends CameraIO {
 
     @Override
     public void update() {
-        this.data.connected = camera.isConnected();
-        this.data.results = camera.getAllUnreadResults();
+        data.connected = camera.isConnected();
+        data.results = camera
+            .getAllUnreadResults()
+            .toArray(PhotonPipelineResult[]::new);
     }
 }

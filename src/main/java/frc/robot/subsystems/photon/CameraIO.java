@@ -9,7 +9,6 @@ import frc.robot.constants.VisionConstants;
 import frc.robot.util.VisionMeasurement;
 import java.util.List;
 import java.util.Optional;
-import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -29,7 +28,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public abstract class CameraIO {
 
     /** Auto-logged data structure for camera vision measurements. */
-    @AutoLog
     public static class CameraData {
 
         CameraData() {}
@@ -37,12 +35,12 @@ public abstract class CameraIO {
         /** Whether or not the camera is connected */
         public boolean connected = false;
 
-        /** The current list of photonvision results */
-        public List<PhotonPipelineResult> results = List.of();
+        /** The current list of vision results */
+        public PhotonPipelineResult[] results = new PhotonPipelineResult[0];
     }
 
     /** Logged data from this camera. */
-    public final CameraDataAutoLogged data = new CameraDataAutoLogged();
+    public final CameraData data = new CameraData();
 
     /** Configuration for this camera (name, position, etc.). */
     public final VisionConstants.CameraConfig config;
