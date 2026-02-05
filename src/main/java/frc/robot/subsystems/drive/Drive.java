@@ -79,7 +79,7 @@ public class Drive extends SubsystemBase {
             Pose2d.kZero
         );
 
-    /** the questnav used for primary vision things */
+    /** the QuestNav used for primary vision things */
     final Quest quest = new Quest(
         switch (Constants.currentMode) {
             case REAL -> new Meta3S();
@@ -95,7 +95,7 @@ public class Drive extends SubsystemBase {
     /** vision measurements collected before robot start */
     final List<VisionMeasurement> calibrators = new ArrayList<>();
 
-    /** photonvision, used to calibrate starting position */
+    /** PhotonVision, used to calibrate starting position */
     final Photon photon = new Photon(
         switch (Constants.currentMode) {
             case REAL -> CameraPhoton::new;
@@ -244,7 +244,7 @@ public class Drive extends SubsystemBase {
      * Runs the drive at the desired robot-relative velocity.
      *
      * @param speeds Speeds in meters/sec
-	 * @see #drive(ChassisSpeeds) <code>drive()</code> for field-relative driving
+     * @see #drive(ChassisSpeeds) <code>drive()</code> for field-relative driving
      */
     public void runVelocity(ChassisSpeeds speeds) {
         Vec2 velocity = new Vec2(
@@ -254,14 +254,14 @@ public class Drive extends SubsystemBase {
 
         // Limit to maximum linear speed, if necessary
         // Can't limit components: <100% vx, 100%vy> = sqrt(2)*100% total speed
-        if (velocity.mag() > getMaxLinearSpeedMetersPerSec()) {
-            velocity = velocity.norm().mul(getMaxLinearSpeedMetersPerSec());
+        if (velocity.mag() > maxSpeedMetersPerSec) {
+            velocity = velocity.norm().mul(maxSpeedMetersPerSec);
             speeds.vxMetersPerSecond = velocity.x;
             speeds.vyMetersPerSecond = velocity.y;
         }
 
-        if (speeds.omegaRadiansPerSecond > getMaxAngularSpeedRadPerSec()) {
-            speeds.omegaRadiansPerSecond = getMaxAngularSpeedRadPerSec();
+        if (speeds.omegaRadiansPerSecond > maxAngularSpeedRadPerSec) {
+            speeds.omegaRadiansPerSecond = maxAngularSpeedRadPerSec;
         }
 
         // Calculate module setpoints
@@ -410,11 +410,6 @@ public class Drive extends SubsystemBase {
         );
     }
 
-    /** Returns the maximum linear speed in meters per sec. */
-    public double getMaxLinearSpeedMetersPerSec() {
-        return maxSpeedMetersPerSec;
-    }
-
     /**
      * Calibrate the initial pose of the robot
      *
@@ -456,10 +451,5 @@ public class Drive extends SubsystemBase {
 
         // Clear calibrators for next use
         calibrators.clear();
-    }
-
-    /** Returns the maximum angular speed in radians per sec. */
-    public double getMaxAngularSpeedRadPerSec() {
-        return maxSpeedMetersPerSec / driveBaseRadius;
     }
 }

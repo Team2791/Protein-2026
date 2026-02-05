@@ -10,17 +10,21 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.robot.constants.ControlConstants;
 import frc.robot.constants.RobotConstants;
 
 public class DriveConstants {
 
-    public static final double maxSpeedMetersPerSec = 5.45;
+    public static final double maxSpeedMetersPerSec =
+        ControlConstants.Drive.kMaxLinearSpeed;
     public static final double odometryFrequency = 100.0; // Hz
     public static final double trackWidth =
         RobotConstants.DriveBase.kTrackWidth;
     public static final double wheelBase = RobotConstants.DriveBase.kWheelBase;
     public static final double driveBaseRadius =
         RobotConstants.DriveBase.kDriveRadius;
+    public static final double maxAngularSpeedRadPerSec =
+        ControlConstants.Drive.kMaxAngularSpeed;
     public static final Translation2d[] moduleTranslations =
         new Translation2d[] {
             new Translation2d(trackWidth / 2.0, wheelBase / 2.0),

@@ -20,7 +20,7 @@ import org.littletonrobotics.junction.Logger;
  *
  * <p>Uses {@link Repulsor} for faraway pathfinding to a target pose. Repulsor works
  * by generating a potential field around obstacles and the goal, then using
- * the laws of pysics to "push" the robot away from obstacles and "pull" it
+ * the laws of physics to "push" the robot away from obstacles and "pull" it
  * toward the goal.
  *
  * <p>This command is used as the first step in {@link Pathfind}: far from the target,
@@ -91,8 +91,7 @@ class Repulse extends Command {
             traj.stream().toArray(Translation2d[]::new)
         );
 
-        drive
-            .field
+        drive.field
             .getObject("Pathfind/RepulseTrajectory")
             .setPoses(
                 traj
@@ -118,16 +117,12 @@ class Repulse extends Command {
         SwerveSample sample = repulsor.getCmd(
             drive.getPose(),
             drive.getChassisSpeeds(),
-            drive.getMaxLinearSpeedMetersPerSec(),
+            ControlConstants.Drive.kMaxLinearSpeed,
             true
         );
 
         Logger.recordOutput("Pathfind/RepulseTarget", sample.getPose());
-
-        drive
-            .field
-            .getObject("Pathfind/RepulseTarget")
-            .setPose(currentTarget);
+        drive.field.getObject("Pathfind/RepulseTarget").setPose(currentTarget);
 
         Vec2 pose = new Vec2(drive.getPose());
         Vec2 target = new Vec2(sample.getPose());
@@ -160,8 +155,7 @@ class Repulse extends Command {
         );
         Logger.recordOutput("Pathfind/RepulseTrajectory", new Translation2d[0]);
 
-        drive
-            .field
+        drive.field
             .getObject("Pathfind/RepulseTrajectory")
             .setPoses(new Pose2d[0]);
     }

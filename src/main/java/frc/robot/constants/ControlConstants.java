@@ -85,6 +85,21 @@ public final class ControlConstants {
     }
 
     /**
+     * Drivetrain motion constraints.
+     */
+    public static final class Drive {
+
+        private Drive() {}
+
+        /** Maximum translational speed (meters/second). */
+        public static final double kMaxLinearSpeed = 5.45;
+
+        /** Maximum angular speed (radians/second). */
+        public static final double kMaxAngularSpeed =
+            kMaxLinearSpeed / RobotConstants.DriveBase.kDriveRadius;
+    }
+
+    /**
      * Slew rate limiters for driver input smoothing.
      *
      * <p>Limits acceleration of joystick commands to prevent abrupt movements
