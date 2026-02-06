@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,7 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.alerter.Rumbler;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.drive.JoystickDrive;
+import frc.robot.constants.RuntimeConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.SuperstructureIO;
 import frc.robot.subsystems.superstructure.SuperstructureIOSim;
 import frc.robot.subsystems.superstructure.SuperstructureIOSpark;
+import frc.robot.util.AllianceUtil;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -35,130 +38,110 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // Subsystems
-  private final Drive drive;
-  private final Superstructure superstructure;
 
-  // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+    // Subsystems
+    private final Drive drive = new Drive(
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> new GyroIONavX();
+            case SIM -> new GyroIO() {};
+            default -> new GyroIO() {};
+        },
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> moduleId -> new ModuleIOSpark(moduleId);
+            case SIM -> moduleId -> new ModuleIOSim();
+            default -> moduleId -> new ModuleIO() {};
+        }
+    );
 
-  // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+    private final Superstructure superstructure = new Superstructure(
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> new SuperstructureIOSpark();
+            case SIM -> new SuperstructureIOSim();
+            default -> new SuperstructureIO() {};
+        }
+    );
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    switch (Constants.currentMode) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIONavX(),
-                new ModuleIOSpark(0),
-                new ModuleIOSpark(1),
-                new ModuleIOSpark(2),
-                new ModuleIOSpark(3));
-        superstructure = new Superstructure(new SuperstructureIOSpark());
-        break;
+    // Controller
+    final CommandXboxController driverctl = new CommandXboxController(0);
+    final CommandXboxController operctl = new CommandXboxController(1);
 
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
-        superstructure = new Superstructure(new SuperstructureIOSim());
-        break;
+    // Dashboard inputs
+    private final LoggedDashboardChooser<Command> autoChooser;
 
-      default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        superstructure = new Superstructure(new SuperstructureIO() {});
-        break;
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+        // Set up auto routines
+        autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+
+        // Set up SysId routines
+        autoChooser.addOption(
+            "Drive Wheel Radius Characterization",
+            DriveCommands.wheelRadiusCharacterization(drive)
+        );
+        autoChooser.addOption(
+            "Drive Simple FF Characterization",
+            DriveCommands.feedforwardCharacterization(drive)
+        );
+        autoChooser.addOption(
+            "Drive SysId (Quasistatic Forward)",
+            drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+        );
+        autoChooser.addOption(
+            "Drive SysId (Quasistatic Reverse)",
+            drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+        );
+        autoChooser.addOption(
+            "Drive SysId (Dynamic Forward)",
+            drive.sysIdDynamic(SysIdRoutine.Direction.kForward)
+        );
+        autoChooser.addOption(
+            "Drive SysId (Dynamic Reverse)",
+            drive.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+        );
+
+        // Configure the button bindings
+        configureButtonBindings();
+
+        Rumbler.getInstance().provideControllers(driverctl, operctl);
     }
 
-    // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    /**
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link GenericHID} or one of its subclasses
+     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+     * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        // Default command, normal field-relative drive
+        drive.setDefaultCommand(new JoystickDrive(driverctl, drive));
 
-    // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // Control bindings for superstructure
+        driverctl.leftBumper().whileTrue(superstructure.intake());
+        driverctl.rightBumper().whileTrue(superstructure.launch());
+        driverctl.a().whileTrue(superstructure.eject());
 
-    // Configure the button bindings
-    configureButtonBindings();
-  }
+        // Reset gyro to 0° when B button is pressed
+        driverctl
+            .start()
+            .onTrue(
+                Commands.runOnce(
+                    () -> {
+                        // SAFETY: we know DS is connected if we're receiving button presses
+                        drive.setHeading(
+                            AllianceUtil.unsafe.autoflip(new Rotation2d())
+                        );
+                    },
+                    drive
+                ).ignoringDisable(true)
+            );
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
-
-    // Control bindings for superstructure
-    controller.leftBumper().whileTrue(superstructure.intake());
-    controller.rightBumper().whileTrue(superstructure.launch());
-    controller.a().whileTrue(superstructure.eject());
-
-    // Lock to 0° when A button is held
-    controller
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> Rotation2d.kZero));
-
-    // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-    // Reset gyro to 0° when B button is pressed
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return autoChooser.get();
+    }
 }

@@ -29,8 +29,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
+import frc.robot.constants.RuntimeConstants;
+import frc.robot.constants.RuntimeConstants.Mode;
 import frc.robot.subsystems.photon.CameraPhoton;
 import frc.robot.subsystems.photon.CameraReplay;
 import frc.robot.subsystems.photon.Photon;
@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -81,7 +82,7 @@ public class Drive extends SubsystemBase {
 
     /** the QuestNav used for primary vision things */
     final Quest quest = new Quest(
-        switch (Constants.currentMode) {
+        switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new Meta3S();
             case REPLAY -> new QuestReplay();
             case SIM -> new QuestReplay();
@@ -97,7 +98,7 @@ public class Drive extends SubsystemBase {
 
     /** PhotonVision, used to calibrate starting position */
     final Photon photon = new Photon(
-        switch (Constants.currentMode) {
+        switch (RuntimeConstants.kCurrentMode) {
             case REAL -> CameraPhoton::new;
             case REPLAY -> CameraReplay::new;
             case SIM -> CameraReplay::new;
@@ -105,18 +106,17 @@ public class Drive extends SubsystemBase {
         this.calibrators::add
     );
 
-    public Drive(
-        GyroIO gyroIO,
-        ModuleIO flModuleIO,
-        ModuleIO frModuleIO,
-        ModuleIO blModuleIO,
-        ModuleIO brModuleIO
-    ) {
+    /**
+     * Creates a new Drive subsystem.
+     * @param gyroIO the gyro IO implementation
+     * @param moduleIOFactory a factory that creates module IO implementations given a module index
+     */
+    public Drive(GyroIO gyroIO, Function<Integer, ModuleIO> moduleIOFactory) {
         this.gyroIO = gyroIO;
-        modules[0] = new Module(flModuleIO, 0);
-        modules[1] = new Module(frModuleIO, 1);
-        modules[2] = new Module(blModuleIO, 2);
-        modules[3] = new Module(brModuleIO, 3);
+        modules[0] = new Module(moduleIOFactory.apply(0), 0);
+        modules[1] = new Module(moduleIOFactory.apply(1), 1);
+        modules[2] = new Module(moduleIOFactory.apply(2), 2);
+        modules[3] = new Module(moduleIOFactory.apply(3), 3);
 
         // Usage reporting for swerve template
         HAL.report(
@@ -234,7 +234,7 @@ public class Drive extends SubsystemBase {
 
         // Update gyro alert
         gyroDisconnectedAlert.set(
-            !gyroInputs.connected && Constants.currentMode != Mode.SIM
+            !gyroInputs.connected && RuntimeConstants.kCurrentMode != Mode.SIM
         );
 
         field.setRobotPose(this.getPose());
@@ -399,6 +399,11 @@ public class Drive extends SubsystemBase {
             getModulePositions(),
             pose
         );
+    }
+
+    /** Sets the robot's heading */
+    public void setHeading(Rotation2d heading) {
+        setPose(new Pose2d(getPose().getTranslation(), heading));
     }
 
     /** Adds a new timestamped vision measurement. */

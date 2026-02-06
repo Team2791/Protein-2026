@@ -5,8 +5,7 @@ import com.revrobotics.spark.SparkBase;
 import com.studica.frc.AHRS;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.Constants;
-
+import frc.robot.constants.RuntimeConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -159,7 +158,7 @@ public class Alerter {
      * <p>Only monitors devices when running on a real robot - skips checks during replay.
      */
     private void update() {
-        if (Constants.currentMode != Constants.Mode.REAL) {
+        if (RuntimeConstants.kCurrentMode != RuntimeConstants.Mode.REAL) {
             return;
         }
 

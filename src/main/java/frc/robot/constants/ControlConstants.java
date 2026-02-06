@@ -112,6 +112,6 @@ public final class ControlConstants {
         /** Maximum translational acceleration (meters/second²). TODO: Can be increased (less top-heavy than previous design). */
         public static final double kOrthogonal = 1.667;
         /** Maximum rotational acceleration (radians/second²). */
-        public static final double kRotation = 3.87;
+        public static final double kRotational = 3.87;
     }
 }
