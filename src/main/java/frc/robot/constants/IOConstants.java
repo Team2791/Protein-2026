@@ -16,28 +16,14 @@ public final class IOConstants {
      * Drivetrain hardware port assignments.
      *
      * <p>Currently contains only gyroscope configuration (commented out).
-     * TODO: May need MXP SPI connection instead of USB1 depending on NavX mounting.
+     * TODO: May need USB connection instead of MXP_SPI depending on NavX mounting.
      */
     public static final class Drivetrain {
 
         private Drivetrain() {}
 
         /** NavX gyro communication port type. */
-        public static final NavXComType kGyroPort = NavXComType.kUSB1;
-    }
-
-    /**
-     * KitBot hardware port assignments.
-     */
-    public static final class KitBot {
-
-        private KitBot() {}
-
-        /** Feeder motor CAN ID. */
-        public static final int kFeeder = 50;
-
-        /** Intake motor CAN ID. */
-        public static final int kIntake = 51;
+        public static final NavXComType kGyroPort = NavXComType.kMXP_SPI;
     }
 
     /**

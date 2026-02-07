@@ -3,24 +3,26 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
-import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.drive.DriveConstants;
 
 /**
  * Global robot physical properties and dimensions.
+ *
  * TODO: Update values based on actual measurements and Ross
+ * TODO: Also, maybe define these values here instead of extracting from DriveConstants, where they don't belong
  */
 public class RobotConstants {
 
     private RobotConstants() {}
 
     /** Robot mass including battery and bumpers. TODO: measure */
-    public static final double kMass = 68.023;
+    public static final double kMass = DriveConstants.robotMassKg;
 
     /**
      * Robot moment of inertia about vertical axis.
      * TODO: Ross will calculate this
      */
-    public static final double kMoI = 4.235;
+    public static final double kMoI = DriveConstants.robotMOI;
 
     /**
      * Swerve drive base geometric dimensions.
@@ -36,13 +38,13 @@ public class RobotConstants {
          * Wheel base: front-to-back distance between modules (meters).
          * @see #kBumperLength for front-to-back outer dimension
          */
-        public static final double kWheelBase = Units.inchesToMeters(26.5);
+        public static final double kWheelBase = DriveConstants.wheelBase;
 
         /**
          * Track width: side-to-side distance between modules (meters).
          * @see #kBumperWidth for side-to-side outer dimension
          */
-        public static final double kTrackWidth = Units.inchesToMeters(26.5);
+        public static final double kTrackWidth = DriveConstants.trackWidth;
 
         /**
          * Bumper width: side-to-side outer dimension
@@ -66,7 +68,7 @@ public class RobotConstants {
          * Drive base radius (module diagonal half-distance).
          */
         public static final double kDriveRadius =
-            0.5 * Math.hypot(kWheelBase, kTrackWidth);
+            DriveConstants.driveBaseRadius;
     }
 
     /**
@@ -77,9 +79,9 @@ public class RobotConstants {
         private Wheel() {}
 
         /** Wheel radius in meters. */
-        public static final double kRadius = Units.inchesToMeters(1.5);
+        public static final double kRadius = DriveConstants.wheelRadiusMeters;
 
         /** Coefficient of friction between wheel and carpet. */
-        public static final double kFriction = 1.3;
+        public static final double kFriction = DriveConstants.wheelCOF;
     }
 }

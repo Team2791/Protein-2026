@@ -4,6 +4,7 @@ import static frc.robot.util.MathPlus.kTau;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.drive.DriveConstants;
 
 /**
  * Control loop constants for robot motion control.
@@ -84,19 +85,24 @@ public final class ControlConstants {
         );
     }
 
-    /**
-     * Drivetrain motion constraints.
-     */
-    public static final class Drive {
+    /** Drivetrain motion constraints. */
+    public static final class Drivetrain {
 
-        private Drive() {}
+        private Drivetrain() {}
 
-        /** Maximum translational speed (meters/second). */
-        public static final double kMaxLinearSpeed = 5.45;
+        /** Velocity constraints for drivetrain motion. */
+        public static final class MaxSpeed {
 
-        /** Maximum angular speed (radians/second). */
-        public static final double kMaxAngularSpeed =
-            kMaxLinearSpeed / RobotConstants.DriveBase.kDriveRadius;
+            private MaxSpeed() {}
+
+            /** Maximum translational speed */
+            public static final double kLinear =
+                DriveConstants.maxSpeedMetersPerSec;
+
+            /** Maximum angular speed */
+            public static final double kAngular =
+                DriveConstants.maxAngularSpeedRadPerSec;
+        }
     }
 
     /**
@@ -109,9 +115,9 @@ public final class ControlConstants {
 
         private SlewRateLimit() {}
 
-        /** Maximum translational acceleration (meters/second²). TODO: Can be increased (less top-heavy than previous design). */
+        /** Orthogonal rate limiting in percent/second (1.0=100%) TODO: Can be increased (less top-heavy than previous design). */
         public static final double kOrthogonal = 1.667;
-        /** Maximum rotational acceleration (radians/second²). */
+        /** Rotational rate limiting in percent/second (1.0=100%) */
         public static final double kRotational = 3.87;
     }
 }

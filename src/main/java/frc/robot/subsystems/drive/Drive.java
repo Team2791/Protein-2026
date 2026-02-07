@@ -253,7 +253,7 @@ public class Drive extends SubsystemBase {
         );
 
         // Limit to maximum linear speed, if necessary
-        // Can't limit components: <100% vx, 100%vy> = sqrt(2)*100% total speed
+        // Can't limit components: <100%vx, 100%vy> = sqrt(2)*100% total speed
         if (velocity.mag() > maxSpeedMetersPerSec) {
             velocity = velocity.norm().mul(maxSpeedMetersPerSec);
             speeds.vxMetersPerSecond = velocity.x;

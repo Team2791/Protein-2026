@@ -103,9 +103,7 @@ public class AllianceUtil {
          * @return Array of poses, all flipped if Red alliance, unchanged if Blue alliance
          */
         public Pose2d[] autoflip(Pose2d[] poses) {
-            return Arrays.stream(poses)
-                .map(this::autoflip)
-                .toArray(Pose2d[]::new);
+            return invert() ? AllianceUtil.flip(poses) : poses;
         }
 
         /**
@@ -125,9 +123,7 @@ public class AllianceUtil {
          * @return Array of rotations, all flipped if Red alliance, unchanged if Blue alliance
          */
         public Rotation2d[] autoflip(Rotation2d[] rotations) {
-            return Arrays.stream(rotations)
-                .map(this::autoflip)
-                .toArray(Rotation2d[]::new);
+            return invert() ? AllianceUtil.flip(rotations) : rotations;
         }
 
         /**
@@ -172,6 +168,18 @@ public class AllianceUtil {
     }
 
     /**
+     * Flips an array of poses from one alliance's coordinate system to the other.
+     *
+     * @param poses The array of poses to flip
+     * @return The array of flipped poses in the other alliance's coordinate system
+     */
+    public static Pose2d[] flip(Pose2d[] poses) {
+        return Arrays.stream(poses)
+            .map(AllianceUtil::flip)
+            .toArray(Pose2d[]::new);
+    }
+
+    /**
      * Flips a rotation from one alliance's coordinate system to the other.
      *
      * Flipped rotation is the original rotation plus 180 degrees (π radians).
@@ -181,6 +189,18 @@ public class AllianceUtil {
      */
     public static Rotation2d flip(Rotation2d rotation) {
         return MathPlus.normalizeAngle(rotation.plus(Rotation2d.kPi));
+    }
+
+    /**
+     * Flips an array of rotations from one alliance's coordinate system to the other.
+     *
+     * @param rotations The array of rotations to flip
+     * @return The array of flipped rotations (each rotated by 180 degrees)
+     */
+    public static Rotation2d[] flip(Rotation2d[] rotations) {
+        return Arrays.stream(rotations)
+            .map(AllianceUtil::flip)
+            .toArray(Rotation2d[]::new);
     }
 
     /**
@@ -201,6 +221,16 @@ public class AllianceUtil {
      */
     public static Optional<Rotation2d> autoflip(Rotation2d rotation) {
         return invert().map(x -> x ? flip(rotation) : rotation);
+    }
+
+    /**
+     * Automatically flips an array of poses if the current alliance is Red.
+     *
+     * @param poses The array of poses to conditionally flip
+     * @return Optional containing the array of poses (flipped if Red, unchanged if Blue
+     */
+    public static Optional<Pose2d[]> autoflip(Pose2d[] poses) {
+        return invert().map(x -> x ? flip(poses) : poses);
     }
 
     /**

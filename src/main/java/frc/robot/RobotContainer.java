@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.drive.JoystickDrive;
+import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -61,9 +62,13 @@ public class RobotContainer {
         }
     );
 
-    // Controller
-    final CommandXboxController driverctl = new CommandXboxController(0);
-    final CommandXboxController operctl = new CommandXboxController(1);
+    // Controllers
+    final CommandXboxController driverctl = new CommandXboxController(
+        IOConstants.Controller.kDriver
+    );
+    final CommandXboxController operctl = new CommandXboxController(
+        IOConstants.Controller.kOperator
+    );
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;

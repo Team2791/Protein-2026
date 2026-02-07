@@ -2,8 +2,8 @@ package frc.robot.commands.pathfind;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -16,7 +16,9 @@ import org.littletonrobotics.junction.Logger;
  *
  * <p>Default concrete implementation: {@link Supplied}
  */
-public abstract class Pathfind extends SequentialCommandGroup {
+public abstract class Pathfind extends WrapperCommand {
+
+    static final String KEY_TARGET = "Pathfind/Target";
 
     /**
      * Concrete {@link Pathfind} implementation that accepts a target pose via Supplier.
@@ -75,14 +77,37 @@ public abstract class Pathfind extends SequentialCommandGroup {
      * @param drive Drive subsystem for movement control
      */
     public Pathfind(Drive drive) {
+        super(new SequentialCommandGroup());
         this.drive = drive;
 
-        addCommands(
-            new InstantCommand(this::prepare),
+        // Due to how Java works, we can't call add these commands in the `super()`
+        // call since we cannot reference `this` before the superclass constructor.
+        //
+        // Instead, we wrap an empty SequentialCommandGroup and add the commands afterward.
+        // Since the wrapped `m_command` is stored as a plain Command, we need to cast back
+        // to SequentialCommandGroup to call addCommands.
+        ((SequentialCommandGroup) super.m_command).addCommands(
             new Repulse(drive, this::currentTarget),
-            new Nearby(drive, this::currentTarget),
-            new InstantCommand(this::release)
+            new Nearby(drive, this::currentTarget)
         );
+    }
+
+    @Override
+    public void initialize() {
+        cache = target();
+        drive.field.getObject(KEY_TARGET).setPose(cache);
+        Logger.recordOutput(KEY_TARGET, cache);
+
+        super.initialize();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+
+        Pose2d invalid = new Pose2d(-1, -1, new Rotation2d());
+        drive.field.getObject(KEY_TARGET).setPose(invalid);
+        Logger.recordOutput(KEY_TARGET, invalid);
     }
 
     /**
@@ -94,25 +119,6 @@ public abstract class Pathfind extends SequentialCommandGroup {
      * @return Target pose, or null if no valid target
      */
     protected abstract Pose2d target();
-
-    /**
-     * Caches and logs the target pose
-     */
-    protected final void prepare() {
-        cache = target();
-
-        drive.field.getObject("Pathfind/Target").setPose(cache);
-        Logger.recordOutput("Pathfind/Target", cache);
-    }
-
-    /**
-     * Deletes the target pose from the logs
-     */
-    protected final void release() {
-        Pose2d invalid = new Pose2d(-1, -1, new Rotation2d());
-        drive.field.getObject("Pathfind/Target").setPose(invalid);
-        Logger.recordOutput("Pathfind/Target", invalid);
-    }
 
     /**
      * Gets the currently cached target pose.

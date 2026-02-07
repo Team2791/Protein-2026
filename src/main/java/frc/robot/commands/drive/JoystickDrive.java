@@ -103,8 +103,8 @@ public class JoystickDrive extends Command {
         if (invert.orElse(false)) linearcmd = linearcmd.neg(); // invert for Red alliance, skip if no FMS/DS
 
         // scale to max speeds
-        Vec2 vel = linearcmd.mul(ControlConstants.Drive.kMaxLinearSpeed);
-        double omega = rotcmd * ControlConstants.Drive.kMaxAngularSpeed;
+        Vec2 vel = linearcmd.mul(ControlConstants.Drivetrain.MaxSpeed.kLinear);
+        double omega = rotcmd * ControlConstants.Drivetrain.MaxSpeed.kAngular;
 
         // no need to speed limit for diagonals, drive.runVelocity() handles that.
         // just send the desired chassis speeds

@@ -29,6 +29,9 @@ import org.littletonrobotics.junction.Logger;
  */
 class Repulse extends Command {
 
+    static final String KEY_TRAJ = "Pathfind/Repulse/Trajectory";
+    static final String KEY_TARGET = "Pathfind/Repulse/Target";
+
     /** Supplier for the target pose. */
     final Supplier<Pose2d> target;
 
@@ -81,24 +84,19 @@ class Repulse extends Command {
         currentTarget = target.get();
         repulsor.setGoal(currentTarget.getTranslation());
 
-        List<Translation2d> traj = repulsor.getTrajectory(
+        List<Translation2d> trj = repulsor.getTrajectory(
             drive.getPose().getTranslation(),
             currentTarget.getTranslation(),
             0.1 // 10cm steps
         );
-        Logger.recordOutput(
-            "Pathfind/RepulseTrajectory",
-            traj.stream().toArray(Translation2d[]::new)
-        );
 
-        drive.field
-            .getObject("Pathfind/RepulseTrajectory")
-            .setPoses(
-                traj
-                    .stream()
-                    .map(t -> new Pose2d(t, new Rotation2d()))
-                    .toArray(Pose2d[]::new)
-            );
+        Pose2d[] poses = trj
+            .stream()
+            .map(t -> new Pose2d(t, new Rotation2d()))
+            .toArray(Pose2d[]::new);
+
+        Logger.recordOutput(KEY_TRAJ, poses);
+        drive.field.getObject(KEY_TRAJ).setPoses(poses);
     }
 
     /**
@@ -117,12 +115,12 @@ class Repulse extends Command {
         SwerveSample sample = repulsor.getCmd(
             drive.getPose(),
             drive.getChassisSpeeds(),
-            ControlConstants.Drive.kMaxLinearSpeed,
+            ControlConstants.Drivetrain.MaxSpeed.kLinear,
             true
         );
 
-        Logger.recordOutput("Pathfind/RepulseTarget", sample.getPose());
-        drive.field.getObject("Pathfind/RepulseTarget").setPose(currentTarget);
+        Logger.recordOutput(KEY_TARGET, sample.getPose());
+        drive.field.getObject(KEY_TARGET).setPose(currentTarget);
 
         Vec2 pose = new Vec2(drive.getPose());
         Vec2 target = new Vec2(sample.getPose());
@@ -149,15 +147,9 @@ class Repulse extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Logger.recordOutput(
-            "Pathfind/RepulseTarget",
-            new Pose2d(-1, -1, new Rotation2d())
-        );
-        Logger.recordOutput("Pathfind/RepulseTrajectory", new Translation2d[0]);
-
-        drive.field
-            .getObject("Pathfind/RepulseTrajectory")
-            .setPoses(new Pose2d[0]);
+        Logger.recordOutput(KEY_TARGET, new Pose2d(-1, -1, new Rotation2d()));
+        Logger.recordOutput(KEY_TRAJ, new Translation2d[0]);
+        drive.field.getObject(KEY_TRAJ).setPoses(new Pose2d[0]);
     }
 
     /**
