@@ -145,16 +145,17 @@ public class Drive extends SubsystemBase {
         // Collect updates when disabled; calibrate once enabled.
         // although calibrate() is called many times, it only acts once
         // since we clear the calibrators list at the end of the method.
-        if (DriverStation.isDisabled()) photon.update();
-        else calibrate();
+        /*if (DriverStation.isDisabled()) 
+        photon.update();
+        else calibrate();*/
         quest.update();
 
         // If the quest has disconnected, fallback on photon for vision
-        if (!quest.data().connected && DriverStation.isEnabled()) {
+        /*if (!quest.data().connected && DriverStation.isEnabled()) {
             photon.update();
             this.calibrators.stream().forEach(this::addVisionMeasurement);
             this.calibrators.clear();
-        }
+        }*/
 
         odometryLock.lock(); // Prevents odometry updates while reading data
         try {
@@ -172,10 +173,8 @@ public class Drive extends SubsystemBase {
             for (var module : modules) {
                 module.stop();
             }
-        }
 
-        // Log empty setpoint states when disabled
-        if (DriverStation.isDisabled()) {
+            // Log empty setpoint states when disabled
             Logger.recordOutput(
                 "SwerveStates/Setpoints",
                 new SwerveModuleState[] {}

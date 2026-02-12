@@ -26,7 +26,7 @@ import java.util.function.DoubleSupplier;
  */
 public class SuperstructureIOSpark implements SuperstructureIO {
   private final SparkMax feeder = new SparkMax(feederCanId, MotorType.kBrushed);
-  private final SparkMax intakeLauncher = new SparkMax(intakeLauncherCanId, MotorType.kBrushed);
+  private final SparkMax intakeLauncher = new SparkMax(intakeLauncherCanId, MotorType.kBrushless);
   private final RelativeEncoder feederEncoder = feeder.getEncoder();
   private final RelativeEncoder intakeLauncherEncoder = intakeLauncher.getEncoder();
 
