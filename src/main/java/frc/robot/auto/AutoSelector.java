@@ -7,9 +7,6 @@ import frc.robot.auto.generated.ChoreoTraj;
 import frc.robot.commands.pathfind.Pathfind;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.AllianceUtil;
-import frc.robot.util.Elastic;
-import frc.robot.util.Elastic.Notification;
-import frc.robot.util.Elastic.Notification.NotificationLevel;
 import java.util.*;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -50,10 +47,11 @@ public class AutoSelector {
 
     final AutoFactory factory;
     final SampleFollower follower;
+    final AutoGraph graph = new AutoGraph();
+    final List<AutoNode> current = new ArrayList<>();
 
-    LoggedDashboardChooser<AutoNode> s1;
-    LoggedDashboardChooser<AutoNode> s2;
-    LoggedDashboardChooser<AutoNode> s3;
+    List<LoggedDashboardChooser<AutoNode>> choosers = new ArrayList<>();
+    static final int NUM_CHOOSERS = 4;
 
     /**
      * Constructs an AutoSelector with the given Drive subsystem.
@@ -91,24 +89,18 @@ public class AutoSelector {
             factory.cache().loadTrajectory(traj.name());
         }
 
-        s1 = chooser("Autonomous Selector 1");
-        s2 = chooser("Autonomous Selector 2");
-        s3 = chooser("Autonomous Selector 3");
+        for (int i = 0; i < NUM_CHOOSERS; i++) {
+            LoggedDashboardChooser<AutoNode> c = chooser(i);
+            choosers.add(c);
+        }
 
-        add(s1, AutoNode.POS1);
-        add(s1, AutoNode.POS2);
-        add(s1, AutoNode.POS3);
+        LoggedDashboardChooser<AutoNode> s0 = choosers.get(0);
+        add(s0, AutoNode.POS1);
+        add(s0, AutoNode.POS2);
+        add(s0, AutoNode.POS3);
+        add(s0, AutoNode.CANCEL);
 
-        s1.onChange(this::updateS2);
-    }
-
-    /**
-     * Helper method to create a LoggedDashboardChooser for AutoNode selections.
-     * @param name Name of the chooser for dashboard display
-     * @return A new LoggedDashboardChooser instance
-     */
-    private LoggedDashboardChooser<AutoNode> chooser(String name) {
-        return new LoggedDashboardChooser<>(name);
+        s0.onChange(null);
     }
 
     /**
@@ -120,46 +112,49 @@ public class AutoSelector {
         c.addOption(n.label(), n);
     }
 
-    /**
-     * Populates the second chooser based on the first selection and sets up the next stage of selection.
-     *
-     * <p>When a selection is made in the first chooser, this method retrieves all valid transitions
-     * from the selected AutoNode using the AutoGraph and populates the second chooser with those options.
-     * It also adds a "Cancel" option to allow users to stop at the first selection if desired.
-     *
-     * @param chooser The chooser to populate with options
-     * @param from The AutoNode from which to find valid transitions
-     */
-    private void populate(
-        LoggedDashboardChooser<AutoNode> chooser,
-        AutoNode from
-    ) {
-        AutoGraph.TRANSITIONS.getOrDefault(from, Map.of())
-            .keySet()
-            .forEach(n -> add(chooser, n));
+    public void update(int n, AutoNode change) {
+        if (current.size() > n) {
+            cutoff(n + 1); // reset subsequent choosers and selections
+            current.remove(n); // remove current selection at index n (last index)
+        }
 
-        add(chooser, AutoNode.CANCEL);
+        // current.size() currently equal to n. add new selection at index n
+        current.add(change);
+
+        // update next chooser based on new selection
+        Set<AutoNode> next = graph.transitionsFrom(change);
+        LoggedDashboardChooser<AutoNode> s = choosers.get(n + 1);
+
+        for (AutoNode node : next) add(s, node); // populate next chooser with valid transitions from new selection
+        add(s, AutoNode.CANCEL); // add cancel/stop option to next chooser
+        s.onChange(node -> update(n + 1, node)); // set up next chooser to update after selection
     }
 
     /**
-     * Updates the second chooser based on the selection from the first chooser and sets up the next stage of selection.
-     * @param sel The AutoNode selected in the first chooser
+     * Recursively cuts off choosers and current selections starting from index n.
+     * This method is called when a selection is changed in one of the choosers, and it
+     * ensures that all subsequent choosers are reset and repopulated based on the new selection.
+     *
+     * @param n The index of the chooser that has changed and from which to start cutting off subsequent choosers
      */
-    private void updateS2(AutoNode sel) {
-        s2.getSendableChooser().close();
-        s2 = chooser("Autonomous Selector 2");
-        s2.onChange(this::updateS3);
-        populate(s2, sel);
+    private void cutoff(int n) {
+        current.subList(n, current.size()).clear();
+
+        while (n < choosers.size()) {
+            choosers.get(n).getSendableChooser().close();
+            LoggedDashboardChooser<AutoNode> next = chooser(n);
+            choosers.set(n, next);
+            n++;
+        }
     }
 
     /**
-     * Updates the third chooser based on the selection from the second chooser and sets up the next stage of selection.
-     * @param sel The AutoNode selected in the second chooser
+     * Helper method to create a LoggedDashboardChooser for AutoNode selections.
+     * @param name Name of the chooser for dashboard display
+     * @return A new LoggedDashboardChooser instance
      */
-    private void updateS3(AutoNode sel) {
-        s3.getSendableChooser().close();
-        s3 = chooser("Autonomous Selector 3");
-        populate(s3, sel);
+    private LoggedDashboardChooser<AutoNode> chooser(int n) {
+        return new LoggedDashboardChooser<>("Auto Selector " + (n + 1));
     }
 
     /**
@@ -174,54 +169,38 @@ public class AutoSelector {
      */
     public AutoRoutine build(Drive drive) {
         AutoRoutine routine = factory.newRoutine("Auto");
+        if (current.isEmpty()) return routine; // no selection made, return empty routine
 
-        AutoNode a = s1.get();
-        AutoNode b = s2.get();
-        AutoNode c = s3.get();
+        Command seq = current.get(0).onEnter(routine);
 
-        if (a == null || b == null) return null;
-        if (b == AutoNode.CANCEL) {
-            Command seq = a.onEnter(routine);
-            if (seq != null) routine.active().onTrue(seq);
-            return routine;
-        }
-        if (c == null) return null;
+        for (int i = 0; i < current.size() - 1; i++) {
+            AutoNode node = current.get(i);
+            AutoNode next = current.get(i + 1);
 
-        List<AutoNode> path = List.of(a, b, c)
-            .stream()
-            .filter(n -> n != null && n != AutoNode.CANCEL)
-            .toList();
+            if (next == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
 
-        Command cmd = a.onEnter(routine);
+            ChoreoTraj trj = graph.transition(node, next);
+            Pose2d initial = trj.initialPoseBlue();
 
-        for (int i = 0; i < path.size() - 1; i++) {
-            AutoNode from = path.get(i);
-            AutoNode to = path.get(i + 1);
-
-            ChoreoTraj traj = AutoGraph.TRANSITIONS.get(from).get(to);
-            if (traj == null) {
-                Elastic.sendNotification(
-                    new Notification(
-                        NotificationLevel.ERROR,
-                        "Failed to find trajectory",
-                        String.format("From %s to %s", from.label(), to.label())
-                    )
-                );
-                return routine;
+            if (i == 0) {
+                // SAFETY: Dashboard set current auto, FMS/DS is connected.
+                // note: will be overridden if cameras get a good read.
+                drive.setPose(AllianceUtil.unsafe.autoflip(initial));
             }
 
-            cmd = Commands.sequence(
-                cmd == null ? Commands.none() : cmd,
+            if (node == AutoNode.CANCEL) break; // if any selection is "Cancel", stop building further commands
+            seq = Commands.sequence(
+                seq,
+                node.onEnter(routine),
                 new Pathfind.Supplied(drive, () -> {
-                    // SAFETY: choosing from dashboard implies we have DS connection
-                    return AllianceUtil.unsafe.autoflip(traj.initialPoseBlue());
+                    // SAFETY: robot driving, therefore FMS/DS connection OK
+                    return AllianceUtil.unsafe.autoflip(initial);
                 }),
-                traj.asAutoTraj(routine).cmd(),
-                to.onEnter(routine)
+                trj.asAutoTraj(routine).cmd()
             );
         }
 
-        if (cmd != null) routine.active().onTrue(cmd);
+        routine.active().onTrue(seq);
         return routine;
     }
 }

@@ -7,15 +7,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
-import frc.robot.commands.DriveCommands;
+import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
@@ -30,7 +28,6 @@ import frc.robot.subsystems.superstructure.SuperstructureIO;
 import frc.robot.subsystems.superstructure.SuperstructureIOSim;
 import frc.robot.subsystems.superstructure.SuperstructureIOSpark;
 import frc.robot.util.AllianceUtil;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -70,39 +67,36 @@ public class RobotContainer {
         IOConstants.Controller.kOperator
     );
 
-    // Dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser;
+    // Auto selector
+    final AutoSelector selector = new AutoSelector(drive);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // Set up auto routines
-        autoChooser = new LoggedDashboardChooser<>("Auto Choices");
-
         // Set up SysId routines
-        autoChooser.addOption(
-            "Drive Wheel Radius Characterization",
-            DriveCommands.wheelRadiusCharacterization(drive)
-        );
-        autoChooser.addOption(
-            "Drive Simple FF Characterization",
-            DriveCommands.feedforwardCharacterization(drive)
-        );
-        autoChooser.addOption(
-            "Drive SysId (Quasistatic Forward)",
-            drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-        );
-        autoChooser.addOption(
-            "Drive SysId (Quasistatic Reverse)",
-            drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-        );
-        autoChooser.addOption(
-            "Drive SysId (Dynamic Forward)",
-            drive.sysIdDynamic(SysIdRoutine.Direction.kForward)
-        );
-        autoChooser.addOption(
-            "Drive SysId (Dynamic Reverse)",
-            drive.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-        );
+        // autoChooser.addOption(
+        //     "Drive Wheel Radius Characterization",
+        //     DriveCommands.wheelRadiusCharacterization(drive)
+        // );
+        // autoChooser.addOption(
+        //     "Drive Simple FF Characterization",
+        //     DriveCommands.feedforwardCharacterization(drive)
+        // );
+        // autoChooser.addOption(
+        //     "Drive SysId (Quasistatic Forward)",
+        //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+        // );
+        // autoChooser.addOption(
+        //     "Drive SysId (Quasistatic Reverse)",
+        //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+        // );
+        // autoChooser.addOption(
+        //     "Drive SysId (Dynamic Forward)",
+        //     drive.sysIdDynamic(SysIdRoutine.Direction.kForward)
+        // );
+        // autoChooser.addOption(
+        //     "Drive SysId (Dynamic Reverse)",
+        //     drive.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+        // );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -130,12 +124,8 @@ public class RobotContainer {
             .start()
             .onTrue(
                 Commands.runOnce(
-                    () -> {
-                        // SAFETY: we know DS is connected if we're receiving button presses
-                        drive.setHeading(
-                            AllianceUtil.unsafe.autoflip(new Rotation2d())
-                        );
-                    },
+                    // SAFETY: running this command means we see button presses, DS connected
+                    () -> drive.setHeading(AllianceUtil.unsafe.zero()),
                     drive
                 ).ignoringDisable(true)
             );
@@ -147,6 +137,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.get();
+        return selector.build(drive).cmd();
     }
 }

@@ -3,6 +3,7 @@ package frc.robot.auto;
 import frc.robot.auto.generated.ChoreoTraj;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A graph-based representation of autonomous navigation paths for the robot.
@@ -14,15 +15,10 @@ import java.util.Map;
  * <p>The class expects trajectory names to follow the format "from_to" where "from" and "to"
  * are valid AutoNode enum values (lowercased). Trajectories with names starting with "seq_" or not
  * containing exactly one underscore are ignored.
- *
- * <p>The resulting TRANSITIONS map provides O(1) lookup for finding trajectories
- * between any two connected autonomous nodes, enabling efficient path planning
- * and autonomous routine construction.
  */
 public class AutoGraph {
 
-    public static final Map<AutoNode, Map<AutoNode, ChoreoTraj>> TRANSITIONS =
-        calculate();
+    final Map<AutoNode, Map<AutoNode, ChoreoTraj>> TRANSITIONS = calculate();
 
     static Map<AutoNode, Map<AutoNode, ChoreoTraj>> calculate() {
         Map<AutoNode, Map<AutoNode, ChoreoTraj>> out = new EnumMap<>(
@@ -52,5 +48,39 @@ public class AutoGraph {
         }
 
         return out;
+    }
+
+    public AutoGraph() {}
+
+    /**
+     * Finds the Choreo trajectory that transitions from one AutoNode to another.
+     * @param from The starting AutoNode
+     * @param to The destination AutoNode
+     * @return The ChoreoTraj that connects from and to, or null if no such trajectory exists
+     */
+    public ChoreoTraj transition(AutoNode from, AutoNode to) {
+        if (!TRANSITIONS.containsKey(from)) return null;
+        return TRANSITIONS.get(from).get(to);
+    }
+
+    /**
+     * Checks if a valid trajectory transition exists between two AutoNodes.
+     * @param from The starting AutoNode
+     * @param to The destination AutoNode
+     * @return True if a trajectory exists that transitions from "from" to "to", false otherwise
+     */
+    public boolean hasTransition(AutoNode from, AutoNode to) {
+        if (!TRANSITIONS.containsKey(from)) return false;
+        return TRANSITIONS.get(from).containsKey(to);
+    }
+
+    /**
+     * Returns a set of AutoNodes that can be transitioned to from the given AutoNode.
+     * @param from The starting AutoNode
+     * @return A set of AutoNodes that have a valid trajectory transition from the given "from" node. If no transitions exist, returns an empty set.
+     */
+    public Set<AutoNode> transitionsFrom(AutoNode from) {
+        if (!TRANSITIONS.containsKey(from)) return Set.of();
+        return TRANSITIONS.get(from).keySet();
     }
 }

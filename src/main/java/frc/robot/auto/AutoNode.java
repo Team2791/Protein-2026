@@ -17,11 +17,10 @@ public enum AutoNode {
     POS1,
     POS2,
     POS3,
-    P1S,
-    P3S,
     DEPOT,
     OUTPOST,
     CLIMB,
+    CENTER,
     CANCEL;
 
     /**
@@ -32,13 +31,13 @@ public enum AutoNode {
      */
     String label() {
         return switch (this) {
-            case POS1 -> "Position 1";
+            case POS1 -> "Position 1 and Shoot";
             case POS2 -> "Position 2 and Shoot";
             case POS3 -> "Position 3";
-            case P1S, P3S -> "Shoot";
             case DEPOT -> "Depot, Intake, and Shoot";
             case OUTPOST -> "Outpost, Intake, and Shoot";
             case CLIMB -> "Climb";
+            case CENTER -> "Center and Collection";
             case CANCEL -> "Stop there";
         };
     }
@@ -53,7 +52,7 @@ public enum AutoNode {
      */
     Command onEnter(AutoRoutine routine) {
         return switch (this) {
-            case P1S, P3S, POS2 -> Commands.sequence(
+            case POS1, POS2 -> Commands.sequence(
                 // TODO: shoot all balls
                 new InstantCommand()
             );
@@ -61,25 +60,29 @@ public enum AutoNode {
                 // TODO: start intaking while following next trj
                 new InstantCommand(),
                 ChoreoTraj.seq_depot_intake.asAutoTraj(routine).cmd(),
-                // TODO: stop intake, start continuously aiming while following next trj
+                // TODO: stop intake
                 new InstantCommand(),
-                ChoreoTraj.seq_depot_score.asAutoTraj(routine).cmd(),
-                // TODO: stop aiming, shoot all balls
+                // TODO: aim and shoot all balls
                 new InstantCommand()
             );
             case OUTPOST -> Commands.sequence(
                 // wait for human player to load balls
                 new WaitCommand(3),
-                // TODO: start aiming while following next trj
-                ChoreoTraj.seq_outpost_score.asAutoTraj(routine).cmd(),
-                // TODO: stop aiming, shoot all balls
+                // TODO: aim and shoot all balls
                 new InstantCommand()
             );
             case CLIMB -> Commands.sequence(
                 // TODO: climb
                 new InstantCommand()
             );
-            case POS1, POS3, CANCEL -> Commands.none();
+            case CENTER -> Commands.sequence(
+                // TODO: start intaking while following next trj
+                new InstantCommand(),
+                ChoreoTraj.seq_center_intake.asAutoTraj(routine).cmd(),
+                // TODO: stop intake
+                new InstantCommand()
+            );
+            case POS3, CANCEL -> Commands.none();
         };
     }
 }

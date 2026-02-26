@@ -87,6 +87,14 @@ public class AllianceUtil {
         }
 
         /**
+         * Zero heading
+         * @return the zero heading for the current alliance (facing opposing alliance)
+         */
+        public Rotation2d zero() {
+            return autoflip(new Rotation2d());
+        }
+
+        /**
          * Automatically flips a pose if on Red alliance.
          *
          * @param pose The pose to potentially flip
