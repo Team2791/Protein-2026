@@ -23,10 +23,6 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
-import frc.robot.subsystems.superstructure.Superstructure;
-import frc.robot.subsystems.superstructure.SuperstructureIO;
-import frc.robot.subsystems.superstructure.SuperstructureIOSim;
-import frc.robot.subsystems.superstructure.SuperstructureIOSpark;
 import frc.robot.util.AllianceUtil;
 
 /**
@@ -48,14 +44,6 @@ public class RobotContainer {
             case REAL -> moduleId -> new ModuleIOSpark(moduleId);
             case SIM -> moduleId -> new ModuleIOSim();
             default -> moduleId -> new ModuleIO() {};
-        }
-    );
-
-    private final Superstructure superstructure = new Superstructure(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new SuperstructureIOSpark();
-            case SIM -> new SuperstructureIOSim();
-            default -> new SuperstructureIO() {};
         }
     );
 
@@ -113,11 +101,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Default command, normal field-relative drive
         drive.setDefaultCommand(new JoystickDrive(driverctl, drive));
-
-        // Control bindings for superstructure
-        driverctl.leftBumper().whileTrue(superstructure.intake());
-        driverctl.rightBumper().whileTrue(superstructure.launch());
-        driverctl.a().whileTrue(superstructure.eject());
 
         // Reset gyro to 0° when B button is pressed
         driverctl
