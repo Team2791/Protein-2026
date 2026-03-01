@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
+import frc.robot.controller.XboxEliteController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -48,11 +48,13 @@ public class RobotContainer {
     );
 
     // Controllers
-    final CommandXboxController driverctl = new CommandXboxController(
-        IOConstants.Controller.kDriver
+    final XboxEliteController driverctl = new XboxEliteController(
+        IOConstants.Controller.kDriver,
+        IOConstants.Controller.kDriverPaddles
     );
-    final CommandXboxController operctl = new CommandXboxController(
-        IOConstants.Controller.kOperator
+    final XboxEliteController operctl = new XboxEliteController(
+        IOConstants.Controller.kOperator,
+        IOConstants.Controller.kOperatorPaddles
     );
 
     // Auto selector

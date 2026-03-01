@@ -42,6 +42,12 @@ public final class IOConstants {
         /** Operator controller USB port (secondary controls). */
         public static final int kOperator = 1;
 
+        /** Keys for the driver paddles in order [BL, TL, TR, BR]. */
+        public static final String kDriverPaddles = "team";
+
+        /** Keys for the operator paddles in order [BL, TL, TR, BR]. */
+        public static final String kOperatorPaddles = "2791";
+
         /**
          * Joystick deadband threshold.
          *
