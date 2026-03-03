@@ -16,7 +16,6 @@ import frc.robot.constants.BuildConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.util.Elastic;
 import java.time.Instant;
-import java.util.Date;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;

@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.alerter.Rumbler;
@@ -62,43 +60,13 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // Set up SysId routines
-        // autoChooser.addOption(
-        //     "Drive Wheel Radius Characterization",
-        //     DriveCommands.wheelRadiusCharacterization(drive)
-        // );
-        // autoChooser.addOption(
-        //     "Drive Simple FF Characterization",
-        //     DriveCommands.feedforwardCharacterization(drive)
-        // );
-        // autoChooser.addOption(
-        //     "Drive SysId (Quasistatic Forward)",
-        //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-        // );
-        // autoChooser.addOption(
-        //     "Drive SysId (Quasistatic Reverse)",
-        //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-        // );
-        // autoChooser.addOption(
-        //     "Drive SysId (Dynamic Forward)",
-        //     drive.sysIdDynamic(SysIdRoutine.Direction.kForward)
-        // );
-        // autoChooser.addOption(
-        //     "Drive SysId (Dynamic Reverse)",
-        //     drive.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-        // );
-
         // Configure the button bindings
         configureButtonBindings();
-
         Rumbler.getInstance().provideControllers(driverctl, operctl);
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-     * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * Use this method to define your button->command mappings
      */
     private void configureButtonBindings() {
         // Default command, normal field-relative drive
