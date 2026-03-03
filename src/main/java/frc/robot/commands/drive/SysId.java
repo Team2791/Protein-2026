@@ -21,13 +21,13 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriveCommands {
+public class SysId {
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
-  private DriveCommands() {}
+  private SysId() {}
 
 
   /**

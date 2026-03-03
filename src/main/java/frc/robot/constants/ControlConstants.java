@@ -52,7 +52,7 @@ public final class ControlConstants {
     /**
      * Vision-based alignment PID constants.
      *
-     * <p>Used by {@link frc.robot.commands.pathfind.Nearby} for fine alignment
+     * <p>Used by {@link frc.robot.commands.drive.pathfind.Nearby} for fine alignment
      */
     public static final class Nearby {
 

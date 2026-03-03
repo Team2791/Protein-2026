@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.BuildConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.util.Elastic;
+import java.time.Instant;
 import java.util.Date;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -54,7 +55,7 @@ public class Robot extends LoggedRobot {
         // Set up data receivers & replay source
         switch (RuntimeConstants.kCurrentMode) {
             case REAL:
-                String date = new Date()
+                String date = Instant.now()
                     .toString()
                     .replaceAll(" ", "_")
                     .replaceAll(":", "-"); // windows compatibility fix

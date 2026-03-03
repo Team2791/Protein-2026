@@ -77,6 +77,7 @@ public class Repulsor {
             this.loc = loc;
         }
 
+        @Override
         public Vec2 getForceAtPosition(
             Translation2d position,
             Translation2d target
@@ -132,6 +133,7 @@ public class Repulsor {
             this.radius = radius;
         }
 
+        @Override
         public Vec2 getForceAtPosition(
             Translation2d position,
             Translation2d target
@@ -194,6 +196,7 @@ public class Repulsor {
             this.y = y;
         }
 
+        @Override
         public Vec2 getForceAtPosition(
             Translation2d position,
             Translation2d target
@@ -211,6 +214,7 @@ public class Repulsor {
             this.x = x;
         }
 
+        @Override
         public Vec2 getForceAtPosition(
             Translation2d position,
             Translation2d target
@@ -222,22 +226,127 @@ public class Repulsor {
     public static final double GOAL_STRENGTH = 0.65;
 
     // TODO: season: replace with actual obsticles (use choreo?)
+    static final double FIELD_LENGTH = GameConstants.kFieldLength;
+    static final double FIELD_WIDTH = GameConstants.kFieldWidth;
     public static final List<Obstacle> FIELD_OBSTACLES = List.of(
+        // Blue Hub
         new CircleObstacle(
-            new Translation2d(4.49, 4),
+            new Translation2d(Units.inchesToMeters(182.11), FIELD_WIDTH / 2),
             0.6,
-            Units.inchesToMeters(65.5 / 2.0),
+            Units.inchesToMeters(58.41 / 2.0),
             true
         ),
+        // Red Hub
         new CircleObstacle(
-            new Translation2d(13.08, 4),
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(182.11),
+                FIELD_WIDTH / 2.0
+            ),
             0.6,
-            Units.inchesToMeters(65.5 / 2.0),
+            Units.inchesToMeters(58.41 / 2.0),
+            true
+        ),
+        // Blue Climb
+        new CircleObstacle(
+            new Translation2d(
+                Units.inchesToMeters(52.0) / 2.0,
+                Units.inchesToMeters(147.395)
+            ),
+            0.6,
+            Units.inchesToMeters(52.0) / 2.0,
+            true
+        ),
+        // Red Climb
+        new CircleObstacle(
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(52.0) / 2.0,
+                FIELD_WIDTH - Units.inchesToMeters(147.395)
+            ),
+            0.6,
+            Units.inchesToMeters(52.0) / 2.0,
+            true
+        ),
+        // Blue Bump #1A
+        new CircleObstacle(
+            new Translation2d(
+                Units.inchesToMeters(181.56),
+                Units.inchesToMeters(114.1)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 2.5,
+            true
+        ),
+        // Blue Bump #1B
+        new CircleObstacle(
+            new Translation2d(
+                Units.inchesToMeters(181.56),
+                Units.inchesToMeters(71.6)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 3.0,
+            true
+        ),
+        // Blue Bump #2A
+        new CircleObstacle(
+            new Translation2d(
+                Units.inchesToMeters(181.56),
+                Units.inchesToMeters(203.268)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 2.5,
+            true
+        ),
+        // Blue Bump #2B
+        new CircleObstacle(
+            new Translation2d(
+                Units.inchesToMeters(181.56),
+                Units.inchesToMeters(245.77)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 3.0,
+            true
+        ),
+        // Red Bump #1A
+        new CircleObstacle(
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(181.56),
+                FIELD_WIDTH - Units.inchesToMeters(114.1)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 2.5,
+            true
+        ),
+        // Red Bump #1B
+        new CircleObstacle(
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(181.56),
+                FIELD_WIDTH - Units.inchesToMeters(71.6)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 3.0,
+            true
+        ),
+        // Red Bump #2A
+        new CircleObstacle(
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(181.56),
+                FIELD_WIDTH - Units.inchesToMeters(203.268)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 2.5,
+            true
+        ),
+        // Red Bump #2B
+        new CircleObstacle(
+            new Translation2d(
+                FIELD_LENGTH - Units.inchesToMeters(181.56),
+                FIELD_WIDTH - Units.inchesToMeters(245.77)
+            ),
+            0.6,
+            Units.inchesToMeters(85.0) / 3.0,
             true
         )
     );
-    static final double FIELD_LENGTH = GameConstants.kFieldLength;
-    static final double FIELD_WIDTH = GameConstants.kFieldWidth;
     public static final List<Obstacle> WALLS = List.of(
         new HorizontalObstacle(0.0, 0.5, true),
         new HorizontalObstacle(FIELD_WIDTH, 0.5, false),
@@ -427,8 +536,7 @@ public class Repulsor {
      * @param currentSpeeds The current {@link ChassisSpeeds} of the robot.
      * @param maxSpeed The desired maximum speed of the robot.
      * @param useGoal Whether or not to use the given goal.
-     * @return A {@link SwerveSample} representing the next desired robot swerve state to get to the
-     *     goal. Includes obstacle avoidance.
+     * @return Returns a {@link SwerveSample} representing the next desired robot swerve state to get to the goal. Includes obstacle avoidance.
      */
     public SwerveSample getCmd(
         Pose2d pose,
@@ -514,7 +622,7 @@ public class Repulsor {
 
     public double pathLength = 0;
 
-    public ArrayList<Translation2d> getTrajectory(
+    public List<Translation2d> getTrajectory(
         Translation2d current,
         Translation2d goalTranslation,
         double stepSize_m

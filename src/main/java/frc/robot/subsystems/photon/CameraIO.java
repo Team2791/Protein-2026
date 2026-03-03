@@ -66,8 +66,6 @@ public abstract class CameraIO {
 
     /**
      * Sets whether the camera should display driver view or processing view.
-     *
-     * @param enabled true for driver view, which exposes a camera feed
      */
     public abstract void update();
 
@@ -75,21 +73,19 @@ public abstract class CameraIO {
      * Computes the {@code VisionMeasurement} of a set of results.
      */
     public VisionMeasurement measurementOf(PhotonPipelineResult result) {
-        Optional<EstimatedRobotPose> estimation = Optional.empty();
-
         // Process all available results
-        estimation = estimator.estimateCoprocMultiTagPose(result);
-        Matrix<N3, N1> stdDevs = stdDevsOf(estimation, result.getTargets());
+        Optional<EstimatedRobotPose> est = estimator.estimateCoprocMultiTagPose(
+            result
+        );
+        Matrix<N3, N1> stdDevs = stdDevsOf(est, result.getTargets());
 
         // Store measurement if pose estimation succeeded
-        if (estimation.isEmpty()) return null;
-
-        EstimatedRobotPose est = estimation.get();
+        if (est.isEmpty()) return null;
 
         return new VisionMeasurement(
-            est.estimatedPose,
+            est.get().estimatedPose,
             stdDevs,
-            est.timestampSeconds
+            est.get().timestampSeconds
         );
     }
 
