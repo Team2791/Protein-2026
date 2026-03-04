@@ -27,6 +27,20 @@ public final class IOConstants {
     }
 
     /**
+     * Shooter hardware port assignments.
+     */
+    public static final class Shooter {
+
+        private Shooter() {}
+
+        /** Leader shooter motor CAN ID. */
+        public static final int kLeader = 50;
+
+        /** Follower shooter motor CAN ID. */
+        public static final int kFollower = 51;
+    }
+
+    /**
      * Driver station controller port mappings and input filtering.
      *
      * <p>Defines USB ports for driver and operator controllers, plus

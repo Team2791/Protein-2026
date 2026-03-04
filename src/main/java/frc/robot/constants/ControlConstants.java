@@ -5,6 +5,7 @@ import static frc.robot.util.MathPlus.kTau;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.util.TunableSparkPID;
 
 /**
  * Control loop constants for robot motion control.
@@ -21,6 +22,22 @@ import frc.robot.subsystems.drive.DriveConstants;
 public final class ControlConstants {
 
     private ControlConstants() {}
+
+    /**
+     * Shooter mechanism PID constants.
+     */
+    public static final class Shooter {
+
+        private Shooter() {}
+
+        /** Tunable PID controller for shooter velocity control. */
+        public static final TunableSparkPID kPid = new TunableSparkPID(
+            0,
+            0,
+            0,
+            "Shooter"
+        );
+    }
 
     /**
      * Autonomous trajectory following PID constants.

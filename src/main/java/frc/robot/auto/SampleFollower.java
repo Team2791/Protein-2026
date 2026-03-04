@@ -4,6 +4,7 @@ import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.drive.Drive;
 import org.littletonrobotics.junction.Logger;
@@ -15,6 +16,8 @@ import org.littletonrobotics.junction.Logger;
  * testing and tuning PID constants for autonomous path following.
  */
 public class SampleFollower {
+
+    private static boolean init = false;
 
     /** Drive subsystem for motion control. */
     final Drive drive;
@@ -45,7 +48,14 @@ public class SampleFollower {
      * @see SampleFollower for usage
      */
     public SampleFollower(Drive drive) {
+        assert !init : "SampleFollower is initialized in the Drive subsystem";
+        init = true;
+
         this.drive = drive;
+
+        SmartDashboard.putData("PID/AutoX", xCtl);
+        SmartDashboard.putData("PID/AutoY", yCtl);
+        SmartDashboard.putData("PID/AutoRot", rotCtl);
     }
 
     /**

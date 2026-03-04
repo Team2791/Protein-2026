@@ -46,7 +46,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class AutoSelector {
 
     final AutoFactory factory;
-    final SampleFollower follower;
     final AutoGraph graph = new AutoGraph();
     final List<AutoNode> current = new ArrayList<>();
 
@@ -59,11 +58,10 @@ public class AutoSelector {
      * @see AutoSelector
      */
     public AutoSelector(Drive drive) {
-        follower = new SampleFollower(drive);
         factory = new AutoFactory(
             drive::getPose,
             drive::setPose,
-            follower::follow,
+            drive.follower::follow,
             true,
             drive,
             (traj, starting) -> {
@@ -112,6 +110,20 @@ public class AutoSelector {
         c.addOption(n.label(), n);
     }
 
+    /**
+     * Called when chooser {@code n} changes to {@code change}.
+     *
+     * <ol>
+     *   <li>Trims all selections and choosers after index {@code n}.
+     *   <li>Records the new selection at index {@code n}.
+     *   <li>Populates the next chooser with valid graph transitions from {@code change},
+     *       plus a {@link AutoNode#CANCEL} stop option.
+     *   <li>Registers this method recursively as the next chooser's change listener.
+     * </ol>
+     *
+     * @param n      The index of the chooser that changed (0-based)
+     * @param change The newly selected {@link AutoNode}
+     */
     public void update(int n, AutoNode change) {
         if (current.size() > n) {
             cutoff(n + 1); // reset subsequent choosers and selections

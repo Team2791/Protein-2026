@@ -3,6 +3,15 @@ package frc.robot.controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+/**
+ * Extended Xbox controller with support for the four back paddles on the Xbox Elite Series 2.
+ *
+ * <p>Paddle inputs are read via {@link KBNT} (Keyboard-over-NetworkTables), which requires the
+ * KBNT companion app to be running on the driver station and each paddle mapped to a key.
+ *
+ * <p>The paddles are ordered [Bottom-Left, Top-Left, Top-Right, Bottom-Right] to match the
+ * left-to-right order shown in the Xbox Accessories configuration app.
+ */
 public class XboxEliteController extends CommandXboxController {
 
     /**
@@ -25,18 +34,22 @@ public class XboxEliteController extends CommandXboxController {
         }
     }
 
+    /** @return Trigger for the bottom-left back paddle (P1). */
     public Trigger paddleBL() {
         return paddles[0];
     }
 
+    /** @return Trigger for the top-left back paddle (P3). */
     public Trigger paddleTL() {
         return paddles[1];
     }
 
+    /** @return Trigger for the top-right back paddle (P4). */
     public Trigger paddleTR() {
         return paddles[2];
     }
 
+    /** @return Trigger for the bottom-right back paddle (P2). */
     public Trigger paddleBR() {
         return paddles[3];
     }

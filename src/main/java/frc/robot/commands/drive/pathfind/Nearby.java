@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -25,38 +26,51 @@ import java.util.function.Supplier;
  */
 class Nearby extends Command {
 
+    static class TunableController extends HolonomicDriveController {
+
+        static TunableController instance;
+
+        private TunableController() {
+            super(
+                new PIDController(
+                    ControlConstants.Nearby.kOrthoP,
+                    ControlConstants.Nearby.kOrthoI,
+                    ControlConstants.Nearby.kOrthoD
+                ),
+                new PIDController(
+                    ControlConstants.Nearby.kOrthoP,
+                    ControlConstants.Nearby.kOrthoI,
+                    ControlConstants.Nearby.kOrthoD
+                ),
+                new ProfiledPIDController(
+                    ControlConstants.Nearby.kTurnP,
+                    ControlConstants.Nearby.kTurnI,
+                    ControlConstants.Nearby.kTurnD,
+                    new TrapezoidProfile.Constraints(
+                        ControlConstants.Nearby.kMaxTurnVelocity,
+                        ControlConstants.Nearby.kMaxTurnAcceleration
+                    )
+                )
+            );
+            this.getThetaController().enableContinuousInput(0, kTau);
+            this.setTolerance(ControlConstants.Nearby.kTolerance);
+
+            SmartDashboard.putData("PID/NearbyX", this.getXController());
+            SmartDashboard.putData("PID/NearbyY", this.getYController());
+            SmartDashboard.putData("PID/NearbyRot", this.getThetaController());
+        }
+
+        public static TunableController getInstance() {
+            if (instance == null) instance = new TunableController();
+            return instance;
+        }
+    }
+
     /** Get the supplier on {@link #initialize()} */
     final Supplier<Pose2d> target;
 
-    /** PID for X position (field-relative). */
-    PIDController xController = new PIDController(
-        ControlConstants.Nearby.kOrthoP,
-        ControlConstants.Nearby.kOrthoI,
-        ControlConstants.Nearby.kOrthoD
-    );
-    /** PID for Y position (field-relative). */
-    PIDController yController = new PIDController(
-        ControlConstants.Nearby.kOrthoP,
-        ControlConstants.Nearby.kOrthoI,
-        ControlConstants.Nearby.kOrthoD
-    );
-    /** Profiled PID for rotation with velocity/acceleration constraints. */
-    ProfiledPIDController rotController = new ProfiledPIDController(
-        ControlConstants.Nearby.kTurnP,
-        ControlConstants.Nearby.kTurnI,
-        ControlConstants.Nearby.kTurnD,
-        new TrapezoidProfile.Constraints(
-            ControlConstants.Nearby.kMaxTurnVelocity,
-            ControlConstants.Nearby.kMaxTurnAcceleration
-        )
-    );
-
     /** High-level holonomic controller combining all three PID loops. */
-    final HolonomicDriveController controller = new HolonomicDriveController(
-        xController,
-        yController,
-        rotController
-    );
+    final HolonomicDriveController controller = TunableController.getInstance();
 
     /** Drive subsystem for motion control. */
     final Drive drive;
@@ -80,11 +94,6 @@ class Nearby extends Command {
         this.drive = drive;
         this.target = target;
 
-        // Enable continuous input: angles wrap at 2π so -0.1 rad = 2π - 0.1 rad
-        rotController.enableContinuousInput(0, kTau);
-        // Set tolerance threshold for "at reference" check
-        controller.setTolerance(ControlConstants.Nearby.kTolerance);
-
         addRequirements(drive);
     }
 
@@ -99,6 +108,10 @@ class Nearby extends Command {
     public final void initialize() {
         exit = false;
         currentTarget = target.get();
+
+        controller.getXController().reset();
+        controller.getYController().reset();
+        controller.getThetaController().reset(drive.getRotation().getRadians());
 
         if (currentTarget == null) {
             exit = true;

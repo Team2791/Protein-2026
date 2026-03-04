@@ -21,6 +21,9 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterReplay;
+import frc.robot.subsystems.shooter.ShooterSpark;
 import frc.robot.util.AllianceUtil;
 
 /**
@@ -32,7 +35,7 @@ import frc.robot.util.AllianceUtil;
 public class RobotContainer {
 
     // Subsystems
-    private final Drive drive = new Drive(
+    final Drive drive = new Drive(
         switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new GyroIONavX();
             case SIM -> new GyroIO() {};
@@ -42,6 +45,14 @@ public class RobotContainer {
             case REAL -> moduleId -> new ModuleIOSpark(moduleId);
             case SIM -> moduleId -> new ModuleIOSim();
             default -> moduleId -> new ModuleIO() {};
+        }
+    );
+
+    final Shooter shooter = new Shooter(
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> new ShooterSpark(drive);
+            case SIM -> new ShooterReplay();
+            default -> new ShooterReplay();
         }
     );
 
@@ -60,7 +71,6 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // Configure the button bindings
         configureButtonBindings();
         Rumbler.getInstance().provideControllers(driverctl, operctl);
     }
