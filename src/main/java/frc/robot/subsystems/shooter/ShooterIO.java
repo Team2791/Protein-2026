@@ -33,6 +33,6 @@ public abstract class ShooterIO {
     /** Updates {@link #data} with the current shooter state */
     public abstract void update();
 
-    /** DEBUGGING: Sets the velocity directly in radians/second */
+    /** Sets the velocity in radians/second */
     public abstract void setVelocity(double velocity);
 }
