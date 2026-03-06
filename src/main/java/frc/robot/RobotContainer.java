@@ -24,6 +24,9 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterReplay;
 import frc.robot.subsystems.shooter.ShooterSpark;
+import frc.robot.subsystems.spindexer.Spindexer;
+import frc.robot.subsystems.spindexer.SpindexerReplay;
+import frc.robot.subsystems.spindexer.SpindexerSpark;
 import frc.robot.util.AllianceUtil;
 
 /**
@@ -47,12 +50,19 @@ public class RobotContainer {
             default -> moduleId -> new ModuleIO() {};
         }
     );
-
     final Shooter shooter = new Shooter(
         switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new ShooterSpark(drive);
+            case REAL -> new ShooterSpark();
             case SIM -> new ShooterReplay();
             default -> new ShooterReplay();
+        },
+        drive
+    );
+    final Spindexer spindexer = new Spindexer(
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> new SpindexerSpark();
+            case SIM -> new SpindexerReplay();
+            default -> new SpindexerReplay();
         }
     );
 

@@ -40,7 +40,7 @@ public final class MotorConstants {
         );
 
         /** Recommended current limit: 40 amps. */
-        public static final double kCurrentLimit = 40;
+        public static final int kCurrentLimit = 40;
 
         /**
          * PWM modulation period for UVW commutation: 10ms.
@@ -78,7 +78,7 @@ public final class MotorConstants {
         );
 
         /** Recommended current limit: 60 amps. */
-        public static final double kCurrentLimit = 60;
+        public static final int kCurrentLimit = 60;
     }
 
     /**
@@ -100,7 +100,7 @@ public final class MotorConstants {
         );
 
         /** Recommended current limit: 20 amps. */
-        public static final double kCurrentLimit = 20;
+        public static final int kCurrentLimit = 20;
 
         /**
          * UVW pulse depth or dead-time setting: 2.

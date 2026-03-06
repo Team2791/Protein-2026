@@ -41,6 +41,20 @@ public final class IOConstants {
     }
 
     /**
+     * Spindexer hardware port assignments.
+     */
+    public static final class Spindexer {
+
+        private Spindexer() {}
+
+        /** SparkFlex (Neo Vortex) motor CAN ID. */
+        public static final int kSpindexer = 52;
+
+        /** SparkMax (Neo) motor CAN ID. */
+        public static final int kKicker = 53;
+    }
+
+    /**
      * Driver station controller port mappings and input filtering.
      *
      * <p>Defines USB ports for driver and operator controllers, plus

@@ -5,7 +5,9 @@ import static frc.robot.util.MathPlus.kTau;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class SparkConfigConstants {
 
@@ -19,12 +21,8 @@ public class SparkConfigConstants {
             kFollower = new SparkFlexConfig();
 
             // current limits
-            kLeader.smartCurrentLimit(
-                (int) MotorConstants.NeoVortex.kCurrentLimit
-            );
-            kFollower.smartCurrentLimit(
-                (int) MotorConstants.NeoVortex.kCurrentLimit
-            );
+            kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+            kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
 
             // position and velocity factors
             kLeader.encoder.positionConversionFactor(kTau);
@@ -49,6 +47,32 @@ public class SparkConfigConstants {
             follower.configure(kFollower, kReset, kPersist);
 
             ControlConstants.Shooter.kPid.register(leader);
+        }
+    }
+
+    public static final class Spindexer {
+
+        static final SparkFlexConfig kSpindexer;
+        static final SparkMaxConfig kKicker;
+
+        static {
+            kSpindexer = new SparkFlexConfig();
+            kKicker = new SparkMaxConfig();
+
+            // current limits
+            kSpindexer.smartCurrentLimit(
+                MotorConstants.NeoVortex.kCurrentLimit
+            );
+            kKicker.smartCurrentLimit(MotorConstants.Neo.kCurrentLimit);
+
+            // idle mode
+            kSpindexer.idleMode(SpindexerConstants.Motor.kIdleMode);
+            kKicker.idleMode(SpindexerConstants.Motor.kIdleMode);
+        }
+
+        public static void apply(SparkFlex flex, SparkMax max) {
+            flex.configure(kSpindexer, kReset, kPersist);
+            max.configure(kKicker, kReset, kPersist);
         }
     }
 
