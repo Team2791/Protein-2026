@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
 import java.nio.ByteBuffer;
@@ -115,6 +116,16 @@ public class Vec2 implements StructSerializable {
      */
     public Vec2(Pose2d pose) {
         this(pose.getTranslation());
+    }
+
+    /**
+     * Constructs a Vec2 from the translational components of a {@link ChassisSpeeds}.
+     *
+     * @param speeds the chassis speeds (vx and vy are used; omega is ignored)
+     */
+    public Vec2(ChassisSpeeds speeds) {
+        this.x = speeds.vxMetersPerSecond;
+        this.y = speeds.vyMetersPerSecond;
     }
 
     /**

@@ -76,6 +76,90 @@ public class SparkConfigConstants {
         }
     }
 
+    public static final class IntakeRoller {
+
+        static final SparkFlexConfig kLeader;
+        static final SparkFlexConfig kFollower;
+
+        static {
+            kLeader = new SparkFlexConfig();
+            kFollower = new SparkFlexConfig();
+
+            // current limits
+            kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+            kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+
+            // encoder conversion: motor rad → wheel rad (includes reduction)
+            kLeader.encoder.positionConversionFactor(
+                kTau * IntakeConstants.Roller.kReduction
+            );
+            kLeader.encoder.velocityConversionFactor(
+                (kTau * IntakeConstants.Roller.kReduction) / 60.0
+            );
+
+            // roller PID (velocity)
+            ControlConstants.Intake.kRollerPid.register(kLeader);
+
+            kLeader.idleMode(IntakeConstants.Roller.kIdleMode);
+            kFollower.idleMode(IntakeConstants.Roller.kIdleMode);
+
+            // leader-follower (inverted)
+            kFollower.follow(
+                IOConstants.Intake.kRollerLeader,
+                IntakeConstants.Roller.kInvertFollower
+            );
+        }
+
+        public static void apply(SparkFlex leader, SparkFlex follower) {
+            leader.configure(kLeader, kReset, kPersist);
+            follower.configure(kFollower, kReset, kPersist);
+
+            ControlConstants.Intake.kRollerPid.register(leader);
+        }
+    }
+
+    public static final class IntakePivot {
+
+        static final SparkFlexConfig kLeader;
+        static final SparkFlexConfig kFollower;
+
+        static {
+            kLeader = new SparkFlexConfig();
+            kFollower = new SparkFlexConfig();
+
+            // current limits
+            kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+            kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+
+            // encoder conversion: motor rad → output rad (includes reduction)
+            kLeader.encoder.positionConversionFactor(
+                kTau * IntakeConstants.Pivot.kReduction
+            );
+            kLeader.encoder.velocityConversionFactor(
+                (kTau * IntakeConstants.Pivot.kReduction) / 60.0
+            );
+
+            // pivot PID (position)
+            ControlConstants.Intake.kPivotPid.register(kLeader);
+
+            kLeader.idleMode(IntakeConstants.Pivot.kIdleMode);
+            kFollower.idleMode(IntakeConstants.Pivot.kIdleMode);
+
+            // leader-follower (inverted)
+            kFollower.follow(
+                IOConstants.Intake.kPivotLeader,
+                IntakeConstants.Pivot.kInvertFollower
+            );
+        }
+
+        public static void apply(SparkFlex leader, SparkFlex follower) {
+            leader.configure(kLeader, kReset, kPersist);
+            follower.configure(kFollower, kReset, kPersist);
+
+            ControlConstants.Intake.kPivotPid.register(leader);
+        }
+    }
+
     public static final ResetMode kReset = ResetMode.kResetSafeParameters;
     public static final PersistMode kPersist = PersistMode.kPersistParameters;
 }

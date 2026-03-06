@@ -40,6 +40,30 @@ public final class ControlConstants {
     }
 
     /**
+     * Intake mechanism PID constants.
+     */
+    public static final class Intake {
+
+        private Intake() {}
+
+        /** Tunable PID controller for roller velocity control. */
+        public static final TunableSparkPID kRollerPid = new TunableSparkPID(
+            0,
+            0,
+            0,
+            "Intake/Roller"
+        );
+
+        /** Tunable PID controller for pivot position control. */
+        public static final TunableSparkPID kPivotPid = new TunableSparkPID(
+            0,
+            0,
+            0,
+            "Intake/Pivot"
+        );
+    }
+
+    /**
      * Autonomous trajectory following PID constants.
      *
      * <p>Used by {@link frc.robot.autos.AutoManager} for Choreo trajectory following.

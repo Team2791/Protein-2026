@@ -55,6 +55,26 @@ public final class IOConstants {
     }
 
     /**
+     * Intake hardware port assignments.
+     */
+    public static final class Intake {
+
+        private Intake() {}
+
+        /** Roller leader SparkFlex (Neo Vortex) CAN ID. */
+        public static final int kRollerLeader = 54;
+
+        /** Roller follower SparkFlex (Neo Vortex) CAN ID. */
+        public static final int kRollerFollower = 55;
+
+        /** Pivot leader SparkFlex (Neo Vortex) CAN ID. */
+        public static final int kPivotLeader = 56;
+
+        /** Pivot follower SparkFlex (Neo Vortex) CAN ID. */
+        public static final int kPivotFollower = 57;
+    }
+
+    /**
      * Driver station controller port mappings and input filtering.
      *
      * <p>Defines USB ports for driver and operator controllers, plus
