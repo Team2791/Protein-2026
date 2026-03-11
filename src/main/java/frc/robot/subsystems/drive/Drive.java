@@ -21,8 +21,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,7 +29,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.auto.SampleFollower;
 import frc.robot.constants.RuntimeConstants;
-import frc.robot.constants.RuntimeConstants.Mode;
 import frc.robot.subsystems.photon.CameraPhoton;
 import frc.robot.subsystems.photon.CameraReplay;
 import frc.robot.subsystems.photon.Photon;
@@ -42,7 +39,6 @@ import frc.robot.util.Vec2;
 import frc.robot.util.VisionMeasurement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
@@ -52,20 +48,21 @@ import org.littletonrobotics.junction.Logger;
 public class Drive extends SubsystemBase {
 
     static final Lock odometryLock = new ReentrantLock();
+
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs =
         new GyroIOInputsAutoLogged();
+
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+
     private final SysIdRoutine sysId;
-    private final Alert gyroDisconnectedAlert = new Alert(
-        "Disconnected gyro, using kinematics as fallback.",
-        AlertType.kError
-    );
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         moduleTranslations
     );
+
     private Rotation2d rawGyroRotation = Rotation2d.kZero;
+
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
         new SwerveModulePosition[] {
             new SwerveModulePosition(),
@@ -73,6 +70,7 @@ public class Drive extends SubsystemBase {
             new SwerveModulePosition(),
             new SwerveModulePosition(),
         };
+
     private SwerveDrivePoseEstimator poseEstimator =
         new SwerveDrivePoseEstimator(
             kinematics,
@@ -80,16 +78,6 @@ public class Drive extends SubsystemBase {
             lastModulePositions,
             Pose2d.kZero
         );
-
-    /** the QuestNav used for primary vision things */
-    final Quest quest = new Quest(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new Meta3S();
-            case REPLAY -> new QuestReplay();
-            case SIM -> new QuestReplay();
-        },
-        this::addVisionMeasurement
-    );
 
     /** Field widget */
     public final Field2d field = new Field2d();
@@ -108,6 +96,16 @@ public class Drive extends SubsystemBase {
             case SIM -> CameraReplay::new;
         },
         this.calibrators::add
+    );
+
+    /** the QuestNav used for primary vision things */
+    final Quest quest = new Quest(
+        switch (RuntimeConstants.kCurrentMode) {
+            case REAL -> new Meta3S();
+            case REPLAY -> new QuestReplay();
+            case SIM -> new QuestReplay();
+        },
+        this::addVisionMeasurement
     );
 
     /**
@@ -207,17 +205,10 @@ public class Drive extends SubsystemBase {
                 lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
             }
 
-            Optional<Rotation2d> questHeading = quest.headingAt(
-                sampleTimestamps[i]
-            );
-
             // Update gyro angle
             if (gyroInputs.connected) {
                 // Use the real gyro angle
                 rawGyroRotation = gyroInputs.odometryYawPositions[i];
-            } else if (questHeading.isPresent()) {
-                // Use the Quest heading if available
-                rawGyroRotation = questHeading.get();
             } else {
                 // Use the angle delta from the kinematics and module deltas
                 Twist2d twist = kinematics.toTwist2d(moduleDeltas);
@@ -233,11 +224,6 @@ public class Drive extends SubsystemBase {
                 modulePositions
             );
         }
-
-        // Update gyro alert
-        gyroDisconnectedAlert.set(
-            !gyroInputs.connected && RuntimeConstants.kCurrentMode != Mode.SIM
-        );
 
         field.setRobotPose(this.getPose());
     }
@@ -365,6 +351,13 @@ public class Drive extends SubsystemBase {
         return kinematics.toChassisSpeeds(getModuleStates());
     }
 
+    public ChassisSpeeds getRobotSpeeds() {
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+            getChassisSpeeds(),
+            getRotation()
+        );
+    }
+
     /** Returns the position of each module in radians. */
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
@@ -401,6 +394,7 @@ public class Drive extends SubsystemBase {
             getModulePositions(),
             pose
         );
+        quest.reset(pose);
     }
 
     /** Sets the robot's heading */

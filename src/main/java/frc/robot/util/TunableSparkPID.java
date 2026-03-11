@@ -5,6 +5,8 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.SparkConfigConstants;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wraps a WPILib {@link PIDController} to allow live PID tuning via Shuffleboard/SmartDashboard
@@ -15,7 +17,7 @@ import frc.robot.constants.SparkConfigConstants;
  *   <li>Construct with initial gains and a dashboard name.
  *   <li>Call {@link #register(SparkBaseConfig)} with the Spark's config object to bake in the current gains.
  *   <li>Call {@link #register(SparkBase)} to bind the motor that will be reconfigured on change.
- *   <li>Call {@link #update()} each loop; if gains changed on the dashboard, the Spark is reconfigured.
+ *   <li>Call {@link #updateAll()} each loop; if gains changed on the dashboard, the Spark is reconfigured.
  * </ol>
  */
 public class TunableSparkPID {
@@ -32,6 +34,9 @@ public class TunableSparkPID {
             return kP == other.kP && kI == other.kI && kD == other.kD;
         }
     }
+
+    /** A list of instances to update every loop. */
+    static final List<TunableSparkPID> instances = new ArrayList<>();
 
     /** The WPILib PIDController exposed to SmartDashboard for live tuning. */
     final PIDController inner;
@@ -62,7 +67,7 @@ public class TunableSparkPID {
 
     /**
      * Writes the current gains into the provided Spark config's closed-loop slot
-     * and stores the config for later reconfiguration via {@link #update()}.
+     * and stores the config for later reconfiguration via {@link #updateAll()}.
      *
      * <p>Call this before applying the config to the motor.
      *
@@ -82,6 +87,7 @@ public class TunableSparkPID {
      */
     public void register(SparkBase motor) {
         this.motor = motor;
+        instances.add(this);
     }
 
     /**
@@ -99,15 +105,17 @@ public class TunableSparkPID {
      *
      * <p>Call this every robot loop iteration.
      */
-    public void update() {
-        PIDConstants current = collect();
-        if (current.equals(old)) return;
+    public static void updateAll() {
+        for (TunableSparkPID that : instances) {
+            PIDConstants current = that.collect();
+            if (current.equals(that.old)) continue; // no change since last update, skip
 
-        config.closedLoop.pid(current.kP, current.kI, current.kD);
-        motor.configure(
-            config,
-            SparkConfigConstants.kReset,
-            SparkConfigConstants.kPersist
-        );
+            that.config.closedLoop.pid(current.kP, current.kI, current.kD);
+            that.motor.configure(
+                that.config,
+                SparkConfigConstants.kReset,
+                SparkConfigConstants.kPersist
+            );
+        }
     }
 }

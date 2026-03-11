@@ -1,6 +1,7 @@
 package frc.robot.subsystems.spindexer;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.SpindexerConstants;
 import frc.robot.subsystems.spindexer.SpindexerIO.SpindexerData;
 
 /**
@@ -38,12 +39,13 @@ public class Spindexer extends SubsystemBase {
     }
 
     /**
-     * Runs or stops the spindexer motors.
+     * Runs or stops the spindexer motors at their configured constant powers.
      *
      * @param running {@code true} to spin at configured powers, {@code false} to stop
      */
     public void set(boolean running) {
-        io.set(running);
+        io.setSpindexer(running ? SpindexerConstants.kSpindexerPower : 0.0);
+        io.setKicker(running ? SpindexerConstants.kKickerPower : 0.0);
     }
 
     /** Calls {@link SpindexerIO#update()} every robot loop to refresh sensor data. */

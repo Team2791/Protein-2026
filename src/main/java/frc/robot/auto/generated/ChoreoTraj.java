@@ -45,13 +45,6 @@ public record ChoreoTraj(
 	    new Pose2d(0.514, 0.666, Rotation2d.fromRadians(-1.571)),
 	    new Pose2d(1.645, 3.314, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj pos3_center = new ChoreoTraj(
-	    "pos3_center",
-	    OptionalInt.empty(),
-	    1.10573,
-	    new Pose2d(4.416, 0.667, Rotation2d.fromRadians(1.571)),
-	    new Pose2d(7.705, 1.21, Rotation2d.fromRadians(3.142))
-	);
 	public static final ChoreoTraj pos1_depot = new ChoreoTraj(
 	    "pos1_depot",
 	    OptionalInt.empty(),
@@ -73,12 +66,12 @@ public record ChoreoTraj(
 	    new Pose2d(3.489, 4.035, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.514, 0.666, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj pos3_outpost = new ChoreoTraj(
-	    "pos3_outpost",
+	public static final ChoreoTraj pos3_center = new ChoreoTraj(
+	    "pos3_center",
 	    OptionalInt.empty(),
-	    1.19032,
-	    new Pose2d(4.416, 0.667, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(0.514, 0.666, Rotation2d.fromRadians(-1.571))
+	    1.10573,
+	    new Pose2d(4.416, 0.667, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(7.705, 1.21, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj seq_center_intake = new ChoreoTraj(
 	    "seq_center_intake",
@@ -94,6 +87,13 @@ public record ChoreoTraj(
 	    new Pose2d(0.514, 7.013, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.514, 5.432, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj pos3_outpost = new ChoreoTraj(
+	    "pos3_outpost",
+	    OptionalInt.empty(),
+	    1.19032,
+	    new Pose2d(4.416, 0.667, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(0.514, 0.666, Rotation2d.fromRadians(-1.571))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -103,13 +103,13 @@ public record ChoreoTraj(
     	Map.entry("center_pos3", center_pos3),
 		Map.entry("depot_climb", depot_climb),
 		Map.entry("outpost_climb", outpost_climb),
-		Map.entry("pos3_center", pos3_center),
 		Map.entry("pos1_depot", pos1_depot),
 		Map.entry("pos2_depot", pos2_depot),
 		Map.entry("pos2_outpost", pos2_outpost),
-		Map.entry("pos3_outpost", pos3_outpost),
+		Map.entry("pos3_center", pos3_center),
 		Map.entry("seq_center_intake", seq_center_intake),
-		Map.entry("seq_depot_intake", seq_depot_intake)
+		Map.entry("seq_depot_intake", seq_depot_intake),
+		Map.entry("pos3_outpost", pos3_outpost)
     );
 
     /**

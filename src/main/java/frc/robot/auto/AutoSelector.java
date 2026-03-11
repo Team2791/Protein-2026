@@ -98,7 +98,7 @@ public class AutoSelector {
         add(s0, AutoNode.POS3);
         add(s0, AutoNode.CANCEL);
 
-        s0.onChange(null);
+        s0.onChange(node -> update(0, node));
     }
 
     /**
@@ -125,6 +125,8 @@ public class AutoSelector {
      * @param change The newly selected {@link AutoNode}
      */
     public void update(int n, AutoNode change) {
+        if (n >= NUM_CHOOSERS - 1) return; // if last chooser changed, no next chooser to update
+
         if (current.size() > n) {
             cutoff(n + 1); // reset subsequent choosers and selections
             current.remove(n); // remove current selection at index n (last index)
@@ -166,7 +168,8 @@ public class AutoSelector {
      * @return A new LoggedDashboardChooser instance
      */
     private LoggedDashboardChooser<AutoNode> chooser(int n) {
-        return new LoggedDashboardChooser<>("Auto Selector " + (n + 1));
+        if (n == 0) return new LoggedDashboardChooser<>("Auto/StartPos");
+        else return new LoggedDashboardChooser<>("Auto/Task" + n);
     }
 
     /**

@@ -25,6 +25,7 @@ public class Meta3S extends QuestIO {
      */
     public Meta3S() {
         this.quest = new QuestNav();
+        quest.setPose(new Pose3d()); // until we get a reading, just assume we're at the origin
 
         Alerter.getInstance().register(
             "Meta Quest 3S",

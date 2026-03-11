@@ -15,7 +15,11 @@ public class SpindexerReplay extends SpindexerIO {
 
     /** No-op: motor output is not applied in replay mode. */
     @Override
-    public void set(boolean running) {}
+    public void setSpindexer(double power) {}
+
+    /** No-op: motor output is not applied in replay mode. */
+    @Override
+    public void setKicker(double power) {}
 
     /** No-op: data is populated from the log, not from hardware. */
     @Override

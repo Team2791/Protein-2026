@@ -35,9 +35,16 @@ public abstract class SpindexerIO {
     public abstract void update();
 
     /**
-     * Runs or stops both motors at their configured constant powers.
+     * Sets the spindexer (SparkFlex / Neo Vortex) motor power.
      *
-     * @param running {@code true} to spin at the configured powers, {@code false} to stop
+     * @param power duty-cycle power in the range [-1, 1]
      */
-    public abstract void set(boolean running);
+    public abstract void setSpindexer(double power);
+
+    /**
+     * Sets the kicker (SparkMax / Neo) motor power.
+     *
+     * @param power duty-cycle power in the range [-1, 1]
+     */
+    public abstract void setKicker(double power);
 }

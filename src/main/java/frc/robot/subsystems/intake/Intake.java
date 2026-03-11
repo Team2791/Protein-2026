@@ -84,24 +84,23 @@ public class Intake extends SubsystemBase {
         // Command the pivot to the deployed position
         pivot.setPosition(IntakeConstants.Pivot.kDeployedPosition);
 
-        // Only spin rollers once the pivot is near the target
-        double err = Math.abs(
-            pivot.data.leader.position() -
-                IntakeConstants.Pivot.kDeployedPosition
-        );
-
-        if (err > IntakeConstants.Pivot.kPositionTolerance) {
+        if (pivot.data.leader.pid().atTarget()) {
             roller.setVelocity(0);
             return;
         }
 
-        // Compute drivetrain linear speed (m/s)
-        double vel = new Vec2(drive.getChassisSpeeds()).mag();
+        // Compute drivetrain/robot-relative velocity (m/s)
+        Vec2 vel = new Vec2(drive.getRobotSpeeds());
+
+        // shooter is +X, intake is -Y
+        // match all intake-directed velocity
+        double yVel = Math.max(0, -vel.y);
 
         // Convert linear speed to wheel angular velocity (rad/s).
         // The Spark encoder conversion factor already accounts for the
         // gear reduction, so we only need to divide by wheel radius.
-        double omega = vel / IntakeConstants.Roller.kWheelRadius;
+        // v = r * omega -> omega = v / r
+        double omega = yVel / IntakeConstants.Roller.kWheelRadius;
 
         roller.setVelocity(omega);
     }

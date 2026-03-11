@@ -5,7 +5,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.constants.SpindexerConstants;
 import frc.robot.util.SparkData;
 
 /**
@@ -13,7 +12,7 @@ import frc.robot.util.SparkData;
  *
  * <p>Uses a {@link SparkFlex} driving a Neo Vortex and a {@link SparkMax} driving
  * a standard Neo. Both motors are controlled independently at fixed duty-cycle
- * powers defined in {@link SpindexerConstants}.
+ * powers.
  */
 public class SpindexerSpark extends SpindexerIO {
 
@@ -34,9 +33,13 @@ public class SpindexerSpark extends SpindexerIO {
     }
 
     @Override
-    public void set(boolean running) {
-        spindexer.set(running ? SpindexerConstants.kSpindexerPower : 0.0);
-        kicker.set(running ? SpindexerConstants.kKickerPower : 0.0);
+    public void setSpindexer(double power) {
+        spindexer.set(power);
+    }
+
+    @Override
+    public void setKicker(double power) {
+        kicker.set(power);
     }
 
     @Override

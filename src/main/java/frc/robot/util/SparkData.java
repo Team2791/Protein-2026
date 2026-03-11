@@ -25,7 +25,9 @@ public record SparkData(
     /** The current [-1..1] output of the motor */
     double output,
     /** Whether the motor is connected */
-    boolean connected
+    boolean connected,
+    /** PID Information */
+    ClosedLoopData pid
 ) implements Cloneable {
     /**
      * Reads the current state of a Spark motor controller and returns it as a SparkData instance.
@@ -40,7 +42,8 @@ public record SparkData(
             spark.getOutputCurrent(),
             spark.getMotorTemperature(),
             spark.get(),
-            spark.getLastError() == REVLibError.kOk
+            spark.getLastError() == REVLibError.kOk,
+            ClosedLoopData.read(spark.getClosedLoopController())
         );
     }
 
@@ -62,11 +65,21 @@ public record SparkData(
             spark.getOutputCurrent(),
             spark.getMotorTemperature(),
             spark.get(),
-            spark.getLastError() == REVLibError.kOk
+            spark.getLastError() == REVLibError.kOk,
+            ClosedLoopData.read(spark.getClosedLoopController())
         );
     }
 
     public static SparkData empty() {
-        return new SparkData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false);
+        return new SparkData(
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            false,
+            ClosedLoopData.empty()
+        );
     }
 }

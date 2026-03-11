@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
 
     /**
      * When {@code true}, the shooter is in manual mode (velocity set via {@link #setVelocity}).
-     * In manual mode, the automatic distance-based control in {@link #update()} is bypassed.
+     * In manual mode, the automatic distance-based control in {@link #updateAll()} is bypassed.
      */
     boolean manual = false;
 
