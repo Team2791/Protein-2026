@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
+import frc.robot.commands.climber.ClimbDown;
+import frc.robot.commands.climber.ClimbFull;
 import frc.robot.commands.drive.JoystickDrive;
+import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.controller.XboxEliteController;
@@ -134,7 +137,7 @@ public class RobotContainer {
         // Default command, normal field-relative drive
         drive.setDefaultCommand(new JoystickDrive(driverctl, drive));
 
-        // Reset gyro to 0° when B button is pressed
+        // Reset gyro to 0° when start button is pressed
         driverctl
             .start()
             .onTrue(
@@ -144,6 +147,18 @@ public class RobotContainer {
                     drive
                 ).ignoringDisable(true)
             );
+
+        // Driver: wheel lock
+        driverctl.a().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+        // Driver: point and shoot
+        driverctl.x().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
+
+        // Driver: Climb down (postauto)
+        driverctl.leftBumper().whileTrue(new ClimbDown(climber, drive, intake));
+
+        // Driver: Climb up (endgame)
+        driverctl.rightBumper().whileTrue(new ClimbFull(climber, intake));
     }
 
     /**
