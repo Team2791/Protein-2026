@@ -5,7 +5,8 @@ import com.studica.frc.AHRS.NavXComType;
 /**
  * Input/Output port assignments and hardware interface constants.
  *
- * <p>Contains CAN IDs, USB port assignments, and controller port mappings
+ * <p>
+ * Contains CAN IDs, USB port assignments, and controller port mappings
  * for all robot hardware peripherals. Organized by subsystem for clarity.
  */
 public final class IOConstants {
@@ -15,7 +16,8 @@ public final class IOConstants {
     /**
      * Drivetrain hardware port assignments.
      *
-     * <p>Currently contains only gyroscope configuration (commented out).
+     * <p>
+     * Currently contains only gyroscope configuration (commented out).
      * TODO: May need USB connection instead of MXP_SPI depending on NavX mounting.
      */
     public static final class Drivetrain {
@@ -75,9 +77,49 @@ public final class IOConstants {
     }
 
     /**
+     * Climber hardware port assignments.
+     *
+     * <p>
+     * Two SparkFlex (Neo Vortex) motors on one axle for rotation, plus
+     * three DoubleSolenoids on the REV Pneumatics Hub for the hook cylinders.
+     */
+    public static final class Climber {
+
+        private Climber() {}
+
+        /** Leader axle motor CAN ID. */
+        public static final int kLeader = 58;
+
+        /** Follower axle motor CAN ID. */
+        public static final int kFollower = 59;
+
+        /** REV Pneumatics Hub CAN ID. */
+        public static final int kPhId = 1;
+
+        /** Inner hook solenoid forward channel. */
+        public static final int kInnerFwd = 0;
+
+        /** Inner hook solenoid reverse channel. */
+        public static final int kInnerRev = 1;
+
+        /** Outer-left hook solenoid forward channel. */
+        public static final int kOuterLeftFwd = 2;
+
+        /** Outer-left hook solenoid reverse channel. */
+        public static final int kOuterLeftRev = 3;
+
+        /** Outer-right hook solenoid forward channel. */
+        public static final int kOuterRightFwd = 4;
+
+        /** Outer-right hook solenoid reverse channel. */
+        public static final int kOuterRightRev = 5;
+    }
+
+    /**
      * Driver station controller port mappings and input filtering.
      *
-     * <p>Defines USB ports for driver and operator controllers, plus
+     * <p>
+     * Defines USB ports for driver and operator controllers, plus
      * joystick deadband for eliminating stick drift.
      */
     public static final class Controller {
@@ -99,7 +141,8 @@ public final class IOConstants {
         /**
          * Joystick deadband threshold.
          *
-         * <p>Inputs within ±{@code 0.05} of center are treated as zero
+         * <p>
+         * Inputs within ±{@code 0.05} of center are treated as zero
          * to prevent unintended movement from controller drift.
          */
         public static final double kDeadband = 0.05;

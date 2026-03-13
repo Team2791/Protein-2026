@@ -11,10 +11,12 @@ import org.littletonrobotics.junction.Logger;
 /**
  * Abstract command for pose-based robot navigation using holonomic drive control.
  *
- * <p>This is an abstract command that subclasses override via {@link Supplied} or
+ * <p>
+ * This is an abstract command that subclasses override via {@link Supplied} or
  * by implementing {@link #target()}.
  *
- * <p>Default concrete implementation: {@link Supplied}
+ * <p>
+ * Default concrete implementation: {@link Supplied}
  */
 public abstract class Pathfind extends WrapperCommand {
 
@@ -23,7 +25,8 @@ public abstract class Pathfind extends WrapperCommand {
     /**
      * Concrete {@link Pathfind} implementation that accepts a target pose via Supplier.
      *
-     * <p>Useful for dynamic targets that may change during the command, or for
+     * <p>
+     * Useful for dynamic targets that may change during the command, or for
      * creating {@link Pathfind} instances with a fixed target pose.
      */
     public static class Supplied extends Pathfind {
@@ -113,7 +116,8 @@ public abstract class Pathfind extends WrapperCommand {
     /**
      * Gets the target pose for this navigation.
      *
-     * <p>Subclasses must implement this to provide the target, which may be
+     * <p>
+     * Subclasses must implement this to provide the target, which may be
      * constant or dynamic (e.g., based on vision measurements).
      *
      * @return Target pose, or null if no valid target

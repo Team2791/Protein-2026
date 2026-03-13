@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /**
  * Rumbler class for controller vibration feedback.
  *
- * <p>Provides rumble functionality for driver and operator controllers.
+ * <p>
+ * Provides rumble functionality for driver and operator controllers.
  * The rumble lasts for a fixed duration controlled by a timer.
  */
 public class Rumbler {
@@ -61,7 +62,8 @@ public class Rumbler {
     /**
      * Triggers controller vibration feedback for 0.5 seconds.
      *
-     * <p>No rumble occurs during autonomous mode.
+     * <p>
+     * No rumble occurs during autonomous mode.
      * The vibration is controlled by a timer that automatically stops after 0.5 seconds.
      */
     public void rumble() {

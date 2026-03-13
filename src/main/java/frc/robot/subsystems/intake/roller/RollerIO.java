@@ -6,7 +6,8 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * Abstract IO class for the intake roller mechanism.
  *
- * <p>Two Neo Vortex motors in leader/follower (inverted), driven at a
+ * <p>
+ * Two Neo Vortex motors in leader/follower (inverted), driven at a
  * velocity setpoint to match drivetrain ground speed.
  */
 public abstract class RollerIO {

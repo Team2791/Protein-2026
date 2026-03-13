@@ -8,7 +8,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 /**
  * Concrete implementation of {@link CameraIO} for PhotonVision-compatible cameras.
  *
- * <p>This class interfaces with physical USB or network-connected vision cameras running
+ * <p>
+ * This class interfaces with physical USB or network-connected vision cameras running
  * PhotonVision firmware. It handles:
  * <ul>
  *   <li>Camera initialization and configuration
@@ -16,7 +17,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
  *   <li>Setting driver mode for dashboard view
  * </ul>
  *
- * <p>Works with any camera supported by PhotonVision, including standard USB webcams.
+ * <p>
+ * Works with any camera supported by PhotonVision, including standard USB webcams.
  */
 public class CameraPhoton extends CameraIO {
 

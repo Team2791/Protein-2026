@@ -43,7 +43,8 @@ public final class Elastic {
         /**
          * Creates a new Notification with all default parameters. This constructor is intended to be
          * used with the chainable decorator methods
-         * <p>Title and description fields are empty.
+         * <p>
+         * Title and description fields are empty.
          */
         public Notification() {
             this(NotificationLevel.INFO, "", "");
@@ -230,7 +231,8 @@ public final class Elastic {
 
         /**
          * Updates the height of the notification
-         * <p>If the height is set to -1, the height will be determined automatically by the dashboard
+         * <p>
+         * If the height is set to -1, the height will be determined automatically by the dashboard
          *
          * @param height the height to set the notification to
          */
@@ -316,7 +318,8 @@ public final class Elastic {
 
         /**
          * Modifies the notification's height and returns itself to allow for method chaining
-         * <p>This will set the height to -1 to have it automatically determined by the dashboard
+         * <p>
+         * This will set the height to -1 to have it automatically determined by the dashboard
          *
          * @return the current notification
          */
@@ -327,8 +330,10 @@ public final class Elastic {
 
         /**
          * Modifies the notification to disable the auto dismiss behavior
-         * <p>This sets the display time to 0 milliseconds
-         * <p>The auto dismiss behavior can be re-enabled by setting the display time to a number
+         * <p>
+         * This sets the display time to 0 milliseconds
+         * <p>
+         * The auto dismiss behavior can be re-enabled by setting the display time to a number
          * greater than 0
          *
          * @return the current notification
@@ -388,7 +393,8 @@ public final class Elastic {
     /**
      * Selects the tab of the dashboard with the given name. If no tab matches the name, this will
      * have no effect on the widgets or tabs in view.
-     * <p>If the given name is a number, Elastic will select the tab whose index equals the number
+     * <p>
+     * If the given name is a number, Elastic will select the tab whose index equals the number
      * provided.
      *
      * @param tabName the name of the tab to select

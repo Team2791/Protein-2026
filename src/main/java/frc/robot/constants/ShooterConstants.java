@@ -28,10 +28,12 @@ public final class ShooterConstants {
     /**
      * Distance-to-velocity regression coefficients for automatic shooter speed control.
      *
-     * <p>The regression formula is: {@code velocity = kSq * dist² + kLin * dist + kConst}
+     * <p>
+     * The regression formula is: {@code velocity = kSq * dist² + kLin * dist + kConst}
      * where {@code dist} is the distance from the robot to the hub in meters.
      *
-     * <p>All coefficients are zero until tuned for the specific robot/game setup.
+     * <p>
+     * All coefficients are zero until tuned for the specific robot/game setup.
      */
     public static final class Regression {
 
@@ -60,7 +62,8 @@ public final class ShooterConstants {
     /**
      * X-position threshold (blue-alliance frame) beyond which the shooter spins down.
      *
-     * <p>When the robot's blue-frame X position exceeds this value, the robot is too
+     * <p>
+     * When the robot's blue-frame X position exceeds this value, the robot is too
      * far from the hub to shoot and the flywheel is commanded to stop.
      */
     public static final double kSpinUpThreshold = Inches.of(215.61).in(Meters);

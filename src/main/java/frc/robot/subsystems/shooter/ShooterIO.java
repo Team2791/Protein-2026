@@ -6,10 +6,12 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * Abstract IO class for the shooter subsystem.
  *
- * <p>This class defines the interface for interacting with the shooter hardware,
+ * <p>
+ * This class defines the interface for interacting with the shooter hardware,
  * including methods for setting shooter speeds and reading sensor data.
  *
- * <p>Concrete implementations of this class should handle the specifics of
+ * <p>
+ * Concrete implementations of this class should handle the specifics of
  * communicating with the shooter hardware, such as motor controllers and encoders.
  */
 public abstract class ShooterIO {

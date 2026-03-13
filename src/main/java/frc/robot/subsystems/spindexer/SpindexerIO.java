@@ -6,11 +6,13 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * Abstract IO class for the spindexer subsystem.
  *
- * <p>This class defines the interface for interacting with the spindexer hardware,
+ * <p>
+ * This class defines the interface for interacting with the spindexer hardware,
  * including a SparkFlex (Neo Vortex) and a SparkMax (Neo) motor, each run
  * independently at a fixed power via {@link #set(boolean)}.
  *
- * <p>Concrete implementations handle the specifics of communicating with the
+ * <p>
+ * Concrete implementations handle the specifics of communicating with the
  * underlying motor controllers.
  */
 public abstract class SpindexerIO {

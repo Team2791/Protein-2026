@@ -17,10 +17,12 @@ import java.util.function.Supplier;
 /**
  * Command for nearby pose-targeted navigation using PIDs.
  *
- * <p>This command is used as a helper for {@link Pathfind}. It is
+ * <p>
+ * This command is used as a helper for {@link Pathfind}. It is
  * used as the final step: close to the target, switch to PID control.
  *
- * <p>Navigate uses a {@link HolonomicDriveController} with three independent PID controllers
+ * <p>
+ * Navigate uses a {@link HolonomicDriveController} with three independent PID controllers
  * to move the robot to a target pose. The controller calculates the required
  * chassis speeds (x, y, rotation) to reach the target.
  */
@@ -83,7 +85,8 @@ class Nearby extends Command {
     /**
      * Constructs a Nearby command.
      *
-     * <p>Initializes the HolonomicDriveController with the three PID controllers,
+     * <p>
+     * Initializes the HolonomicDriveController with the three PID controllers,
      * enables continuous input for rotation (angles wrap around), and sets the
      * position tolerance for determining when the target is reached.
      *
@@ -100,7 +103,8 @@ class Nearby extends Command {
     /**
      * Command initialization: Get target pose and prepare for navigation.
      *
-     * <p>Called once when the command starts. Fetches the target pose from
+     * <p>
+     * Called once when the command starts. Fetches the target pose from
      * {@link #target}, logs it, and displays it on the field view
      * for debugging.
      */
@@ -122,7 +126,8 @@ class Nearby extends Command {
     /**
      * Command execution: Calculate and send chassis speeds to reach target.
      *
-     * <p>Uses the {@link HolonomicDriveController} to calculate the required
+     * <p>
+     * Uses the {@link HolonomicDriveController} to calculate the required
      * chassis speeds (vx, vy, ω) based on current pose, target pose, and
      * controller gains.
      */
@@ -145,7 +150,8 @@ class Nearby extends Command {
     /**
      * Command end: Stop robot and clean up target visualization.
      *
-     * <p>Called when the command finishes (either by {@link #isFinished()} or interruption).
+     * <p>
+     * Called when the command finishes (either by {@link #isFinished()} or interruption).
      * Removes the target from the field visualization and stops the robot.
      *
      * @param interrupted true if command was interrupted, false if finished normally
@@ -159,7 +165,8 @@ class Nearby extends Command {
     /**
      * Checks if the robot has reached the target pose.
      *
-     * <p>Uses the {@link HolonomicDriveController}'s tolerance checking to determine if
+     * <p>
+     * Uses the {@link HolonomicDriveController}'s tolerance checking to determine if
      * both position and rotation are within acceptable thresholds.
      *
      * @return true if at target within tolerance, false otherwise

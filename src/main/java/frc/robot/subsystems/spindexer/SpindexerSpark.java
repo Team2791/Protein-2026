@@ -10,7 +10,8 @@ import frc.robot.util.SparkData;
 /**
  * Concrete {@link SpindexerIO} implementation for Spark motor controllers.
  *
- * <p>Uses a {@link SparkFlex} driving a Neo Vortex and a {@link SparkMax} driving
+ * <p>
+ * Uses a {@link SparkFlex} driving a Neo Vortex and a {@link SparkMax} driving
  * a standard Neo. Both motors are controlled independently at fixed duty-cycle
  * powers.
  */

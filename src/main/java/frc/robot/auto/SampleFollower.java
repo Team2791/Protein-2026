@@ -12,7 +12,8 @@ import org.littletonrobotics.junction.Logger;
 /**
  * Sample follower for testing and tuning.
  *
- * <p>Follows a SwerveSample by using PID controllers to track the sample's pose. Used for
+ * <p>
+ * Follows a SwerveSample by using PID controllers to track the sample's pose. Used for
  * testing and tuning PID constants for autonomous path following.
  */
 public class SampleFollower {

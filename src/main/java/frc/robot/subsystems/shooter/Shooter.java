@@ -12,11 +12,13 @@ import frc.robot.util.Vec2;
 /**
  * Shooter subsystem for controlling the robot's ball-shooting mechanism.
  *
- * <p>This subsystem wraps a {@link ShooterIO} implementation to provide a consistent interface
+ * <p>
+ * This subsystem wraps a {@link ShooterIO} implementation to provide a consistent interface
  * for controlling the shooter regardless of whether running on real hardware, in simulation,
  * or in log replay.
  *
- * <p>Automatic speed control is handled by the IO layer based on robot position.
+ * <p>
+ * Automatic speed control is handled by the IO layer based on robot position.
  * Manual override is available via {@link #setVelocity(double)} for debugging.
  */
 public class Shooter extends SubsystemBase {

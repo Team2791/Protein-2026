@@ -9,13 +9,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 /**
  * FRC 2026 game-specific field dimensions and reference points.
  *
- * <p>Contains field geometry constants derived from the official game manual.
+ * <p>
+ * Contains field geometry constants derived from the official game manual.
  * All dimensions are converted from inches to meters.
  *
- * <p>These values define the coordinate system used for autonomous navigation
+ * <p>
+ * These values define the coordinate system used for autonomous navigation
  * and alliance-aware positioning.
  *
- * <p>Sources:
+ * <p>
+ * Sources:
  * <ul>
  *   <li><a href="https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf">2026 Field Dimension Drawings</a>
  * </ul>
@@ -34,7 +37,8 @@ public class GameConstants {
     /**
      * Red alliance coordinate system origin.
      *
-     * <p>Located at the far corner of the field with {@code 180°} rotation.
+     * <p>
+     * Located at the far corner of the field with {@code 180°} rotation.
      */
     public static final Pose2d kRedOrigin = new Pose2d(
         kFieldLength,
@@ -50,7 +54,8 @@ public class GameConstants {
         /**
          * Blue alliance hub (goal structure) pose.
          *
-         * <p>The heading (180°) points outward from the hub toward the blue driver station,
+         * <p>
+         * The heading (180°) points outward from the hub toward the blue driver station,
          * representing the direction the robot should face to shoot into the goal.
          */
         public static final Pose2d kHub = new Pose2d(

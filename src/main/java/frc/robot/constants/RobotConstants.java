@@ -27,7 +27,8 @@ public class RobotConstants {
     /**
      * Swerve drive base geometric dimensions.
      *
-     * <p>Defines wheelbase, track width, bumper extents, and radii for
+     * <p>
+     * Defines wheelbase, track width, bumper extents, and radii for
      * kinematics calculations and obstacle clearance checks.
      */
     public static final class DriveBase {

@@ -9,7 +9,8 @@ import edu.wpi.first.math.numbers.N3;
 /**
  * Vision measurement data structure.
  *
- * <p>Bundles a robot pose estimate with uncertainty (standard deviations)
+ * <p>
+ * Bundles a robot pose estimate with uncertainty (standard deviations)
  * and timestamp for fusion with odometry.
  *
  * @param estimate 3D robot pose from vision

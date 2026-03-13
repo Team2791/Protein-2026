@@ -24,6 +24,7 @@ in
       openssl
       gcc
 
+      antigravity
       frc-nix.packages.x86_64-linux.glass
     ]);
 

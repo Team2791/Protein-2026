@@ -6,7 +6,8 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * Abstract IO class for the intake pivot mechanism.
  *
- * <p>Two Neo Vortex motors in leader/follower (inverted), driven to a
+ * <p>
+ * Two Neo Vortex motors in leader/follower (inverted), driven to a
  * position setpoint via closed-loop PID.
  */
 public abstract class PivotIO {

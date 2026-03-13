@@ -12,11 +12,13 @@ import java.util.function.Consumer;
 /**
  * LED controller class for managing addressable LED strips with priority-based state management.
  *
- * <p>This class implements a singleton pattern to control an addressable LED strip connected to a PWM port.
+ * <p>
+ * This class implements a singleton pattern to control an addressable LED strip connected to a PWM port.
  * It supports multiple LED modes (solid colors, rainbow, blinking) with a priority system that allows
  * different robot states to control the LEDs without conflicts.</p>
  *
- * <p>The priority system ensures that more important alerts (like robot alerts) take precedence over
+ * <p>
+ * The priority system ensures that more important alerts (like robot alerts) take precedence over
  * less important ones (like idle states). States are automatically sorted by priority level.</p>
  *
  * <h3>Usage Example:</h3>
@@ -29,7 +31,8 @@ import java.util.function.Consumer;
  * led.register(() -> true, Led.Mode.rainbow(), Led.Priority.IDLE);
  * }</pre>
  *
- * <p>The LED strip is automatically updated at the robot's default period rate using a Notifier.
+ * <p>
+ * The LED strip is automatically updated at the robot's default period rate using a Notifier.
  * Only the highest priority active state will be displayed at any given time.</p>
  *
  * @see Mode
@@ -62,10 +65,12 @@ public class Led {
      * Represents a LED display mode that defines how LEDs should behave.
      * Each mode encapsulates a specific behavior pattern that can be applied to LED strips.
      *
-     * <p>This class uses the command pattern to encapsulate LED behaviors as reusable modes.
+     * <p>
+     * This class uses the command pattern to encapsulate LED behaviors as reusable modes.
      * The behavior is defined as a Consumer function that operates on an LED instance.
      *
-     * <p>Available modes include:
+     * <p>
+     * Available modes include:
      * <ul>
      *   <li>Solid color display</li>
      *   <li>Off (all LEDs turned off)</li>
@@ -127,9 +132,11 @@ public class Led {
     /**
      * Enumeration representing different priority levels for LED alerts.
      *
-     * <p>Each priority has an associated numeric level, with higher numbers indicating higher priority.
+     * <p>
+     * Each priority has an associated numeric level, with higher numbers indicating higher priority.
      *
-     * <p>Priority levels from lowest to highest:</p>
+     * <p>
+     * Priority levels from lowest to highest:</p>
      * <ul>
      *   <li>{@link #IDLE} (0) - No active alerts, default state (e.g. teleop vs autonomous)</li>
      *   <li>{@link #CONTEXT} (1) - Contextual information display (e.g. DriverStation not connected)</li>
@@ -201,7 +208,8 @@ public class Led {
     /**
      * Registers a new LED state with its activation condition and priority.
      *
-     * <p>The states are automatically sorted by priority level, ensuring that higher
+     * <p>
+     * The states are automatically sorted by priority level, ensuring that higher
      * priority states take precedence during updates.</p>
      *
      * @param active A BooleanSupplier that returns true when this state should be active
@@ -226,7 +234,8 @@ public class Led {
 
     /** Blink the LEDs with a specified color */
     private void blink(int r, int g, int b) {
-        boolean on = ((int)((Timer.getFPGATimestamp() / BLINK_INTERVAL) % 2)) == 0;
+        boolean on =
+            ((int) ((Timer.getFPGATimestamp() / BLINK_INTERVAL) % 2)) == 0;
 
         if (on) solid(r, g, b);
         else solid(0, 0, 0);
@@ -246,7 +255,8 @@ public class Led {
     /**
      * Periodic update method to evaluate and apply the highest priority active LED state.
      *
-     * <p>This method checks all registered states in order of priority and applies
+     * <p>
+     * This method checks all registered states in order of priority and applies
      * the first active state's mode to the LED strip.</p>
      */
     private synchronized void update() {

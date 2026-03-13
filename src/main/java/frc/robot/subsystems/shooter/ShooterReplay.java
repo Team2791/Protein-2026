@@ -3,11 +3,13 @@ package frc.robot.subsystems.shooter;
 /**
  * Replay implementation of {@link ShooterIO} for simulation/log replay.
  *
- * <p>This class is used when replaying recorded robot data from AdvantageKit logs.
+ * <p>
+ * This class is used when replaying recorded robot data from AdvantageKit logs.
  * It does not interact with any real hardware or simulation - all shooter data is
  * read directly from the logged {@link ShooterIO.ShooterData} values.
  *
- * <p>All methods are no-ops because replayed data is read-only.
+ * <p>
+ * All methods are no-ops because replayed data is read-only.
  */
 public class ShooterReplay extends ShooterIO {
 

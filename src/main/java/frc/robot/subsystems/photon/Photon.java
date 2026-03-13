@@ -13,11 +13,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 /**
  * Photon vision subsystem for camera-based pose estimation.
  *
- * <p>This class manages multiple vision cameras for detecting AprilTags and calculating
+ * <p>
+ * This class manages multiple vision cameras for detecting AprilTags and calculating
  * robot position corrections. Unlike a typical subsystem, this does NOT extend SubsystemBase
  * because it should not be used as a command requirement - it operates independently.
  *
- * <p>The subsystem:
+ * <p>
+ * The subsystem:
  * <ul>
  *   <li>Manages one or more Photon vision cameras
  *   <li>Updates camera measurements periodically
@@ -25,7 +27,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
  *   <li>Integrates with the Periodic utility for non-subsystem periodic updates
  * </ul>
  *
- * <p>Vision measurements are used to correct odometry drift from encoder/gyro estimates.
+ * <p>
+ * Vision measurements are used to correct odometry drift from encoder/gyro estimates.
  */
 public class Photon {
 

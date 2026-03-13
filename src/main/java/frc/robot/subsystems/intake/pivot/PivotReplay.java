@@ -3,7 +3,8 @@ package frc.robot.subsystems.intake.pivot;
 /**
  * Replay implementation of {@link PivotIO} for simulation/log replay.
  *
- * <p>All methods are no-ops because replayed data is read-only.
+ * <p>
+ * All methods are no-ops because replayed data is read-only.
  */
 public class PivotReplay extends PivotIO {
 

@@ -6,10 +6,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /**
  * Extended Xbox controller with support for the four back paddles on the Xbox Elite Series 2.
  *
- * <p>Paddle inputs are read via {@link KBNT} (Keyboard-over-NetworkTables), which requires the
+ * <p>
+ * Paddle inputs are read via {@link KBNT} (Keyboard-over-NetworkTables), which requires the
  * KBNT companion app to be running on the driver station and each paddle mapped to a key.
  *
- * <p>The paddles are ordered [Bottom-Left, Top-Left, Top-Right, Bottom-Right] to match the
+ * <p>
+ * The paddles are ordered [Bottom-Left, Top-Left, Top-Right, Bottom-Right] to match the
  * left-to-right order shown in the Xbox Accessories configuration app.
  */
 public class XboxEliteController extends CommandXboxController {

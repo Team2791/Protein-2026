@@ -13,14 +13,16 @@ import java.util.function.Function;
 /**
  * Monitors hardware devices for errors and provides alerts to the driver and operator.
  *
- * <p>This singleton class:
+ * <p>
+ * This singleton class:
  * <ul>
  *   <li>Tracks registered devices (motors, sensors, etc.) and their error states
  *   <li>Sends notifications to the Elastic dashboard when hardware fails
  *   <li>Only monitors devices when running on real robots (not in replay mode)
  * </ul>
  *
- * <p>The alerting system is one-shot per error type, meaning each unique error is only
+ * <p>
+ * The alerting system is one-shot per error type, meaning each unique error is only
  * reported once to avoid flooding the dashboard with repeated notifications.
  */
 public class Alerter {
@@ -96,7 +98,8 @@ public class Alerter {
     /**
      * Registers a REV Spark motor controller for error monitoring.
      *
-     * <p>The controller will be checked periodically for errors, and any new errors
+     * <p>
+     * The controller will be checked periodically for errors, and any new errors
      * will trigger a notification on the Elastic dashboard.
      *
      * @param name Human-readable name for the motor (e.g., "Drive Left Front")
@@ -117,7 +120,8 @@ public class Alerter {
     /**
      * Registers a gyroscope for error monitoring.
      *
-     * <p>See {@link #register(String, SparkBase)} for details.
+     * <p>
+     * See {@link #register(String, SparkBase)} for details.
      *
      * @param gyro The AHRS gyro instance to monitor
      */
@@ -128,7 +132,8 @@ public class Alerter {
     /**
      * Registers a generic device for disconnection monitoring.
      *
-     * <p>See {@link #register(String, SparkBase)} for details.
+     * <p>
+     * See {@link #register(String, SparkBase)} for details.
      *
      * @param <T> The device type
      * @param name Human-readable name for the device
@@ -154,8 +159,10 @@ public class Alerter {
     /**
      * Updates all device monitoring and sends alerts for any new errors.
      *
-     * <p>This should be called periodically.
-     * <p>Only monitors devices when running on a real robot - skips checks during replay.
+     * <p>
+     * This should be called periodically.
+     * <p>
+     * Only monitors devices when running on a real robot - skips checks during replay.
      */
     private void update() {
         if (RuntimeConstants.kCurrentMode != RuntimeConstants.Mode.REAL) {

@@ -6,7 +6,8 @@ import edu.wpi.first.math.util.Units;
 /**
  * Constants for the intake subsystem.
  *
- * <p>Contains motor configuration, pivot setpoints, intake wheel geometry,
+ * <p>
+ * Contains motor configuration, pivot setpoints, intake wheel geometry,
  * and gear reduction for both the roller and pivot mechanisms.
  */
 public final class IntakeConstants {
@@ -27,7 +28,8 @@ public final class IntakeConstants {
         /**
          * Gear reduction from motor shaft to roller wheel.
          *
-         * <p>Convention: 1 motor turn : {@code kReduction} wheel turns
+         * <p>
+         * Convention: 1 motor turn : {@code kReduction} wheel turns
          * (i.e. a value {@literal <} 1 means the motor spins faster than the wheel).
          * Adjust this to match the physical gearbox ratio.
          */
@@ -36,7 +38,8 @@ public final class IntakeConstants {
         /**
          * Radius of the intake roller wheels in meters.
          *
-         * <p>Used to convert drivetrain linear speed (m/s) into wheel surface velocity
+         * <p>
+         * Used to convert drivetrain linear speed (m/s) into wheel surface velocity
          * and then into motor angular velocity (rad/s).
          */
         public static final double kWheelRadius = Units.inchesToMeters(2);
@@ -56,7 +59,8 @@ public final class IntakeConstants {
         /**
          * Gear reduction from motor shaft to pivot output.
          *
-         * <p>Convention: 1 motor turn : {@code kReduction} output turns
+         * <p>
+         * Convention: 1 motor turn : {@code kReduction} output turns
          * (i.e. a value {@literal <} 1 means the motor spins faster than the output).
          * Adjust this to match the physical gearbox ratio.
          */
@@ -65,7 +69,8 @@ public final class IntakeConstants {
         /**
          * The deployed (down) position setpoint for the pivot, in radians.
          *
-         * <p>The retracted position is assumed to be 0 rad.
+         * <p>
+         * The retracted position is assumed to be 0 rad.
          */
         public static final double kDeployedPosition = Units.degreesToRadians(
             90
@@ -74,7 +79,8 @@ public final class IntakeConstants {
         /**
          * Tolerance for considering the pivot "at position", in radians.
          *
-         * <p>Rollers will not spin until the pivot is within this threshold
+         * <p>
+         * Rollers will not spin until the pivot is within this threshold
          * of the deployed setpoint.
          */
         public static final double kPositionTolerance = Units.degreesToRadians(

@@ -13,18 +13,21 @@ import java.util.function.BooleanSupplier;
  * KBNT (Keyboard over Network Tables) is a utility that allows keyboard input to be
  * transmitted to the robot via NetworkTables.
  *
- * <p>This class interfaces with the KBNT client app over NetworkTables to read keyboard input
+ * <p>
+ * This class interfaces with the KBNT client app over NetworkTables to read keyboard input
  * data, specifically tracking key presses and their respective press counts. It provides methods to
  * check key states and create WPILib {@link Trigger} objects for command-based programming.
  *
- * <p>The NetworkTable structure used:
+ * <p>
+ * The NetworkTable structure used:
  * <ul>
  *   <li>Table name: {@code "KBNT"}</li>
  *   <li>{@code "KeysToPress"} - A string of tracked keys (lowercase)</li>
  *   <li>{@code "NumKeydowns"} - An array of press counts corresponding to each key (by index)</li>
  * </ul>
  *
- * <p>Usage example:
+ * <p>
+ * Usage example:
  * <pre>
  *   KBNT kbnt = KBNT.getInstance();
  *

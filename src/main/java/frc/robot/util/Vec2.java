@@ -11,11 +11,13 @@ import java.nio.ByteBuffer;
 /**
  * A 2D vector class for representing and manipulating 2D coordinates and directions.
  *
- * <p>This immutable class provides common vector operations including addition, subtraction,
+ * <p>
+ * This immutable class provides common vector operations including addition, subtraction,
  * scalar multiplication, dot product, and magnitude calculations. It's commonly used for
  * representing velocities, positions, and forces in 2D space.
  *
- * <p>The class is immutable, meaning all operations return new Vec2 instances rather than
+ * <p>
+ * The class is immutable, meaning all operations return new Vec2 instances rather than
  * modifying the original object.
  */
 public class Vec2 implements StructSerializable {
@@ -276,7 +278,8 @@ public class Vec2 implements StructSerializable {
     /**
      * Rotates this vector by a given angle, counterclockwise.
      *
-     * <p>This multiplies the translation vector by a counterclockwise rotation matrix of the given
+     * <p>
+     * This multiplies the translation vector by a counterclockwise rotation matrix of the given
      * angle.
      *
      * <pre>

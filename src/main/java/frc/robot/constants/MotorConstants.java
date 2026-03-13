@@ -6,11 +6,13 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 /**
  * REV Robotics brushless motor specifications.
  *
- * <p>Contains empirically measured free speeds and recommended current limits
+ * <p>
+ * Contains empirically measured free speeds and recommended current limits
  * for each motor type used on the robot. Free speeds are converted from RPM
  * to radians/second for kinematic calculations.
  *
- * <p>Specification sources:
+ * <p>
+ * Specification sources:
  * <ul>
  *   <li>NEO: <a href="https://www.revrobotics.com/rev-21-1650/">REV-21-1650</a>
  *   <li>NEO Vortex: <a href="https://www.revrobotics.com/rev-21-1652/">REV-21-1652</a>
@@ -24,7 +26,8 @@ public final class MotorConstants {
     /**
      * NEO brushless motor specifications (REV-21-1650).
      *
-     * <p>Used for swerve module drive motors.
+     * <p>
+     * Used for swerve module drive motors.
      */
     public static final class Neo {
 
@@ -45,7 +48,8 @@ public final class MotorConstants {
         /**
          * PWM modulation period for UVW commutation: 10ms.
          *
-         * <P>Controls the switching frequency of the motor controller for brushless motor commutation.
+         * <p>
+         * Controls the switching frequency of the motor controller for brushless motor commutation.
          * Lower periods result in higher commutation frequencies and smoother motor operation.
          */
         public static final int kUvwPeriod = 10;
@@ -53,7 +57,8 @@ public final class MotorConstants {
         /**
          * UVW pulse depth or dead-time setting: 2.
          *
-         * <p>Defines the dead-time interval between switching commutation phases to prevent
+         * <p>
+         * Defines the dead-time interval between switching commutation phases to prevent
          * shoot-through and ensure safe transistor switching in the motor controller.
          */
         public static final int kUvwDepth = 2;
@@ -62,7 +67,8 @@ public final class MotorConstants {
     /**
      * NEO Vortex brushless motor specifications (REV-21-1652).
      *
-     * <p>Higher power motor for demanding applications.
+     * <p>
+     * Higher power motor for demanding applications.
      */
     public static final class NeoVortex {
 
@@ -84,7 +90,8 @@ public final class MotorConstants {
     /**
      * NEO 550 brushless motor specifications (REV-21-1651).
      *
-     * <p>Compact, high-speed motor used for swerve module steering.
+     * <p>
+     * Compact, high-speed motor used for swerve module steering.
      */
     public static final class Neo550 {
 
@@ -105,7 +112,8 @@ public final class MotorConstants {
         /**
          * UVW pulse depth or dead-time setting: 2.
          *
-         * <p>Defines the dead-time interval between switching commutation phases to prevent
+         * <p>
+         * Defines the dead-time interval between switching commutation phases to prevent
          * shoot-through and ensure safe transistor switching in the motor controller.
          *
          * This number came from the template code

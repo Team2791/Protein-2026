@@ -10,7 +10,9 @@ import frc.robot.util.TunableSparkPID;
 /**
  * Control loop constants for robot motion control.
  *
- * <p>Contains PID gains, feedforward coefficients, and control limits for:
+ * <p>
+ * Contains PID gains, feedforward coefficients, and control limits for:
+ *
  * <ul>
  *   <li>Swerve module drive motors (velocity control)
  *   <li>Swerve module turn motors (position control)
@@ -64,9 +66,26 @@ public final class ControlConstants {
     }
 
     /**
+     * Climber mechanism PID constants.
+     */
+    public static final class Climber {
+
+        private Climber() {}
+
+        /** Tunable PID controller for axle position control. */
+        public static final TunableSparkPID kPid = new TunableSparkPID(
+            0,
+            0,
+            0,
+            "Climber"
+        );
+    }
+
+    /**
      * Autonomous trajectory following PID constants.
      *
-     * <p>Used by {@link frc.robot.autos.AutoManager} for Choreo trajectory following.
+     * <p>
+     * Used by {@link frc.robot.autos.AutoManager} for Choreo trajectory following.
      */
     public static final class Auto {
 
@@ -93,7 +112,8 @@ public final class ControlConstants {
     /**
      * Vision-based alignment PID constants.
      *
-     * <p>Used by {@link frc.robot.commands.drive.pathfind.Nearby} for fine alignment
+     * <p>
+     * Used by {@link frc.robot.commands.drive.pathfind.Nearby} for fine alignment
      */
     public static final class Nearby {
 
@@ -149,7 +169,8 @@ public final class ControlConstants {
     /**
      * Slew rate limiters for driver input smoothing.
      *
-     * <p>Limits acceleration of joystick commands to prevent abrupt movements
+     * <p>
+     * Limits acceleration of joystick commands to prevent abrupt movements
      * and reduce mechanical stress on the drivetrain.
      */
     public static final class SlewRateLimit {

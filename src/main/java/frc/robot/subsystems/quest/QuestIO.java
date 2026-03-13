@@ -10,10 +10,12 @@ import org.littletonrobotics.junction.AutoLog;
 /**
  * Abstract IO class for the QuestNav subsystem.
  *
- * <p>This class defines the interface for interacting with the QuestNav device,
+ * <p>
+ * This class defines the interface for interacting with the QuestNav device,
  * including methods for updating sensor data and resetting the device's pose.
  *
- * <p>Concrete implementations of this class should handle the specifics of
+ * <p>
+ * Concrete implementations of this class should handle the specifics of
  * communicating with the QuestNav hardware or replay implementations.
  */
 public abstract class QuestIO {

@@ -11,7 +11,8 @@ import frc.robot.util.SparkData;
 /**
  * Concrete {@link PivotIO} implementation for Spark motor controllers.
  *
- * <p>Uses two SparkFlex/Neo Vortex motors in leader-follower with
+ * <p>
+ * Uses two SparkFlex/Neo Vortex motors in leader-follower with
  * position closed-loop on the leader.
  */
 public class PivotSpark extends PivotIO {

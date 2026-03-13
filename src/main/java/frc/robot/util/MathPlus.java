@@ -7,10 +7,12 @@ import edu.wpi.first.math.geometry.Transform2d;
 /**
  * Mathematical utility functions for robotics calculations.
  *
- * <p>This class provides helper methods for common operations involving poses,
+ * <p>
+ * This class provides helper methods for common operations involving poses,
  * rotations, and transformations in 2D space.
  *
- * <p>Called {@link MathPlus} because WPI stole MathUtil, smh.
+ * <p>
+ * Called {@link MathPlus} because WPI stole MathUtil, smh.
  */
 public class MathPlus {
 
@@ -25,7 +27,8 @@ public class MathPlus {
     /**
      * Calculates the transformation from one pose to another in the first pose's frame.
      *
-     * <p>Given two poses, returns the transformation that would move an object from the
+     * <p>
+     * Given two poses, returns the transformation that would move an object from the
      * first pose to the second pose, as viewed from the first pose's perspective.
      * In other words, the returned transform represents how something at pose 'a' should
      * move (relative to itself) to reach pose 'b'.
@@ -50,7 +53,8 @@ public class MathPlus {
     /**
      * Normalizes an angle to be within the range [0, 2π).
      *
-     * <p>This is useful for standardizing angles so they can be easily compared.
+     * <p>
+     * This is useful for standardizing angles so they can be easily compared.
      * Negative angles are wrapped to their positive equivalents.
      *
      * @param angle The angle to normalize (in radians)

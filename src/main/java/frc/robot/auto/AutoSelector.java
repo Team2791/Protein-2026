@@ -175,7 +175,8 @@ public class AutoSelector {
     /**
      * Builds an AutoRoutine based on the current selections in the choosers.
      *
-     * <p>This method retrieves the selected AutoNodes from the three choosers and constructs a command sequence
+     * <p>
+     * This method retrieves the selected AutoNodes from the three choosers and constructs a command sequence
      * that follows the selected path through the AutoGraph. It handles null selections and "Cancel" options
      * gracefully, allowing for flexible autonomous routine construction.
      *

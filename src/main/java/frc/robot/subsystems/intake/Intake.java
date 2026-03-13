@@ -10,11 +10,13 @@ import frc.robot.util.Vec2;
 /**
  * Intake subsystem controlling roller and pivot mechanisms.
  *
- * <p>This subsystem wraps separate {@link PivotIO} and {@link RollerIO}
+ * <p>
+ * This subsystem wraps separate {@link PivotIO} and {@link RollerIO}
  * implementations to provide a consistent interface regardless of whether
  * running on real hardware, in simulation, or in log replay.
  *
- * <p>Calling {@link #deploy(boolean) deploy(true)} commands the pivot to its deployed
+ * <p>
+ * Calling {@link #deploy(boolean) deploy(true)} commands the pivot to its deployed
  * position and, once the pivot is within tolerance, spins the rollers at a speed
  * matched to the drivetrain. Calling {@code deploy(false)} stops the rollers
  * immediately and retracts the pivot.
@@ -59,7 +61,8 @@ public class Intake extends SubsystemBase {
     /**
      * Deploys or retracts the intake.
      *
-     * <p>When deployed, the pivot moves to the down setpoint and the rollers
+     * <p>
+     * When deployed, the pivot moves to the down setpoint and the rollers
      * begin spinning (matched to drivetrain speed) once the pivot reaches
      * position. When retracted, the rollers stop immediately and the pivot
      * returns to 0 rad.

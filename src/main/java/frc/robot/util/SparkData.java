@@ -8,7 +8,8 @@ import java.util.function.Function;
  * Data class representing the state of a Spark motor controller, including encoder readings,
  * electrical measurements, and connection status.
  *
- * <p>This class provides a structured way to capture and log relevant data from a Spark motor
+ * <p>
+ * This class provides a structured way to capture and log relevant data from a Spark motor
  * controller for diagnostics and analysis.
  */
 public record SparkData(

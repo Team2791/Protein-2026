@@ -65,6 +65,12 @@ public class SparkConfigConstants {
             );
             kKicker.smartCurrentLimit(MotorConstants.Neo.kCurrentLimit);
 
+            kSpindexer.encoder.positionConversionFactor(kTau);
+            kSpindexer.encoder.velocityConversionFactor(kTau / 60.0);
+
+            kKicker.encoder.positionConversionFactor(kTau);
+            kKicker.encoder.velocityConversionFactor(kTau / 60.0);
+
             // idle mode
             kSpindexer.idleMode(SpindexerConstants.Motor.kIdleMode);
             kKicker.idleMode(SpindexerConstants.Motor.kIdleMode);
@@ -157,6 +163,48 @@ public class SparkConfigConstants {
             follower.configure(kFollower, kReset, kPersist);
 
             ControlConstants.Intake.kPivotPid.register(leader);
+        }
+    }
+
+    public static final class Climber {
+
+        static final SparkFlexConfig kLeader;
+        static final SparkFlexConfig kFollower;
+
+        static {
+            kLeader = new SparkFlexConfig();
+            kFollower = new SparkFlexConfig();
+
+            // current limits
+            kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+            kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+
+            // encoder conversion: motor rad → output rad (direct drive)
+            kLeader.encoder.positionConversionFactor(
+                kTau * ClimberConstants.kReduction
+            );
+            kLeader.encoder.velocityConversionFactor(
+                (kTau * ClimberConstants.kReduction) / 60.0
+            );
+
+            // position PID
+            ControlConstants.Climber.kPid.register(kLeader);
+
+            kLeader.idleMode(ClimberConstants.Motor.kIdleMode);
+            kFollower.idleMode(ClimberConstants.Motor.kIdleMode);
+
+            // leader-follower
+            kFollower.follow(
+                IOConstants.Climber.kLeader,
+                ClimberConstants.Motor.kInvertFollower
+            );
+        }
+
+        public static void apply(SparkFlex leader, SparkFlex follower) {
+            leader.configure(kLeader, kReset, kPersist);
+            follower.configure(kFollower, kReset, kPersist);
+
+            ControlConstants.Climber.kPid.register(leader);
         }
     }
 

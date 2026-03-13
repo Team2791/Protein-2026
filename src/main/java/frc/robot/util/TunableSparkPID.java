@@ -12,7 +12,8 @@ import java.util.List;
  * Wraps a WPILib {@link PIDController} to allow live PID tuning via Shuffleboard/SmartDashboard
  * that is automatically applied to a REV Spark motor controller's closed-loop slot.
  *
- * <p>Workflow:
+ * <p>
+ * Workflow:
  * <ol>
  *   <li>Construct with initial gains and a dashboard name.
  *   <li>Call {@link #register(SparkBaseConfig)} with the Spark's config object to bake in the current gains.
@@ -69,7 +70,8 @@ public class TunableSparkPID {
      * Writes the current gains into the provided Spark config's closed-loop slot
      * and stores the config for later reconfiguration via {@link #updateAll()}.
      *
-     * <p>Call this before applying the config to the motor.
+     * <p>
+     * Call this before applying the config to the motor.
      *
      * @param config The Spark config object to write PID gains into
      */
@@ -103,7 +105,8 @@ public class TunableSparkPID {
      * Checks whether PID gains have changed on the dashboard and, if so, applies
      * the new gains to the Spark motor controller in real time.
      *
-     * <p>Call this every robot loop iteration.
+     * <p>
+     * Call this every robot loop iteration.
      */
     public static void updateAll() {
         for (TunableSparkPID that : instances) {

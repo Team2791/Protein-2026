@@ -17,7 +17,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 /**
  * Abstract base class for vision camera implementations.
  *
- * <p>This class provides the core vision processing pipeline:
+ * <p>
+ * This class provides the core vision processing pipeline:
  * <ul>
  *   <li>Queries camera results for detected AprilTags
  *   <li>Uses {@link PhotonPoseEstimator} for multi-tag pose estimation
@@ -51,7 +52,8 @@ public abstract class CameraIO {
     /**
      * Constructs a camera IO instance.
      *
-     * <p>Initializes the {@link PhotonPoseEstimator} with the AprilTag field layout and
+     * <p>
+     * Initializes the {@link PhotonPoseEstimator} with the AprilTag field layout and
      * multi-tag PnP strategy for robust pose estimation.
      *
      * @param config Configuration including camera name and robot-to-camera transform

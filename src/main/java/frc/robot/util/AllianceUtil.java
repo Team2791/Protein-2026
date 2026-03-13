@@ -13,13 +13,15 @@ import java.util.Optional;
 /**
  * Utility for handling alliance-based coordinate system transformations.
  *
- * <p>In FRC, the field has a symmetric layout where:
+ * <p>
+ * In FRC, the field has a symmetric layout where:
  * <ul>
  *   <li>Blue alliance origin is at the field origin (0, 0)
  *   <li>Red alliance origin is at the opposite corner of the field
  * </ul>
  *
- * <p>This class provides utilities to automatically flip poses and rotations
+ * <p>
+ * This class provides utilities to automatically flip poses and rotations
  * between alliance coordinate systems, allowing autonomous routines to
  * work symmetrically for both alliances.
  */
@@ -30,7 +32,8 @@ public class AllianceUtil {
     /**
      * A container for the current alliance state with caching.
      *
-     * <p>This inner class caches the alliance once it's reported by FMS to avoid
+     * <p>
+     * This inner class caches the alliance once it's reported by FMS to avoid
      * repeated queries and handles the case where alliance information might not
      * be immediately available.
      */
@@ -48,7 +51,8 @@ public class AllianceUtil {
         /**
          * Gets the current alliance, with fallback to cached value.
          *
-         * <p>Queries FMS for the current alliance and caches the result. If FMS hasn't
+         * <p>
+         * Queries FMS for the current alliance and caches the result. If FMS hasn't
          * reported yet and no prior value is cached, defaults to Blue and logs a warning.
          *
          * @return The current alliance (Blue or Red)

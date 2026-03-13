@@ -18,12 +18,14 @@ import org.littletonrobotics.junction.Logger;
 /**
  * Faraway pathfinding command.
  *
- * <p>Uses {@link Repulsor} for faraway pathfinding to a target pose. Repulsor works
+ * <p>
+ * Uses {@link Repulsor} for faraway pathfinding to a target pose. Repulsor works
  * by generating a potential field around obstacles and the goal, then using
  * the laws of physics to "push" the robot away from obstacles and "pull" it
  * toward the goal.
  *
- * <p>This command is used as the first step in {@link Pathfind}: far from the target,
+ * <p>
+ * This command is used as the first step in {@link Pathfind}: far from the target,
  * use Repulsor to pathfind around obstacles. When close to the target, switch to
  * {@link Nearby} for precision movement.
  */
@@ -143,7 +145,8 @@ class Repulse extends Command {
     /**
      * Cleans up after the Repulse command ends.
      *
-     * <p>Clears the target and trajectory logs from the field visualization.
+     * <p>
+     * Clears the target and trajectory logs from the field visualization.
      */
     @Override
     public void end(boolean interrupted) {
@@ -155,7 +158,8 @@ class Repulse extends Command {
     /**
      * Determines if the Repulse command is finished.
      *
-     * <p>Finishes when the robot is within the nearby threshold distance of the target.
+     * <p>
+     * Finishes when the robot is within the nearby threshold distance of the target.
      * See {@link ControlConstants.Auto#kNearbyThreshold}.
      */
     @Override

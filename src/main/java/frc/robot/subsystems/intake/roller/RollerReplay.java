@@ -3,7 +3,8 @@ package frc.robot.subsystems.intake.roller;
 /**
  * Replay implementation of {@link RollerIO} for simulation/log replay.
  *
- * <p>All methods are no-ops because replayed data is read-only.
+ * <p>
+ * All methods are no-ops because replayed data is read-only.
  */
 public class RollerReplay extends RollerIO {
 

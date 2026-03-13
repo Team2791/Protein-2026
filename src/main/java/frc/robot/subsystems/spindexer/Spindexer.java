@@ -7,11 +7,13 @@ import frc.robot.subsystems.spindexer.SpindexerIO.SpindexerData;
 /**
  * Spindexer subsystem controlling two independent brushless motors.
  *
- * <p>This subsystem wraps a {@link SpindexerIO} implementation to provide a
+ * <p>
+ * This subsystem wraps a {@link SpindexerIO} implementation to provide a
  * consistent interface regardless of whether running on real hardware, in
  * simulation, or in log replay.
  *
- * <p>Both motors are controlled together via {@link #set(boolean)}: when
+ * <p>
+ * Both motors are controlled together via {@link #set(boolean)}: when
  * {@code true} each motor runs at its configured constant power; when
  * {@code false} both stop.
  */

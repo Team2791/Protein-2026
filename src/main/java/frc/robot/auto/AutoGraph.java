@@ -8,11 +8,13 @@ import java.util.Set;
 /**
  * A graph-based representation of autonomous navigation paths for the robot.
  *
- * <p>This class builds a transition map that connects autonomous nodes (positions/states)
+ * <p>
+ * This class builds a transition map that connects autonomous nodes (positions/states)
  * through Choreo trajectories. It automatically parses trajectory names to determine
  * the source and destination nodes for each path.
  *
- * <p>The class expects trajectory names to follow the format "from_to" where "from" and "to"
+ * <p>
+ * The class expects trajectory names to follow the format "from_to" where "from" and "to"
  * are valid AutoNode enum values (lowercased). Trajectories with names starting with "seq_" or not
  * containing exactly one underscore are ignored.
  */

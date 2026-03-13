@@ -17,11 +17,13 @@ import org.littletonrobotics.junction.Logger;
 /**
  * QuestNav vision subsystem for Meta Quest-based pose estimation.
  *
- * <p>This subsystem provides additional vision-based localization using a Meta Quest device
+ * <p>
+ * This subsystem provides additional vision-based localization using a Meta Quest device
  * running QuestNav. Like Photon, this does not extend SubsystemBase because it operates
  * independently of the command scheduler.
  *
- * <p>The Quest system:
+ * <p>
+ * The Quest system:
  * <ul>
  *   <li>Uses inside-out pose tracking from the Quest device
  *   <li>Reports pose measurements to the drivetrain's odometry system
