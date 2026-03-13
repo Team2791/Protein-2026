@@ -2,10 +2,12 @@ package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.IOConstants;
 import frc.robot.subsystems.climber.axle.AxleIO;
 import frc.robot.subsystems.climber.axle.AxleIO.AxleData;
 import frc.robot.subsystems.climber.cylinder.CylinderIO;
 import frc.robot.subsystems.climber.cylinder.CylinderIO.CylinderData;
+import java.util.function.BiFunction;
 
 /**
  * Climber subsystem controlling the axle rotation and pneumatic hook cylinders.
@@ -55,14 +57,21 @@ public class Climber extends SubsystemBase {
      */
     public Climber(
         AxleIO axle,
-        CylinderIO inner,
-        CylinderIO outerLeft,
-        CylinderIO outerRight
+        BiFunction<Integer, Integer, CylinderIO> cylinderFactory
     ) {
         this.axle = axle;
-        this.inner = inner;
-        this.outerLeft = outerLeft;
-        this.outerRight = outerRight;
+        this.inner = cylinderFactory.apply(
+            IOConstants.Climber.kInnerFwd,
+            IOConstants.Climber.kInnerRev
+        );
+        this.outerLeft = cylinderFactory.apply(
+            IOConstants.Climber.kOuterLeftFwd,
+            IOConstants.Climber.kOuterLeftRev
+        );
+        this.outerRight = cylinderFactory.apply(
+            IOConstants.Climber.kOuterRightFwd,
+            IOConstants.Climber.kOuterRightRev
+        );
     }
 
     /**

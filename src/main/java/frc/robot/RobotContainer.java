@@ -64,6 +64,7 @@ public class RobotContainer {
             default -> moduleId -> new ModuleIO() {};
         }
     );
+
     final Shooter shooter = new Shooter(
         switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new ShooterSpark();
@@ -72,6 +73,7 @@ public class RobotContainer {
         },
         drive
     );
+
     final Spindexer spindexer = new Spindexer(
         switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new SpindexerSpark();
@@ -79,35 +81,19 @@ public class RobotContainer {
             default -> new SpindexerReplay();
         }
     );
+
     final Climber climber = switch (RuntimeConstants.kCurrentMode) {
         case REAL -> {
             PneumaticHub ph = new PneumaticHub(IOConstants.Climber.kPhId);
-            yield new Climber(
-                new AxleSpark(),
-                new CylinderPH(
-                    ph,
-                    IOConstants.Climber.kInnerFwd,
-                    IOConstants.Climber.kInnerRev
-                ),
-                new CylinderPH(
-                    ph,
-                    IOConstants.Climber.kOuterLeftFwd,
-                    IOConstants.Climber.kOuterLeftRev
-                ),
-                new CylinderPH(
-                    ph,
-                    IOConstants.Climber.kOuterRightFwd,
-                    IOConstants.Climber.kOuterRightRev
-                )
-            );
+            yield new Climber(new AxleSpark(), (fwd, rev) -> {
+                return new CylinderPH(ph, fwd, rev);
+            });
         }
-        default -> new Climber(
-            new AxleReplay(),
-            new CylinderReplay(),
-            new CylinderReplay(),
-            new CylinderReplay()
-        );
+        default -> new Climber(new AxleReplay(), (fwd, rev) -> {
+            return new CylinderReplay();
+        });
     };
+
     final Intake intake = new Intake(
         switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new PivotSpark();
