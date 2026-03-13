@@ -12,37 +12,26 @@ import frc.robot.subsystems.climber.cylinder.CylinderIO.CylinderData;
  *
  * <p>
  * This subsystem wraps an {@link AxleIO} (two SparkFlex motors on a shared
- * axle)
- * and three {@link CylinderIO} instances (inner hook, outer-left hook,
- * outer-right
- * hook) to provide a consistent interface regardless of whether running on real
- * hardware, in simulation, or in log replay.
+ * axle) and three {@link CylinderIO} instances (inner hook, outer-left hook,
+ * outer-right hook) to provide a consistent interface regardless of whether
+ * running on real hardware, in simulation, or in log replay.
  *
  * <p>
  * The climbing sequence alternates between expanded and contracted positions:
  *
  * <pre>
- *   kContract → kExpand → kContract = L1
- *   L1        → kExpand → kContract = L2
- *   L2        → kExpand → kContract = L3
+ *   CONTRACT → EXPAND → CONTRACT = L1
+ *   L1       → EXPAND → CONTRACT = L2
+ *   L2       → EXPAND → CONTRACT = L3
  * </pre>
  *
  * <p>
  * In autonomous, the robot climbs only L1 using the inner hooks and
- * {@link #contractPartial()} instead of {@link #contract()}, which reaches L1
+ * {@link ClimberConstants.Position#CONTRACT_PARTIAL} instead of
+ * {@link ClimberConstants.Position#CONTRACT}, which reaches L1
  * in a position where the robot can come back down.
  */
 public class Climber extends SubsystemBase {
-
-    /** Possible states of the axle rotation. */
-    public enum State {
-        /** Fully contracted (home position). */
-        CONTRACT,
-        /** Fully expanded. */
-        EXPAND,
-        /** Partially contracted (autonomous L1 — allows descent). */
-        CONTRACT_PARTIAL,
-    }
 
     /** The axle IO interface (two motors, position control). */
     final AxleIO axle;
@@ -55,12 +44,6 @@ public class Climber extends SubsystemBase {
 
     /** Outer-right hook cylinder. */
     final CylinderIO outerRight;
-
-    /** Current completed level (0 = ground, 1 = L1, etc.). */
-    int level = 0;
-
-    /** Current axle state. */
-    State state = State.CONTRACT;
 
     /**
      * Constructs a Climber subsystem.
@@ -138,63 +121,12 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Commands the axle to the expanded position.
+     * Commands the axle to the given position setpoint.
      *
-     * <p>
-     * Sets the state to {@link State#EXPAND}.
+     * @param position The target {@link ClimberConstants.Position}
      */
-    public void expand() {
-        state = State.EXPAND;
-        axle.setPosition(ClimberConstants.kExpand);
-    }
-
-    /**
-     * Commands the axle to the fully contracted position.
-     *
-     * <p>
-     * If transitioning from {@link State#EXPAND}, increments the level
-     * counter. Sets the state to {@link State#CONTRACT}.
-     */
-    public void contract() {
-        if (state == State.EXPAND) {
-            level++;
-        }
-        state = State.CONTRACT;
-        axle.setPosition(ClimberConstants.kContract);
-    }
-
-    /**
-     * Commands the axle to the partial contraction position.
-     *
-     * <p>
-     * Used during autonomous to reach L1 in a position where the robot
-     * can come back down. If transitioning from {@link State#EXPAND},
-     * increments the level counter.
-     */
-    public void contractPartial() {
-        if (state == State.EXPAND) {
-            level++;
-        }
-        state = State.CONTRACT_PARTIAL;
-        axle.setPosition(ClimberConstants.kContractPartial);
-    }
-
-    /**
-     * Returns the current completed level.
-     *
-     * @return Level number (0 = ground, 1 = L1, 2 = L2, 3 = L3)
-     */
-    public int getLevel() {
-        return level;
-    }
-
-    /**
-     * Returns the current axle state.
-     *
-     * @return The current {@link State}
-     */
-    public State getState() {
-        return state;
+    public void setPosition(ClimberConstants.Position position) {
+        axle.setPosition(position.radians);
     }
 
     /** Updates all IO objects every robot loop. */

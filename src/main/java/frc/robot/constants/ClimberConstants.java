@@ -36,28 +36,38 @@ public final class ClimberConstants {
     public static final double kReduction = 1.0;
 
     /**
-     * Contracted position setpoint in radians.
+     * Axle position setpoints.
      *
      * <p>
-     * This is the home/starting position of the axle.
+     * Each variant carries a radian value at the output shaft.
      */
-    public static final double kContract = 0.0;
+    public enum Position {
+        /** Fully contracted (home position). */
+        CONTRACT(0.0),
+        /** Fully expanded. */
+        EXPAND(3.0),
+        /** Partial contraction for autonomous L1 (allows descent). */
+        CONTRACT_PARTIAL(1.0);
+
+        /** Position setpoint in radians. */
+        public final double radians;
+
+        Position(double radians) {
+            this.radians = radians;
+        }
+    }
 
     /**
-     * Expanded position setpoint in radians.
+     * Duration in seconds to wait after actuating the pneumatic cylinders.
      *
      * <p>
-     * The axle rotates to this position to extend the climber mechanism.
-     * Tune this value on the robot.
+     * Allows the solenoids to fully extend or retract before the command ends.
      */
-    public static final double kExpand = 3.0;
+    public static final double kEngageDuration = 0.5;
 
-    /**
-     * Partial contraction position setpoint in radians.
-     *
-     * <p>
-     * Used during autonomous to reach L1 in a position where the robot
-     * can come back down. Between {@link #kContract} and {@link #kExpand}.
-     */
-    public static final double kContractPartial = 1.0;
+    /** Duration in seconds to reverse drivetrain after descent */
+    public static final double kReverseDuration = 0.5;
+
+    /** Speed of drivetrain when reversing */
+    public static final double kReverseSpeed = 0.5;
 }
