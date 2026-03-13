@@ -50,9 +50,6 @@ public class PointAtHub extends Command {
     }
 
     @Override
-    public void initialize() {}
-
-    @Override
     public void execute() {
         Pose2d posBlue = AllianceUtil.unsafe.autoflip(drive.getPose());
         Pose2d blueHub = GameConstants.Objects.kHub;
