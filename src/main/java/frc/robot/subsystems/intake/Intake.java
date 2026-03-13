@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -34,6 +35,9 @@ public class Intake extends SubsystemBase {
 
     /** Whether the intake is currently commanded to deploy. */
     boolean deployed = false;
+
+    /** The intake should initally deploy once at the beginning of the match */
+    boolean autoDeployed = false;
 
     /**
      * Constructs an Intake subsystem.
@@ -75,6 +79,11 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!autoDeployed && !deployed && DriverStation.isEnabled()) {
+            deploy(true);
+            autoDeployed = true;
+        }
+
         pivot.update();
         roller.update();
 
