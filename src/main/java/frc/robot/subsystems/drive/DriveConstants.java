@@ -5,6 +5,8 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
+// prettier-ignore
+
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,8 +17,8 @@ import edu.wpi.first.math.util.Units;
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 4.804;
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double trackWidth = Units.inchesToMeters(26.5);
-  public static final double wheelBase = Units.inchesToMeters(26.5);
+  public static final double trackWidth = Units.inchesToMeters(24.0);
+  public static final double wheelBase = Units.inchesToMeters(24.0);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final double maxAngularSpeedRadPerSec = maxSpeedMetersPerSec / driveBaseRadius;
   public static final Translation2d[] moduleTranslations = new Translation2d[] {
@@ -48,15 +50,12 @@ public class DriveConstants {
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 47;// old 60
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
-  public static final double driveMotorReduction = (45.0 * 22.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion teeth and
-                                                                                  // 22 spur teeth
+  public static final double driveMotorReduction = (45.0 * 22.0) / (14.0 * 15.0); 
   public static final DCMotor driveGearbox = DCMotor.getNEO(1);
 
   // Drive encoder configuration
-  public static final double driveEncoderPositionFactor = 2 * Math.PI / driveMotorReduction; // Rotor Rotations -> Wheel
-                                                                                             // Radians
-  public static final double driveEncoderVelocityFactor = (2 * Math.PI) / 60.0 / driveMotorReduction; // Rotor RPM ->
-                                                                                                      // Wheel Rad/Sec
+  public static final double driveEncoderPositionFactor = 2 * Math.PI / driveMotorReduction; 
+  public static final double driveEncoderVelocityFactor = (2 * Math.PI) / 60.0 / driveMotorReduction;
 
   // Drive PID configuration
   public static final double driveKp = 0.0;

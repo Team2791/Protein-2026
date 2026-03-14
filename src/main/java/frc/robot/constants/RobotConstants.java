@@ -48,16 +48,26 @@ public class RobotConstants {
         public static final double kTrackWidth = DriveConstants.trackWidth;
 
         /**
-         * Bumper width: side-to-side outer dimension
-         * @see #kTrackWidth for distance between wheels in the same axis
+         * Chassis length: front-to-back distance between (metal) chassis (without bumpers), in meters.
          */
-        public static final double kBumperWidth = Inches.of(36.5).in(Meters);
+        public static final double kChassisLength = Inches.of(27.5).in(Meters);
+
+        /**
+         * Chassis width: side-to-side distance between (metal) chassis (without bumpers), in meters.
+         */
+        public static final double kChassisWidth = Inches.of(27.5).in(Meters);
 
         /**
          * Bumper length: front-to-back outer dimension
          * @see #kWheelBase for distance between wheels in the same axis
          */
-        public static final double kBumperLength = Inches.of(36.5).in(Meters);
+        public static final double kBumperLength = Inches.of(34).in(Meters);
+
+        /**
+         * Bumper width: side-to-side outer dimension
+         * @see #kTrackWidth for distance between wheels in the same axis
+         */
+        public static final double kBumperWidth = Inches.of(34).in(Meters);
 
         /**
          * Radius of circle bumpers fit within.

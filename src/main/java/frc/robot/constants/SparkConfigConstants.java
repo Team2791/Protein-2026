@@ -97,10 +97,10 @@ public class SparkConfigConstants {
 
             // encoder conversion: motor rad → wheel rad (includes reduction)
             kLeader.encoder.positionConversionFactor(
-                kTau * IntakeConstants.Roller.kReduction
+                kTau / IntakeConstants.Roller.kReduction
             );
             kLeader.encoder.velocityConversionFactor(
-                (kTau * IntakeConstants.Roller.kReduction) / 60.0
+                kTau / 60.0 / IntakeConstants.Roller.kReduction
             );
 
             // roller PID (velocity)
@@ -139,10 +139,10 @@ public class SparkConfigConstants {
 
             // encoder conversion: motor rad → output rad (includes reduction)
             kLeader.encoder.positionConversionFactor(
-                kTau * IntakeConstants.Pivot.kReduction
+                kTau / IntakeConstants.Pivot.kReduction
             );
             kLeader.encoder.velocityConversionFactor(
-                (kTau * IntakeConstants.Pivot.kReduction) / 60.0
+                kTau / 60.0 / IntakeConstants.Pivot.kReduction
             );
 
             // pivot PID (position)
@@ -181,10 +181,10 @@ public class SparkConfigConstants {
 
             // encoder conversion: motor rad → output rad (direct drive)
             kLeader.encoder.positionConversionFactor(
-                kTau * ClimberConstants.kReduction
+                kTau / ClimberConstants.kReduction
             );
             kLeader.encoder.velocityConversionFactor(
-                (kTau * ClimberConstants.kReduction) / 60.0
+                kTau / 60.0 / ClimberConstants.kReduction
             );
 
             // position PID

@@ -30,8 +30,7 @@ public final class ClimberConstants {
      * Gear reduction from motor shaft to axle output.
      *
      * <p>
-     * Convention: 1 motor turn : {@code kReduction} output turns.
-     * Currently direct drive (1:1).
+     * Convention: N motor turns : 1 output turn.
      */
     public static final double kReduction = 1.0;
 

@@ -29,11 +29,11 @@ public final class IntakeConstants {
          * Gear reduction from motor shaft to roller wheel.
          *
          * <p>
-         * Convention: 1 motor turn : {@code kReduction} wheel turns
-         * (i.e. a value {@literal <} 1 means the motor spins faster than the wheel).
+         * Convention: N motor turn : 1 wheel turns
+         * (i.e. a value {@literal >} 1 means the motor spins faster than the wheel).
          * Adjust this to match the physical gearbox ratio.
          */
-        public static final double kReduction = 1.0;
+        public static final double kReduction = 2;
 
         /**
          * Radius of the intake roller wheels in meters.
@@ -60,11 +60,11 @@ public final class IntakeConstants {
          * Gear reduction from motor shaft to pivot output.
          *
          * <p>
-         * Convention: 1 motor turn : {@code kReduction} output turns
-         * (i.e. a value {@literal <} 1 means the motor spins faster than the output).
+         * Convention: N motor turn : 1 output turn
+         * (i.e. a value {@literal >} 1 means the motor spins faster than the output).
          * Adjust this to match the physical gearbox ratio.
          */
-        public static final double kReduction = 1.0;
+        public static final double kReduction = 20;
 
         /**
          * The deployed (down) position setpoint for the pivot, in radians.

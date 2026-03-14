@@ -84,7 +84,7 @@ public final class MotorConstants {
         );
 
         /** Recommended current limit: 60 amps. */
-        public static final int kCurrentLimit = 60;
+        public static final int kCurrentLimit = 40;
     }
 
     /**
