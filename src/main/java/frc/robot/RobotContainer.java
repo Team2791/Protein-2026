@@ -7,23 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
-import frc.robot.commands.climber.ClimbDown;
-import frc.robot.commands.climber.ClimbFull;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.controller.XboxEliteController;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.axle.AxleReplay;
-import frc.robot.subsystems.climber.axle.AxleSpark;
-import frc.robot.subsystems.climber.cylinder.CylinderPH;
-import frc.robot.subsystems.climber.cylinder.CylinderReplay;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -85,17 +77,17 @@ public class RobotContainer {
         }
     );
 
-    final Climber climber = switch (RuntimeConstants.kCurrentMode) {
-        case REAL -> {
-            PneumaticHub ph = new PneumaticHub(IOConstants.Climber.kPhId);
-            yield new Climber(new AxleSpark(), (fwd, rev) -> {
-                return new CylinderPH(ph, fwd, rev);
-            });
-        }
-        default -> new Climber(new AxleReplay(), (fwd, rev) -> {
-            return new CylinderReplay();
-        });
-    };
+    // final Climber climber = switch (RuntimeConstants.kCurrentMode) {
+    //     case REAL -> {
+    //         PneumaticHub ph = new PneumaticHub(IOConstants.Climber.kPhId);
+    //         yield new Climber(new AxleSpark(), (fwd, rev) -> {
+    //             return new CylinderPH(ph, fwd, rev);
+    //         });
+    //     }
+    //     default -> new Climber(new AxleReplay(), (fwd, rev) -> {
+    //         return new CylinderReplay();
+    //     });
+    // };
 
     final Intake intake = new Intake(
         switch (RuntimeConstants.kCurrentMode) {
@@ -154,11 +146,11 @@ public class RobotContainer {
         // Driver: point and shoot
         driverctl.x().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
 
-        // Driver: Climb down (postauto)
-        driverctl.leftBumper().whileTrue(new ClimbDown(climber, drive, intake));
+        // // Driver: Climb down (postauto)
+        // driverctl.leftBumper().whileTrue(new ClimbDown(climber, drive, intake));
 
-        // Driver: Climb up (endgame)
-        driverctl.rightBumper().whileTrue(new ClimbFull(climber, intake));
+        // // Driver: Climb up (endgame)
+        // driverctl.rightBumper().whileTrue(new ClimbFull(climber, intake));
     }
 
     /**
