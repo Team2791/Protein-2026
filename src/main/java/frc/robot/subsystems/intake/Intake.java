@@ -43,7 +43,6 @@ public class Intake extends SubsystemBase {
      *
      * @param pivot  The pivot IO implementation
      * @param roller The roller IO implementation
-     * @param drive  The drive subsystem for speed-matching
      */
     public Intake(PivotIO pivot, RollerIO roller) {
         this.pivot = pivot;

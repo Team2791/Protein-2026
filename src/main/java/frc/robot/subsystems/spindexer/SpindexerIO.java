@@ -9,7 +9,8 @@ import org.littletonrobotics.junction.AutoLog;
  * <p>
  * This class defines the interface for interacting with the spindexer hardware,
  * including a SparkFlex (Neo Vortex) and a SparkMax (Neo) motor, each run
- * independently at a fixed power via {@link #set(boolean)}.
+ * independently at a fixed power via {@link #setSpindexer(double)} and
+ * {@link #setKicker(double)}.
  *
  * <p>
  * Concrete implementations handle the specifics of communicating with the

@@ -36,22 +36,38 @@ public class XboxEliteController extends CommandXboxController {
         }
     }
 
-    /** @return Trigger for the bottom-left back paddle (P1). */
+    /**
+     * Bottom-left paddle (P1)
+     *
+     * @return Trigger for the bottom-left back paddle (P1).
+     */
     public Trigger paddleBL() {
         return paddles[0];
     }
 
-    /** @return Trigger for the top-left back paddle (P3). */
+    /**
+     * Top-left paddle (P3)
+     *
+     * @return Trigger for the top-left back paddle (P3).
+     */
     public Trigger paddleTL() {
         return paddles[1];
     }
 
-    /** @return Trigger for the top-right back paddle (P4). */
+    /**
+     * Top-right paddle (P4)
+     *
+     * @return Trigger for the top-right back paddle (P4).
+     */
     public Trigger paddleTR() {
         return paddles[2];
     }
 
-    /** @return Trigger for the bottom-right back paddle (P2). */
+    /**
+     * Bottom-right paddle (P2)
+     *
+     * @return Trigger for the bottom-right back paddle (P2).
+     */
     public Trigger paddleBR() {
         return paddles[3];
     }

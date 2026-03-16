@@ -29,8 +29,7 @@ import edu.wpi.first.math.numbers.N3;
  */
 public final class VisionConstants {
 
-    private VisionConstants() {
-    }
+    private VisionConstants() {}
 
     /**
      * Camera hardware configurations.
@@ -71,8 +70,9 @@ public final class VisionConstants {
      * TODO: Measure and configure actual transform.
      */
     public static Transform3d kBotToQuest = new Transform3d(
-            new Translation3d(0, Inches.of(12).in(Meters), 0),
-            new Rotation3d(0, 0, Math.PI / 2));
+        new Translation3d(0, Inches.of(12).in(Meters), 0),
+        new Rotation3d(0, 0, Math.PI / 2)
+    );
 
     /**
      * Quest Pro measurement standard deviations.
@@ -82,9 +82,10 @@ public final class VisionConstants {
      * Lower values = more trust in Quest measurements.
      */
     public static Matrix<N3, N1> kQuestDevs = VecBuilder.fill(
-            Centimeters.of(2).in(Meters),
-            Centimeters.of(2).in(Meters),
-            Degrees.of(0.035).in(Radians));
+        Centimeters.of(2).in(Meters),
+        Centimeters.of(2).in(Meters),
+        Degrees.of(0.035).in(Radians)
+    );
 
     /**
      * Vision alignment constraints.
@@ -94,8 +95,7 @@ public final class VisionConstants {
      */
     public static final class Align {
 
-        private Align() {
-        }
+        private Align() {}
 
         /**
          * Maximum distance for vision-based alignment (1.5 meters).
@@ -114,8 +114,7 @@ public final class VisionConstants {
      */
     public static final class AprilTag {
 
-        private AprilTag() {
-        }
+        private AprilTag() {}
 
         /**
          * Field layout for 2025 Reefscape (Welded variant).
@@ -123,8 +122,8 @@ public final class VisionConstants {
          * <p>
          * TODO: Update for 2026 field when released.
          */
-        public static final AprilTagFieldLayout kLayout = AprilTagFieldLayout
-                .loadField(AprilTagFields.k2025ReefscapeWelded);
+        public static final AprilTagFieldLayout kLayout =
+            AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     }
 
     /**
@@ -136,8 +135,7 @@ public final class VisionConstants {
      */
     public static final class StdDevs {
 
-        private StdDevs() {
-        }
+        private StdDevs() {}
 
         /**
          * Single AprilTag measurement uncertainty.
@@ -151,9 +149,10 @@ public final class VisionConstants {
          * </ul>
          */
         public static final Matrix<N3, N1> kSingleTag = VecBuilder.fill(
-                4,
-                4,
-                8);
+            4,
+            4,
+            8
+        );
 
         /**
          * Multiple AprilTag measurement uncertainty.
@@ -167,8 +166,9 @@ public final class VisionConstants {
          * </ul>
          */
         public static final Matrix<N3, N1> kMultiTag = VecBuilder.fill(
-                0.5,
-                0.5,
-                1);
+            0.5,
+            0.5,
+            1
+        );
     }
 }

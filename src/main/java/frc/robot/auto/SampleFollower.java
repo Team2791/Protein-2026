@@ -18,8 +18,6 @@ import org.littletonrobotics.junction.Logger;
  */
 public class SampleFollower {
 
-    private static boolean init = false;
-
     /** Drive subsystem for motion control. */
     final Drive drive;
 
@@ -49,9 +47,6 @@ public class SampleFollower {
      * @see SampleFollower for usage
      */
     public SampleFollower(Drive drive) {
-        assert !init : "SampleFollower is initialized in the Drive subsystem";
-        init = true;
-
         this.drive = drive;
 
         SmartDashboard.putData("PID/AutoX", xCtl);
