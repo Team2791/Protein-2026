@@ -7,7 +7,7 @@ public record ClosedLoopData(
     double target,
     ControlType control,
     boolean atTarget
-) {
+) implements Cloneable {
     public static ClosedLoopData read(SparkClosedLoopController ctl) {
         return new ClosedLoopData(
             ctl.getSetpoint(),
@@ -18,5 +18,10 @@ public record ClosedLoopData(
 
     public static ClosedLoopData empty() {
         return new ClosedLoopData(0.0, ControlType.kDutyCycle, false);
+    }
+
+    @Override
+    public ClosedLoopData clone() {
+        return new ClosedLoopData(target, control, atTarget);
     }
 }

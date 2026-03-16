@@ -83,4 +83,18 @@ public record SparkData(
             ClosedLoopData.empty()
         );
     }
+
+    @Override
+    public SparkData clone() {
+        return new SparkData(
+            position,
+            velocity,
+            voltage,
+            amps,
+            temperature,
+            output,
+            connected,
+            pid.clone()
+        );
+    }
 }

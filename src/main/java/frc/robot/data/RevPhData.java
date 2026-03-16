@@ -50,4 +50,16 @@ public record RevPhData(
     public static RevPhData empty() {
         return new RevPhData(0.0, false, 0.0, 0, 0.0, 0.0);
     }
+
+    @Override
+    public RevPhData clone() {
+        return new RevPhData(
+            pressure,
+            compressing,
+            compressorCurrent,
+            solenoids,
+            voltage,
+            current
+        );
+    }
 }
