@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.data;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;

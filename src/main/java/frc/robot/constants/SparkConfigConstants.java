@@ -4,8 +4,8 @@ import static frc.robot.util.MathPlus.kTau;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -13,8 +13,8 @@ public class SparkConfigConstants {
 
     public static final class Shooter {
 
-        static final SparkFlexConfig kLeader;
-        static final SparkFlexConfig kFollower;
+        public static final SparkFlexConfig kLeader;
+        public static final SparkFlexConfig kFollower;
 
         static {
             kLeader = new SparkFlexConfig();
@@ -29,7 +29,16 @@ public class SparkConfigConstants {
             kLeader.encoder.velocityConversionFactor(kTau / 60.0);
 
             // pid constants
-            ControlConstants.Shooter.kPid.register(kLeader);
+            kLeader.closedLoop.pid(
+                ControlConstants.Shooter.kP,
+                ControlConstants.Shooter.kI,
+                ControlConstants.Shooter.kD
+            );
+            kLeader.closedLoop.feedForward.sv(
+                ControlConstants.Shooter.kShooterS,
+                ControlConstants.Shooter.kShooterV
+            );
+            kLeader.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
             // idle mode
             kLeader.idleMode(ShooterConstants.Motor.kIdleMode);
@@ -41,19 +50,12 @@ public class SparkConfigConstants {
                 ShooterConstants.Motor.kInvertFollower
             );
         }
-
-        public static void apply(SparkFlex leader, SparkFlex follower) {
-            leader.configure(kLeader, kReset, kPersist);
-            follower.configure(kFollower, kReset, kPersist);
-
-            ControlConstants.Shooter.kPid.register(leader);
-        }
     }
 
     public static final class Spindexer {
 
-        static final SparkFlexConfig kSpindexer;
-        static final SparkMaxConfig kKicker;
+        public static final SparkFlexConfig kSpindexer;
+        public static final SparkMaxConfig kKicker;
 
         static {
             kSpindexer = new SparkFlexConfig();
@@ -75,17 +77,12 @@ public class SparkConfigConstants {
             kSpindexer.idleMode(SpindexerConstants.Motor.kIdleMode);
             kKicker.idleMode(SpindexerConstants.Motor.kIdleMode);
         }
-
-        public static void apply(SparkFlex flex, SparkMax max) {
-            flex.configure(kSpindexer, kReset, kPersist);
-            max.configure(kKicker, kReset, kPersist);
-        }
     }
 
     public static final class IntakeRoller {
 
-        static final SparkFlexConfig kLeader;
-        static final SparkFlexConfig kFollower;
+        public static final SparkFlexConfig kLeader;
+        public static final SparkFlexConfig kFollower;
 
         static {
             kLeader = new SparkFlexConfig();
@@ -103,9 +100,6 @@ public class SparkConfigConstants {
                 kTau / 60.0 / IntakeConstants.Roller.kReduction
             );
 
-            // roller PID (velocity)
-            ControlConstants.Intake.kRollerPid.register(kLeader);
-
             kLeader.idleMode(IntakeConstants.Roller.kIdleMode);
             kFollower.idleMode(IntakeConstants.Roller.kIdleMode);
 
@@ -115,19 +109,12 @@ public class SparkConfigConstants {
                 IntakeConstants.Roller.kInvertFollower
             );
         }
-
-        public static void apply(SparkFlex leader, SparkFlex follower) {
-            leader.configure(kLeader, kReset, kPersist);
-            follower.configure(kFollower, kReset, kPersist);
-
-            ControlConstants.Intake.kRollerPid.register(leader);
-        }
     }
 
     public static final class IntakePivot {
 
-        static final SparkFlexConfig kLeader;
-        static final SparkFlexConfig kFollower;
+        public static final SparkFlexConfig kLeader;
+        public static final SparkFlexConfig kFollower;
 
         static {
             kLeader = new SparkFlexConfig();
@@ -146,7 +133,16 @@ public class SparkConfigConstants {
             );
 
             // pivot PID (position)
-            ControlConstants.Intake.kPivotPid.register(kLeader);
+            kLeader.closedLoop.pid(
+                ControlConstants.Intake.kPivotP,
+                ControlConstants.Intake.kPivotI,
+                ControlConstants.Intake.kPivotD
+            );
+            kLeader.closedLoop.allowedClosedLoopError(
+                IntakeConstants.Pivot.kTolerance,
+                ClosedLoopSlot.kSlot0
+            );
+            kLeader.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
             kLeader.idleMode(IntakeConstants.Pivot.kIdleMode);
             kFollower.idleMode(IntakeConstants.Pivot.kIdleMode);
@@ -157,19 +153,12 @@ public class SparkConfigConstants {
                 IntakeConstants.Pivot.kInvertFollower
             );
         }
-
-        public static void apply(SparkFlex leader, SparkFlex follower) {
-            leader.configure(kLeader, kReset, kPersist);
-            follower.configure(kFollower, kReset, kPersist);
-
-            ControlConstants.Intake.kPivotPid.register(leader);
-        }
     }
 
     public static final class Climber {
 
-        static final SparkFlexConfig kLeader;
-        static final SparkFlexConfig kFollower;
+        public static final SparkFlexConfig kLeader;
+        public static final SparkFlexConfig kFollower;
 
         static {
             kLeader = new SparkFlexConfig();
@@ -188,7 +177,12 @@ public class SparkConfigConstants {
             );
 
             // position PID
-            ControlConstants.Climber.kPid.register(kLeader);
+            kLeader.closedLoop.pid(
+                ControlConstants.Climber.kP,
+                ControlConstants.Climber.kI,
+                ControlConstants.Climber.kD
+            );
+            kLeader.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
             kLeader.idleMode(ClimberConstants.Motor.kIdleMode);
             kFollower.idleMode(ClimberConstants.Motor.kIdleMode);
@@ -198,13 +192,6 @@ public class SparkConfigConstants {
                 IOConstants.Climber.kLeader,
                 ClimberConstants.Motor.kInvertFollower
             );
-        }
-
-        public static void apply(SparkFlex leader, SparkFlex follower) {
-            leader.configure(kLeader, kReset, kPersist);
-            follower.configure(kFollower, kReset, kPersist);
-
-            ControlConstants.Climber.kPid.register(leader);
         }
     }
 

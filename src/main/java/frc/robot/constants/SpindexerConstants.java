@@ -36,5 +36,5 @@ public final class SpindexerConstants {
      * <p>
      * Positive values spin the motor forward. Tune this value on the robot.
      */
-    public static final double kKickerPower = 0.5;
+    public static final double kKickerPower = -0.5;
 }

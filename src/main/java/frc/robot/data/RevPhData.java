@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.data;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
 

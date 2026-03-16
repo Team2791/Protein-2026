@@ -84,4 +84,16 @@ public class MathPlus {
         if (Math.abs(value) < kEpsilon) return Math.copySign(kEpsilon, value);
         return value;
     }
+
+    /**
+     * Is thing basically equal to other thing with tolerance
+     *
+     * @param a thing
+     * @param b other thing
+     * @param tolerance tolerance
+     * @return Is this basically equal to other thing
+     */
+    public static boolean atTolerance(double a, double b, double tolerance) {
+        return Math.abs(a - b) < tolerance;
+    }
 }

@@ -1,6 +1,6 @@
 package frc.robot.subsystems.spindexer;
 
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 import org.littletonrobotics.junction.AutoLog;
 
 /**

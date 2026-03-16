@@ -8,6 +8,9 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.Vec2;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Shooter subsystem for controlling the robot's ball-shooting mechanism.
@@ -19,7 +22,7 @@ import frc.robot.util.Vec2;
  *
  * <p>
  * Automatic speed control is handled by the IO layer based on robot position.
- * Manual override is available via {@link #setVelocity(double)} for debugging.
+ * Manual override is available via {@link #manual(ShooterConstants.Setpoint)} for debugging.
  */
 public class Shooter extends SubsystemBase {
 
@@ -30,8 +33,8 @@ public class Shooter extends SubsystemBase {
     final Drive drive;
 
     /**
-     * When {@code true}, the shooter is in manual mode (velocity set via {@link #setVelocity}).
-     * In manual mode, the automatic distance-based control in {@link #updateAll()} is bypassed.
+     * When {@code true}, the shooter is in manual mode.
+     * In manual mode, the automatic distance-based control is bypassed.
      */
     boolean manual = false;
 
@@ -43,6 +46,7 @@ public class Shooter extends SubsystemBase {
     public Shooter(ShooterIO io, Drive drive) {
         this.io = io;
         this.drive = drive;
+        AutoLogOutputManager.addObject(this);
     }
 
     /**
@@ -54,20 +58,30 @@ public class Shooter extends SubsystemBase {
         return io.data.clone();
     }
 
+    /** Checks connection statuses */
+    @AutoLogOutput(key = "Shooter/Ok")
+    public boolean ok() {
+        return io.data.leader.connected() && io.data.follower.connected();
+    }
+
     /**
-     * DEBUGGING: Sets the shooter wheel velocity directly, bypassing automatic control.
+     * Sets the shooter to a manual speed setpoint, bypassing automatic control.
      *
-     * @param velocity The target velocity in radians/second
+     * <p>
+     * Pass {@code null} to return to automatic distance-based control.
+     *
+     * @param setpoint The manual setpoint, or {@code null} for auto
      */
-    public void setVelocity(double velocity) {
-        this.manual = true;
-        io.setVelocity(velocity);
+    public void manual(ShooterConstants.Setpoint setpoint) {
+        this.manual = setpoint != null;
+        if (manual) io.setVelocity(setpoint.velocity);
     }
 
     /** Calls {@link ShooterIO#update()} every robot loop to refresh sensor data. */
     @Override
     public void periodic() {
         io.update();
+        Logger.processInputs("Shooter", io.data);
 
         if (manual) return;
 

@@ -3,10 +3,12 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.pivot.PivotIO;
 import frc.robot.subsystems.intake.roller.RollerIO;
-import frc.robot.util.Vec2;
+import frc.robot.util.MathPlus;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Intake subsystem controlling roller and pivot mechanisms.
@@ -30,11 +32,8 @@ public class Intake extends SubsystemBase {
     /** The roller IO interface. */
     final RollerIO roller;
 
-    /** The drive subsystem, used to read current chassis speed. */
-    final Drive drive;
-
     /** Whether the intake is currently commanded to deploy. */
-    boolean deployed = false;
+    boolean deployed = true;
 
     /** The intake should initally deploy once at the beginning of the match */
     boolean autoDeployed = false;
@@ -46,10 +45,10 @@ public class Intake extends SubsystemBase {
      * @param roller The roller IO implementation
      * @param drive  The drive subsystem for speed-matching
      */
-    public Intake(PivotIO pivot, RollerIO roller, Drive drive) {
+    public Intake(PivotIO pivot, RollerIO roller) {
         this.pivot = pivot;
         this.roller = roller;
-        this.drive = drive;
+        AutoLogOutputManager.addObject(this);
     }
 
     /** Returns the pivot IO data (for external reads). */
@@ -60,6 +59,12 @@ public class Intake extends SubsystemBase {
     /** Returns the roller IO data (for external reads). */
     public RollerIO.RollerData rollerData() {
         return roller.data.clone();
+    }
+
+    /** Checks conneciton statuses */
+    @AutoLogOutput(key = "Intake/Ok")
+    public boolean ok() {
+        return pivot.data.leader.connected() && roller.data.leader.connected();
     }
 
     /**
@@ -84,36 +89,35 @@ public class Intake extends SubsystemBase {
             autoDeployed = true;
         }
 
+        if (!autoDeployed && deployed && DriverStation.isEnabled()) {
+            pivot.resetPosition(IntakeConstants.Pivot.kDeployedPosition);
+            autoDeployed = true;
+        }
+
         pivot.update();
         roller.update();
 
+        Logger.processInputs("Intake/Pivot", pivot.data);
+        Logger.processInputs("Intake/Roller", roller.data);
+
         if (!deployed) {
-            roller.setVelocity(0);
+            roller.set(0);
             pivot.setPosition(0.0);
             return;
         }
 
-        // Command the pivot to the deployed position
-        pivot.setPosition(IntakeConstants.Pivot.kDeployedPosition);
-
-        if (pivot.data.leader.pid().atTarget()) {
-            roller.setVelocity(0);
+        if (
+            !MathPlus.atTolerance(
+                pivot.data.leader.position(),
+                IntakeConstants.Pivot.kDeployedPosition,
+                IntakeConstants.Pivot.kTolerance
+            )
+        ) {
+            pivot.setPosition(IntakeConstants.Pivot.kDeployedPosition);
             return;
         }
 
-        // Compute drivetrain/robot-relative velocity (m/s)
-        Vec2 vel = new Vec2(drive.getRobotSpeeds());
-
-        // shooter is +X, intake is -Y
-        // match all intake-directed velocity
-        double yVel = Math.max(0, -vel.y);
-
-        // Convert linear speed to wheel angular velocity (rad/s).
-        // The Spark encoder conversion factor already accounts for the
-        // gear reduction, so we only need to divide by wheel radius.
-        // v = r * omega -> omega = v / r
-        double omega = yVel / IntakeConstants.Roller.kWheelRadius;
-
-        roller.setVelocity(omega);
+        pivot.setPosition(pivot.data.leader.position());
+        roller.set(IntakeConstants.Roller.kPower);
     }
 }

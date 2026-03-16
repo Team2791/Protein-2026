@@ -19,8 +19,8 @@ public final class IntakeConstants {
 
         private Roller() {}
 
-        /** Idle mode for roller motors (coast lets wheels spin freely). */
-        public static final IdleMode kIdleMode = IdleMode.kCoast;
+        /** Idle mode for roller motors */
+        public static final IdleMode kIdleMode = IdleMode.kBrake;
 
         /** Whether the follower motor should spin opposite to the leader. */
         public static final boolean kInvertFollower = true;
@@ -43,6 +43,9 @@ public final class IntakeConstants {
          * and then into motor angular velocity (rad/s).
          */
         public static final double kWheelRadius = Units.inchesToMeters(2);
+
+        /** Target roller power */
+        public static final double kPower = -0.3;
     }
 
     /** Motor configuration constants for the intake pivot motors. */
@@ -72,9 +75,7 @@ public final class IntakeConstants {
          * <p>
          * The retracted position is assumed to be 0 rad.
          */
-        public static final double kDeployedPosition = Units.degreesToRadians(
-            90
-        );
+        public static final double kDeployedPosition = -1.59;
 
         /**
          * Tolerance for considering the pivot "at position", in radians.
@@ -83,8 +84,6 @@ public final class IntakeConstants {
          * Rollers will not spin until the pivot is within this threshold
          * of the deployed setpoint.
          */
-        public static final double kPositionTolerance = Units.degreesToRadians(
-            5
-        );
+        public static final double kTolerance = 0.11;
     }
 }

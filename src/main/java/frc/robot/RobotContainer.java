@@ -7,12 +7,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
-import frc.robot.commands.shooter.PointAndShoot;
+import frc.robot.commands.drive.SysId;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.controller.XboxEliteController;
@@ -80,11 +84,11 @@ public class RobotContainer {
     // final Climber climber = switch (RuntimeConstants.kCurrentMode) {
     //     case REAL -> {
     //         PneumaticHub ph = new PneumaticHub(IOConstants.Climber.kPhId);
-    //         yield new Climber(new AxleSpark(), (fwd, rev) -> {
-    //             return new CylinderPH(ph, fwd, rev);
+    //         yield new Climber(new AxleSpark(), ch -> {
+    //             return new CylinderPH(ph, ch);
     //         });
     //     }
-    //     default -> new Climber(new AxleReplay(), (fwd, rev) -> {
+    //     default -> new Climber(new AxleReplay(), ch -> {
     //         return new CylinderReplay();
     //     });
     // };
@@ -97,8 +101,7 @@ public class RobotContainer {
         switch (RuntimeConstants.kCurrentMode) {
             case REAL -> new RollerSpark();
             default -> new RollerReplay();
-        },
-        drive
+        }
     );
 
     // Controllers
@@ -113,13 +116,17 @@ public class RobotContainer {
 
     // Auto selector
     final AutoSelector selector = new AutoSelector(drive);
+    final SendableChooser<Command> sysid = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         configureButtonBindings();
+        configureSysId();
         Rumbler.getInstance().provideControllers(driverctl, operctl);
+
+        SmartDashboard.putData("AutoSysId", sysid);
     }
 
     /**
@@ -144,13 +151,40 @@ public class RobotContainer {
         driverctl.a().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
         // Driver: point and shoot
-        driverctl.x().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
+        // driverctl.x().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
 
-        // // Driver: Climb down (postauto)
-        // driverctl.leftBumper().whileTrue(new ClimbDown(climber, drive, intake));
+        // Driver/unlocalized: point and shoot
+        driverctl.rightBumper().whileTrue(new Shoot(spindexer));
+        driverctl.rightBumper().whileFalse(new Shoot.ReverseTimed(spindexer));
+    }
 
-        // // Driver: Climb up (endgame)
-        // driverctl.rightBumper().whileTrue(new ClimbFull(climber, intake));
+    private void configureSysId() {
+        sysid.addOption(
+            "Drive Wheel Radius Characterization",
+            SysId.wheelRadiusCharacterization(drive)
+        );
+        sysid.addOption(
+            "Drive Simple FF Characterization",
+            SysId.feedforwardCharacterization(drive)
+        );
+        sysid.addOption(
+            "Drive SysId (Quasistatic Forward)",
+            drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+        );
+        sysid.addOption(
+            "Drive SysId (Quasistatic Reverse)",
+            drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+        );
+        sysid.addOption(
+            "Drive SysId (Dynamic Forward)",
+            drive.sysIdDynamic(SysIdRoutine.Direction.kForward)
+        );
+        sysid.addOption(
+            "Drive SysId (Dynamic Reverse)",
+            drive.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+        );
+
+        SmartDashboard.putData("SysIdAuto", sysid);
     }
 
     /**

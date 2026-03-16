@@ -7,7 +7,10 @@ import frc.robot.subsystems.climber.axle.AxleIO;
 import frc.robot.subsystems.climber.axle.AxleIO.AxleData;
 import frc.robot.subsystems.climber.cylinder.CylinderIO;
 import frc.robot.subsystems.climber.cylinder.CylinderIO.CylinderData;
-import java.util.function.BiFunction;
+import java.util.function.Function;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Climber subsystem controlling the axle rotation and pneumatic hook cylinders.
@@ -50,28 +53,18 @@ public class Climber extends SubsystemBase {
     /**
      * Constructs a Climber subsystem.
      *
-     * @param axle       The axle IO implementation (motor control)
-     * @param inner      The inner hook cylinder IO
-     * @param outerLeft  The outer-left hook cylinder IO
-     * @param outerRight The outer-right hook cylinder IO
+     * @param axle            The axle IO implementation (motor control)
+     * @param cylinderFactory Factory that creates a {@link CylinderIO} for a given
+     *                        solenoid channel
      */
-    public Climber(
-        AxleIO axle,
-        BiFunction<Integer, Integer, CylinderIO> cylinderFactory
-    ) {
+    public Climber(AxleIO axle, Function<Integer, CylinderIO> cylinderFactory) {
         this.axle = axle;
-        this.inner = cylinderFactory.apply(
-            IOConstants.Climber.kInnerFwd,
-            IOConstants.Climber.kInnerRev
-        );
-        this.outerLeft = cylinderFactory.apply(
-            IOConstants.Climber.kOuterLeftFwd,
-            IOConstants.Climber.kOuterLeftRev
-        );
+        this.inner = cylinderFactory.apply(IOConstants.Climber.kInner);
+        this.outerLeft = cylinderFactory.apply(IOConstants.Climber.kOuterLeft);
         this.outerRight = cylinderFactory.apply(
-            IOConstants.Climber.kOuterRightFwd,
-            IOConstants.Climber.kOuterRightRev
+            IOConstants.Climber.kOuterRight
         );
+        AutoLogOutputManager.addObject(this);
     }
 
     /**
@@ -81,6 +74,12 @@ public class Climber extends SubsystemBase {
      */
     public AxleData axleData() {
         return axle.data.clone();
+    }
+
+    /** Checks connection statuses */
+    @AutoLogOutput(key = "Climber/Ok")
+    public boolean ok() {
+        return axle.data.leader.connected() && axle.data.follower.connected();
     }
 
     /**
@@ -145,5 +144,10 @@ public class Climber extends SubsystemBase {
         inner.update();
         outerLeft.update();
         outerRight.update();
+
+        Logger.processInputs("Climber/Axle", axle.data);
+        Logger.processInputs("Climber/Inner", inner.data);
+        Logger.processInputs("Climber/OuterLeft", outerLeft.data);
+        Logger.processInputs("Climber/OuterRight", outerRight.data);
     }
 }

@@ -5,7 +5,6 @@ import static frc.robot.util.MathPlus.kTau;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.drive.DriveConstants;
-import frc.robot.util.TunableSparkPID;
 
 /**
  * Control loop constants for robot motion control.
@@ -32,13 +31,16 @@ public final class ControlConstants {
 
         private Shooter() {}
 
-        /** Tunable PID controller for shooter velocity control. */
-        public static final TunableSparkPID kPid = new TunableSparkPID(
-            0,
-            0,
-            0,
-            "Shooter"
-        );
+        /** Proportional gain for shooter velocity control. */
+        public static final double kP = 0.01;
+        /** Integral gain for shooter velocity control. */
+        public static final double kI = 0;
+        /** Derivative gain for shooter velocity control. */
+        public static final double kD = 0;
+        /** Feedforward static friction constant */
+        public static final double kShooterS = .2375;
+        /** Feedforward velocity factor */
+        public static final double kShooterV = .0172;
     }
 
     /**
@@ -48,21 +50,23 @@ public final class ControlConstants {
 
         private Intake() {}
 
-        /** Tunable PID controller for roller velocity control. */
-        public static final TunableSparkPID kRollerPid = new TunableSparkPID(
-            0,
-            0,
-            0,
-            "Intake/Roller"
-        );
+        /** Proportional gain for roller velocity control. */
+        public static final double kRollerP = 0;
+        /** Integral gain for roller velocity control. */
+        public static final double kRollerI = 0;
+        /** Derivative gain for roller velocity control. */
+        public static final double kRollerD = 0;
+        /** Feedforward static friction constant */
+        public static final double kRollerS = .2875;
+        /** Feedforward velocity factor */
+        public static final double kRollerV = .035;
 
-        /** Tunable PID controller for pivot position control. */
-        public static final TunableSparkPID kPivotPid = new TunableSparkPID(
-            0,
-            0,
-            0,
-            "Intake/Pivot"
-        );
+        /** Proportional gain for pivot position control. */
+        public static final double kPivotP = 0.1;
+        /** Integral gain for pivot position control. */
+        public static final double kPivotI = 0;
+        /** Derivative gain for pivot position control. */
+        public static final double kPivotD = 0;
     }
 
     /**
@@ -72,13 +76,12 @@ public final class ControlConstants {
 
         private Climber() {}
 
-        /** Tunable PID controller for axle position control. */
-        public static final TunableSparkPID kPid = new TunableSparkPID(
-            0,
-            0,
-            0,
-            "Climber"
-        );
+        /** Proportional gain for axle position control. */
+        public static final double kP = 0;
+        /** Integral gain for axle position control. */
+        public static final double kI = 0;
+        /** Derivative gain for axle position control. */
+        public static final double kD = 0;
     }
 
     /**

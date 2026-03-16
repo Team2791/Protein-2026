@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake.roller;
 
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 import org.littletonrobotics.junction.AutoLog;
 
 /**
@@ -32,9 +32,9 @@ public abstract class RollerIO {
     public abstract void update();
 
     /**
-     * Sets the roller velocity in radians/second (at the wheel).
+     * Sets the roller velocity [-1..1]
      *
-     * @param velocity target velocity in rad/s
+     * @param output target [-1..1]
      */
-    public abstract void setVelocity(double velocity);
+    public abstract void set(double output);
 }

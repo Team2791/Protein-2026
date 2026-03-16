@@ -17,4 +17,7 @@ public class PivotReplay extends PivotIO {
     /** No-op: data is populated from the log, not from hardware. */
     @Override
     public void update() {}
+
+    @Override
+    public void resetPosition(double position) {}
 }

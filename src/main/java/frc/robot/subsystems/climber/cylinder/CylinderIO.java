@@ -1,15 +1,15 @@
 package frc.robot.subsystems.climber.cylinder;
 
-import frc.robot.util.RevPhData;
+import frc.robot.data.RevPhData;
 import org.littletonrobotics.junction.AutoLog;
 
 /**
  * Abstract IO class for a single climber pneumatic cylinder.
  *
  * <p>
- * Each cylinder is driven by a {@link edu.wpi.first.wpilibj.DoubleSolenoid}
- * on the REV Pneumatics Hub. When engaged (forward), the hook connects with
- * the climbing mechanism; when disengaged (reverse), it releases.
+ * Each cylinder is driven by a single-acting {@link edu.wpi.first.wpilibj.Solenoid}
+ * on the REV Pneumatics Hub. When engaged ({@code true}), the hook connects with
+ * the climbing mechanism; when disengaged ({@code false}), it releases.
  *
  * <p>
  * The {@link Climber} subsystem manages three instances of this IO: one for
@@ -39,8 +39,7 @@ public abstract class CylinderIO {
     /**
      * Sets the cylinder state.
      *
-     * @param engaged {@code true} to engage (forward), {@code false} to disengage
-     *                (reverse)
+     * @param engaged {@code true} to engage (forward), {@code false} to disengage (reverse)
      */
     public abstract void set(boolean engaged);
 }

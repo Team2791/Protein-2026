@@ -43,6 +43,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
@@ -88,25 +89,25 @@ public class Drive extends SubsystemBase {
     /** vision measurements collected before robot start */
     final List<VisionMeasurement> calibrators = new ArrayList<>();
 
-    /** PhotonVision, used to calibrate starting position */
-    final Photon photon = new Photon(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> CameraPhoton::new;
-            case REPLAY -> CameraReplay::new;
-            case SIM -> CameraReplay::new;
-        },
-        this.calibrators::add
-    );
+    // /** PhotonVision, used to calibrate starting position */
+    // final Photon photon = new Photon(
+    //     switch (RuntimeConstants.kCurrentMode) {
+    //         case REAL -> CameraPhoton::new;
+    //         case REPLAY -> CameraReplay::new;
+    //         case SIM -> CameraReplay::new;
+    //     },
+    //     this.calibrators::add
+    // );
 
-    /** the QuestNav used for primary vision things */
-    final Quest quest = new Quest(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new Meta3S();
-            case REPLAY -> new QuestReplay();
-            case SIM -> new QuestReplay();
-        },
-        this::addVisionMeasurement
-    );
+    // /** the QuestNav used for primary vision things */
+    // final Quest quest = new Quest(
+    //     switch (RuntimeConstants.kCurrentMode) {
+    //         case REAL -> new Meta3S();
+    //         case REPLAY -> new QuestReplay();
+    //         case SIM -> new QuestReplay();
+    //     },
+    //     this::addVisionMeasurement
+    // );
 
     /**
      * Creates a new Drive subsystem.
@@ -129,6 +130,8 @@ public class Drive extends SubsystemBase {
         // Start odometry thread
         SparkOdometryThread.getInstance().start();
 
+        AutoLogOutputManager.addObject(this);
+
         // Configure SysId
         sysId = new SysIdRoutine(
             new SysIdRoutine.Config(null, null, null, state ->
@@ -147,16 +150,16 @@ public class Drive extends SubsystemBase {
         // Collect updates when disabled; calibrate once enabled.
         // although calibrate() is called many times, it only acts once
         // since we clear the calibrators list at the end of the method.
-        if (DriverStation.isDisabled()) photon.update();
-        else calibrate();
-        quest.update();
+        // if (DriverStation.isDisabled()) photon.update();
+        // else calibrate();
+        // quest.update();
 
         // If the quest has disconnected, fallback on photon for vision
-        if (!quest.data().connected && DriverStation.isEnabled()) {
-            photon.update();
-            this.calibrators.stream().forEach(this::addVisionMeasurement);
-            this.calibrators.clear();
-        }
+        // if (!quest.data().connected && DriverStation.isEnabled()) {
+        //     photon.update();
+        //     this.calibrators.stream().forEach(this::addVisionMeasurement);
+        //     this.calibrators.clear();
+        // }
 
         odometryLock.lock(); // Prevents odometry updates while reading data
         try {
@@ -376,6 +379,12 @@ public class Drive extends SubsystemBase {
         return output;
     }
 
+    /** Checks connection statuses */
+    @AutoLogOutput(key = "Drive/Ok")
+    public boolean ok() {
+        return gyroInputs.connected;
+    }
+
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
@@ -394,7 +403,7 @@ public class Drive extends SubsystemBase {
             getModulePositions(),
             pose
         );
-        quest.reset(pose);
+        // quest.reset(pose);
     }
 
     /** Sets the robot's heading */

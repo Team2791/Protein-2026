@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake.pivot;
 
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 import org.littletonrobotics.junction.AutoLog;
 
 /**
@@ -37,4 +37,9 @@ public abstract class PivotIO {
      * @param position target position in rad
      */
     public abstract void setPosition(double position);
+
+    /**
+     * Debugging: Reset current encoder position
+     */
+    public abstract void resetPosition(double position);
 }

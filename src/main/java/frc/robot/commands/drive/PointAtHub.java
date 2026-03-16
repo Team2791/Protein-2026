@@ -1,5 +1,7 @@
 package frc.robot.commands.drive;
 
+import static frc.robot.util.MathPlus.kTau;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,7 +43,7 @@ public class PointAtHub extends Command {
         this.jsd = new JoystickDrive(ctl, drive);
         addRequirements(drive);
 
-        rotController.enableContinuousInput(-Math.PI, Math.PI);
+        rotController.enableContinuousInput(0, kTau);
         rotController.setTolerance(
             ControlConstants.Nearby.kTolerance.getRotation().getRadians()
         );
@@ -67,6 +69,6 @@ public class PointAtHub extends Command {
         );
         Logger.recordOutput("Point/Cur", posBlue);
 
-        drive.drive(new ChassisSpeeds(linear.x, linear.y, -rot));
+        drive.drive(new ChassisSpeeds(linear.x, linear.y, rot));
     }
 }

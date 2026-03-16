@@ -12,7 +12,7 @@ public class RollerReplay extends RollerIO {
 
     /** No-op: velocity setpoint is not applied in replay mode. */
     @Override
-    public void setVelocity(double velocity) {}
+    public void set(double velocity) {}
 
     /** No-op: data is populated from the log, not from hardware. */
     @Override

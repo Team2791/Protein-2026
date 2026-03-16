@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 
 /**
  * Concrete {@link PivotIO} implementation for Spark motor controllers.
@@ -34,12 +34,28 @@ public class PivotSpark extends PivotIO {
         leader.getClosedLoopController();
 
     public PivotSpark() {
-        SparkConfigConstants.IntakePivot.apply(leader, follower);
+        leader.configure(
+            SparkConfigConstants.IntakePivot.kLeader,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+        follower.configure(
+            SparkConfigConstants.IntakePivot.kFollower,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+
+        leader.getEncoder().setPosition(0);
     }
 
     @Override
     public void setPosition(double position) {
         controller.setSetpoint(position, ControlType.kPosition);
+    }
+
+    @Override
+    public void resetPosition(double position) {
+        leader.getEncoder().setPosition(position);
     }
 
     @Override

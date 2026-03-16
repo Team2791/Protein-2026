@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 
 /**
  * Concrete {@link ShooterIO} implementation for Spark motor controllers.
@@ -30,7 +30,16 @@ public class ShooterSpark extends ShooterIO {
         leader.getClosedLoopController();
 
     public ShooterSpark() {
-        SparkConfigConstants.Shooter.apply(leader, follower);
+        leader.configure(
+            SparkConfigConstants.Shooter.kLeader,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+        follower.configure(
+            SparkConfigConstants.Shooter.kFollower,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 
 /**
  * Concrete {@link AxleIO} implementation for Spark motor controllers.
@@ -34,7 +34,16 @@ public class AxleSpark extends AxleIO {
         leader.getClosedLoopController();
 
     public AxleSpark() {
-        SparkConfigConstants.Climber.apply(leader, follower);
+        leader.configure(
+            SparkConfigConstants.Climber.kLeader,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+        follower.configure(
+            SparkConfigConstants.Climber.kFollower,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
     }
 
     @Override

@@ -81,7 +81,8 @@ public final class IOConstants {
      *
      * <p>
      * Two SparkFlex (Neo Vortex) motors on one axle for rotation, plus
-     * three DoubleSolenoids on the REV Pneumatics Hub for the hook cylinders.
+     * three single-acting solenoids on the REV Pneumatics Hub for the hook
+     * cylinders.
      */
     public static final class Climber {
 
@@ -94,25 +95,16 @@ public final class IOConstants {
         public static final int kFollower = 59;
 
         /** REV Pneumatics Hub CAN ID. */
-        public static final int kPhId = 1;
+        public static final int kPhId = 2;
 
-        /** Inner hook solenoid forward channel. */
-        public static final int kInnerFwd = 0;
+        /** Inner hook solenoid channel. */
+        public static final int kInner = 0;
 
-        /** Inner hook solenoid reverse channel. */
-        public static final int kInnerRev = 1;
+        /** Outer-left hook solenoid channel. */
+        public static final int kOuterLeft = 1;
 
-        /** Outer-left hook solenoid forward channel. */
-        public static final int kOuterLeftFwd = 2;
-
-        /** Outer-left hook solenoid reverse channel. */
-        public static final int kOuterLeftRev = 3;
-
-        /** Outer-right hook solenoid forward channel. */
-        public static final int kOuterRightFwd = 4;
-
-        /** Outer-right hook solenoid reverse channel. */
-        public static final int kOuterRightRev = 5;
+        /** Outer-right hook solenoid channel. */
+        public static final int kOuterRight = 2;
     }
 
     /**

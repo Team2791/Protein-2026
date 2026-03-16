@@ -1,12 +1,10 @@
 package frc.robot.subsystems.intake.roller;
 
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 
 /**
  * Concrete {@link RollerIO} implementation for Spark motor controllers.
@@ -29,17 +27,22 @@ public class RollerSpark extends RollerIO {
         MotorType.kBrushless
     );
 
-    /** Closed-loop controller for roller velocity */
-    final SparkClosedLoopController controller =
-        leader.getClosedLoopController();
-
     public RollerSpark() {
-        SparkConfigConstants.IntakeRoller.apply(leader, follower);
+        leader.configure(
+            SparkConfigConstants.IntakeRoller.kLeader,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+        follower.configure(
+            SparkConfigConstants.IntakeRoller.kFollower,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
     }
 
     @Override
-    public void setVelocity(double velocity) {
-        controller.setSetpoint(velocity, ControlType.kVelocity);
+    public void set(double output) {
+        leader.set(output);
     }
 
     @Override

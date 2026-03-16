@@ -19,10 +19,27 @@ public final class ShooterConstants {
         private Motor() {}
 
         /** Whether the follower motor should spin opposite to the leader. */
-        public static final boolean kInvertFollower = false;
+        public static final boolean kInvertFollower = true;
 
         /** Idle mode for the shooter motors (coast allows wheels to spin freely when stopped). */
         public static final IdleMode kIdleMode = IdleMode.kCoast;
+    }
+
+    /** Manual shooter speed setpoints. */
+    public enum Setpoint {
+        /** Close-range shot. */
+        kNear(200),
+        /** Mid-range shot. */
+        kMedium(350),
+        /** Far-range shot. */
+        kFar(500);
+
+        /** Flywheel velocity in rad/s. */
+        public final double velocity;
+
+        Setpoint(double velocity) {
+            this.velocity = velocity;
+        }
     }
 
     /**
@@ -67,4 +84,19 @@ public final class ShooterConstants {
      * far from the hub to shoot and the flywheel is commanded to stop.
      */
     public static final double kSpinUpThreshold = Inches.of(215.61).in(Meters);
+
+    /** Constants for the {@link frc.robot.commands.shooter.Shoot} command. */
+    public static final class Shoot {
+
+        private Shoot() {}
+
+        /** Minimum time (seconds) the spindexer runs before checking for a stall. */
+        public static final double kStallTimeout = 1.0;
+
+        /** Velocity threshold (rad/s) below which the spindexer is considered stalled. */
+        public static final double kStallVelocity = 200;
+
+        /** Duration (seconds) the spindexer reverses between shots. */
+        public static final double kReverseDuration = 0.25;
+    }
 }

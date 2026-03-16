@@ -3,6 +3,9 @@ package frc.robot.subsystems.spindexer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.SpindexerConstants;
 import frc.robot.subsystems.spindexer.SpindexerIO.SpindexerData;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Spindexer subsystem controlling two independent brushless motors.
@@ -29,6 +32,7 @@ public class Spindexer extends SubsystemBase {
      */
     public Spindexer(SpindexerIO io) {
         this.io = io;
+        AutoLogOutputManager.addObject(this);
     }
 
     /**
@@ -38,6 +42,12 @@ public class Spindexer extends SubsystemBase {
      */
     public SpindexerData data() {
         return io.data.clone();
+    }
+
+    /** Checks connection statuses */
+    @AutoLogOutput(key = "Spindexer/Ok")
+    public boolean ok() {
+        return io.data.spindexer.connected() && io.data.kicker.connected();
     }
 
     /**
@@ -50,9 +60,15 @@ public class Spindexer extends SubsystemBase {
         io.setKicker(running ? SpindexerConstants.kKickerPower : 0.0);
     }
 
+    public void reverse() {
+        io.setSpindexer(-SpindexerConstants.kSpindexerPower);
+    }
+
     /** Calls {@link SpindexerIO#update()} every robot loop to refresh sensor data. */
     @Override
     public void periodic() {
         io.update();
+
+        Logger.processInputs("Spindexer", io.data);
     }
 }

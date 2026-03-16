@@ -45,7 +45,7 @@ public class DriveConstants {
   public static final int frontLeftTurnCanId = 15;
   public static final int frontRightTurnCanId = 25;
   public static final int backLeftTurnCanId = 35;
-  public static final int backRightTurnCanId = 46;
+  public static final int backRightTurnCanId = 45;
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 47;// old 60
@@ -60,8 +60,8 @@ public class DriveConstants {
   // Drive PID configuration
   public static final double driveKp = 0.0;
   public static final double driveKd = 0.0;
-  public static final double driveKs = 0.12319;
-  public static final double driveKv = 0.09165;
+  public static final double driveKs = 0.20109;
+  public static final double driveKv = 0.09462;
   public static final double driveSimP = 0.05;
   public static final double driveSimD = 0.0;
   public static final double driveSimKs = 0.0;

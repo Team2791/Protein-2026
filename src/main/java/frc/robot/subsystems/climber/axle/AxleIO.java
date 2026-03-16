@@ -1,6 +1,6 @@
 package frc.robot.subsystems.climber.axle;
 
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 import org.littletonrobotics.junction.AutoLog;
 
 /**

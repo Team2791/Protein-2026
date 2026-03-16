@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.BuildConstants;
 import frc.robot.constants.RuntimeConstants;
 import frc.robot.util.Elastic;
-import frc.robot.util.TunableSparkPID;
 import java.time.Instant;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -117,7 +116,6 @@ public class Robot extends LoggedRobot {
         // This must be called from the robot's periodic block in order for anything in
         // the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        TunableSparkPID.updateAll();
 
         // Return to non-RT thread priority (do not modify the first argument)
         //Threads.setCurrentThreadPriority(false, 10);

@@ -5,7 +5,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
-import frc.robot.util.SparkData;
+import frc.robot.data.SparkData;
 
 /**
  * Concrete {@link SpindexerIO} implementation for Spark motor controllers.
@@ -30,7 +30,16 @@ public class SpindexerSpark extends SpindexerIO {
     );
 
     public SpindexerSpark() {
-        SparkConfigConstants.Spindexer.apply(spindexer, kicker);
+        spindexer.configure(
+            SparkConfigConstants.Spindexer.kSpindexer,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
+        kicker.configure(
+            SparkConfigConstants.Spindexer.kKicker,
+            SparkConfigConstants.kReset,
+            SparkConfigConstants.kPersist
+        );
     }
 
     @Override
