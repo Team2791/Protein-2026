@@ -181,8 +181,8 @@ public final class ControlConstants {
         private SlewRateLimit() {}
 
         /** Orthogonal rate limiting in percent/second (1.0=100%) TODO: Can be increased (less top-heavy than previous design). */
-        public static final double kOrthogonal = 1.667;
+        public static final double kOrthogonal = 1.8;
         /** Rotational rate limiting in percent/second (1.0=100%) */
-        public static final double kRotational = 3.87;
+        public static final double kRotational = 3.1;
     }
 }

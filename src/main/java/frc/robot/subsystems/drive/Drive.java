@@ -27,6 +27,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.auto.SampleFollower;
+import frc.robot.subsystems.quest.Meta3S;
+import frc.robot.subsystems.quest.Quest;
+import frc.robot.subsystems.quest.QuestReplay;
+import frc.robot.util.AdvantageUtil;
 import frc.robot.util.Vec2;
 import frc.robot.util.VisionMeasurement;
 import java.util.ArrayList;
@@ -88,11 +92,11 @@ public class Drive extends SubsystemBase {
     //     this.calibrators::add
     // );
 
-    // /** the QuestNav used for primary vision things */
-    // final Quest quest = new Quest(
-    //     AdvantageUtil.match(Meta3S::new, QuestReplay::new),
-    //     this::addVisionMeasurement
-    // );
+    /** the QuestNav used for primary vision things */
+    final Quest quest = new Quest(
+        AdvantageUtil.match(Meta3S::new, QuestReplay::new),
+        this::addVisionMeasurement
+    );
 
     /**
      * Creates a new Drive subsystem.
@@ -137,9 +141,9 @@ public class Drive extends SubsystemBase {
         // since we clear the calibrators list at the end of the method.
         // if (DriverStation.isDisabled()) photon.update();
         // else calibrate();
-        // quest.update();
+        quest.update();
 
-        // If the quest has disconnected, fallback on photon for vision
+        // // If the quest has disconnected, fallback on photon for vision
         // if (!quest.data().connected && DriverStation.isEnabled()) {
         //     photon.update();
         //     this.calibrators.stream().forEach(this::addVisionMeasurement);
@@ -390,7 +394,7 @@ public class Drive extends SubsystemBase {
             getModulePositions(),
             pose
         );
-        // quest.reset(pose);
+        quest.reset(pose);
     }
 
     /** Sets the robot's heading */
