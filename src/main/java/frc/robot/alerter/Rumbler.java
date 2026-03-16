@@ -26,9 +26,7 @@ public class Rumbler {
     static final Rumbler instance = new Rumbler();
 
     /** Private constructor, see {@link #getInstance()}. */
-    private Rumbler() {
-        timer.setName("RumbleStillTimer");
-    }
+    private Rumbler() {}
 
     /** Stops the rumble on both controllers. */
     private void still() {
@@ -67,9 +65,7 @@ public class Rumbler {
      * The vibration is controlled by a timer that automatically stops after 0.5 seconds.
      */
     public void rumble() {
-        if (this.driverctl == null || this.operctl == null) {
-            return;
-        }
+        if (this.driverctl == null || this.operctl == null) return;
 
         // Don't rumble during autonomous
         if (edu.wpi.first.wpilibj.DriverStation.isAutonomous()) return;

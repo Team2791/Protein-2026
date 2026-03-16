@@ -18,13 +18,11 @@ import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
-import frc.robot.constants.RuntimeConstants;
 import frc.robot.controller.XboxEliteController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.pivot.PivotReplay;
@@ -37,6 +35,7 @@ import frc.robot.subsystems.shooter.ShooterSpark;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.spindexer.SpindexerReplay;
 import frc.robot.subsystems.spindexer.SpindexerSpark;
+import frc.robot.util.AdvantageUtil;
 import frc.robot.util.AllianceUtil;
 
 /**
@@ -52,56 +51,30 @@ public class RobotContainer {
 
     // Subsystems
     final Drive drive = new Drive(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new GyroIONavX();
-            case SIM -> new GyroIO() {};
-            default -> new GyroIO() {};
-        },
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> moduleId -> new ModuleIOSpark(moduleId);
-            case SIM -> moduleId -> new ModuleIOSim();
-            default -> moduleId -> new ModuleIO() {};
-        }
+        AdvantageUtil.match(GyroIONavX::new, () -> new GyroIO() {}),
+        AdvantageUtil.match(ModuleIOSpark::new, moduleId -> new ModuleIO() {})
     );
 
     final Shooter shooter = new Shooter(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new ShooterSpark();
-            case SIM -> new ShooterReplay();
-            default -> new ShooterReplay();
-        },
+        AdvantageUtil.match(ShooterSpark::new, ShooterReplay::new),
         drive
     );
 
     final Spindexer spindexer = new Spindexer(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new SpindexerSpark();
-            case SIM -> new SpindexerReplay();
-            default -> new SpindexerReplay();
-        }
+        AdvantageUtil.match(SpindexerSpark::new, SpindexerReplay::new)
     );
 
-    // final Climber climber = switch (RuntimeConstants.kCurrentMode) {
-    //     case REAL -> {
+    // final Climber climber = AdvantageUtil.matchReal(
+    //     () -> {
     //         PneumaticHub ph = new PneumaticHub(IOConstants.Climber.kPhId);
-    //         yield new Climber(new AxleSpark(), ch -> {
-    //             return new CylinderPH(ph, ch);
-    //         });
-    //     }
-    //     default -> new Climber(new AxleReplay(), ch -> {
-    //         return new CylinderReplay();
-    //     });
-    // };
+    //         return new Climber(new AxleSpark(), ch -> new CylinderPH(ph, ch));
+    //     },
+    //     () -> new Climber(new AxleReplay(), ch -> new CylinderReplay())
+    // );
 
     final Intake intake = new Intake(
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new PivotSpark();
-            default -> new PivotReplay();
-        },
-        switch (RuntimeConstants.kCurrentMode) {
-            case REAL -> new RollerSpark();
-            default -> new RollerReplay();
-        }
+        AdvantageUtil.match(() -> new PivotSpark(), () -> new PivotReplay()),
+        AdvantageUtil.match(() -> new RollerSpark(), () -> new RollerReplay())
     );
 
     // Controllers

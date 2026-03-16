@@ -22,22 +22,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.auto.SampleFollower;
-import frc.robot.constants.RuntimeConstants;
-import frc.robot.subsystems.photon.CameraPhoton;
-import frc.robot.subsystems.photon.CameraReplay;
-import frc.robot.subsystems.photon.Photon;
-import frc.robot.subsystems.quest.Meta3S;
-import frc.robot.subsystems.quest.Quest;
-import frc.robot.subsystems.quest.QuestReplay;
 import frc.robot.util.Vec2;
 import frc.robot.util.VisionMeasurement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -89,23 +82,15 @@ public class Drive extends SubsystemBase {
     /** vision measurements collected before robot start */
     final List<VisionMeasurement> calibrators = new ArrayList<>();
 
-    // /** PhotonVision, used to calibrate starting position */
+    /** PhotonVision, used to calibrate starting position */
     // final Photon photon = new Photon(
-    //     switch (RuntimeConstants.kCurrentMode) {
-    //         case REAL -> CameraPhoton::new;
-    //         case REPLAY -> CameraReplay::new;
-    //         case SIM -> CameraReplay::new;
-    //     },
+    //     AdvantageUtil.match(CameraPhoton::new, CameraReplay::new),
     //     this.calibrators::add
     // );
 
     // /** the QuestNav used for primary vision things */
     // final Quest quest = new Quest(
-    //     switch (RuntimeConstants.kCurrentMode) {
-    //         case REAL -> new Meta3S();
-    //         case REPLAY -> new QuestReplay();
-    //         case SIM -> new QuestReplay();
-    //     },
+    //     AdvantageUtil.match(Meta3S::new, QuestReplay::new),
     //     this::addVisionMeasurement
     // );
 
@@ -382,7 +367,9 @@ public class Drive extends SubsystemBase {
     /** Checks connection statuses */
     @AutoLogOutput(key = "Drive/Ok")
     public boolean ok() {
-        return gyroInputs.connected;
+        return (
+            gyroInputs.connected && Arrays.stream(modules).allMatch(Module::ok)
+        );
     }
 
     /** Returns the current odometry pose. */
@@ -420,46 +407,46 @@ public class Drive extends SubsystemBase {
         );
     }
 
-    /**
-     * Calibrate the initial pose of the robot
-     *
-     * Photon/AprilTag measurements are recorded and collected while the robot is disabled.
-     * Once enabled, we average the latest few measurements and set our starting pose to that.
-     */
-    private void calibrate() {
-        if (calibrators.isEmpty()) return;
+    // /**
+    //  * Calibrate the initial pose of the robot
+    //  *
+    //  * Photon/AprilTag measurements are recorded and collected while the robot is disabled.
+    //  * Once enabled, we average the latest few measurements and set our starting pose to that.
+    //  */
+    // private void calibrate() {
+    //     if (calibrators.isEmpty()) return;
 
-        // Average all calibrator measurements
-        double x = 0;
-        double y = 0;
-        double sin = 0;
-        double cos = 0;
-        int n = 0;
+    //     // Average all calibrator measurements
+    //     double x = 0;
+    //     double y = 0;
+    //     double sin = 0;
+    //     double cos = 0;
+    //     int n = 0;
 
-        for (VisionMeasurement vm : calibrators) {
-            double age = Timer.getFPGATimestamp() - vm.timestamp();
-            if (age > 15) continue; // Ignore old measurements
+    //     for (VisionMeasurement vm : calibrators) {
+    //         double age = Timer.getFPGATimestamp() - vm.timestamp();
+    //         if (age > 15) continue; // Ignore old measurements
 
-            Pose2d est = vm.estimate2();
+    //         Pose2d est = vm.estimate2();
 
-            x += est.getX();
-            y += est.getY();
-            sin += est.getRotation().getSin();
-            cos += est.getRotation().getCos();
-            n++;
-        }
+    //         x += est.getX();
+    //         y += est.getY();
+    //         sin += est.getRotation().getSin();
+    //         cos += est.getRotation().getCos();
+    //         n++;
+    //     }
 
-        x /= n;
-        y /= n;
-        sin /= n;
-        cos /= n;
+    //     x /= n;
+    //     y /= n;
+    //     sin /= n;
+    //     cos /= n;
 
-        Pose2d avg = new Pose2d(x, y, new Rotation2d(cos, sin));
+    //     Pose2d avg = new Pose2d(x, y, new Rotation2d(cos, sin));
 
-        // Reset odometry and gyro to the averaged pose
-        this.setPose(avg);
+    //     // Reset odometry and gyro to the averaged pose
+    //     this.setPose(avg);
 
-        // Clear calibrators for next use
-        calibrators.clear();
-    }
+    //     // Clear calibrators for next use
+    //     calibrators.clear();
+    // }
 }

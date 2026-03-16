@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.targeting.PhotonPipelineResult;
 
@@ -55,6 +57,13 @@ public class Photon {
         this.cameras = Arrays.stream(CameraConfig.values())
             .map(factory)
             .toList();
+
+        AutoLogOutputManager.addObject(this);
+    }
+
+    @AutoLogOutput(key = "Photon/Ok")
+    public boolean ok() {
+        return this.cameras.stream().allMatch(cam -> cam.data.connected);
     }
 
     /**

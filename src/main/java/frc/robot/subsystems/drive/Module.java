@@ -122,4 +122,8 @@ public class Module {
   public double getFFCharacterizationVelocity() {
     return inputs.driveVelocityRadPerSec;
   }
+
+  public boolean ok() {
+    return inputs.driveConnected && inputs.turnConnected;
+  }
 }

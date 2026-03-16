@@ -12,6 +12,8 @@ import gg.questnav.questnav.PoseFrame;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -51,6 +53,13 @@ public class Quest {
     public Quest(QuestIO quest, Consumer<VisionMeasurement> addMeasurement) {
         this.quest = quest;
         this.addMeasurement = addMeasurement;
+
+        AutoLogOutputManager.addObject(this);
+    }
+
+    @AutoLogOutput(key = "Quest/Ok")
+    public boolean ok() {
+        return this.quest.data.connected;
     }
 
     /**
