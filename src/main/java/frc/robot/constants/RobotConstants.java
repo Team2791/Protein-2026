@@ -61,13 +61,13 @@ public class RobotConstants {
          * Bumper length: front-to-back outer dimension
          * @see #kWheelBase for distance between wheels in the same axis
          */
-        public static final double kBumperLength = Inches.of(34).in(Meters);
+        public static final double kBumperLength = Inches.of(35.25).in(Meters);
 
         /**
          * Bumper width: side-to-side outer dimension
          * @see #kTrackWidth for distance between wheels in the same axis
          */
-        public static final double kBumperWidth = Inches.of(34).in(Meters);
+        public static final double kBumperWidth = Inches.of(35.25).in(Meters);
 
         /**
          * Radius of circle bumpers fit within.

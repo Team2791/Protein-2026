@@ -90,7 +90,7 @@ public abstract class Pathfind extends WrapperCommand {
         // Since the wrapped `m_command` is stored as a plain Command, we need to cast back
         // to SequentialCommandGroup to call addCommands.
         ((SequentialCommandGroup) super.m_command).addCommands(
-            new Repulse(drive, this::currentTarget),
+            // new Repulse(drive, this::currentTarget),
             new Nearby(drive, this::currentTarget)
         );
     }

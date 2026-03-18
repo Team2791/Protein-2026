@@ -2,7 +2,6 @@ package frc.robot.alerter;
 
 import frc.robot.util.Elastic;
 import frc.robot.util.Elastic.Notification.NotificationLevel;
-import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
@@ -21,8 +20,44 @@ record Device<T, E>(
     String name,
     Function<T, E> error,
     Function<E, String> serialize,
-    ArrayList<E> signaled
+    Cell<E> previous
 ) {
+    static class Cell<T> {
+
+        T previous;
+
+        Cell(T previous) {
+            this.previous = previous;
+        }
+
+        public boolean equals(Object other) {
+            return previous.equals(other);
+        }
+
+        public void set(T previous) {
+            this.previous = previous;
+        }
+    }
+
+    Device(
+        T deivce,
+        String name,
+        Function<T, E> error,
+        Function<E, String> serialize,
+        E skip
+    ) {
+        this(deivce, name, error, serialize, new Cell<E>(skip));
+    }
+
+    Device(
+        T deivce,
+        String name,
+        Function<T, E> error,
+        Function<E, String> serialize
+    ) {
+        this(deivce, name, error, serialize, new Cell<E>(null));
+    }
+
     /**
      * Checks the device for a new error and alerts if one is found.
      *
@@ -30,7 +65,7 @@ record Device<T, E>(
      */
     void alert() {
         E err = error.apply(device);
-        if (err == null || signaled.contains(err)) return;
+        if (err == null || previous.equals(err)) return;
 
         // Send notification to Elastic dashboard
         Elastic.sendNotification(
@@ -41,6 +76,6 @@ record Device<T, E>(
             )
         );
 
-        signaled.add(err);
+        previous.set(err);
     }
 }

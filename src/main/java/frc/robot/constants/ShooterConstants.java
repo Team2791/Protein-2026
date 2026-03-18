@@ -27,12 +27,14 @@ public final class ShooterConstants {
 
     /** Manual shooter speed setpoints. */
     public enum Setpoint {
+        /** Automatic (regression-powered) control */
+        kRegress(0),
         /** Close-range shot. */
-        kNear(200),
+        kNear(-175),
         /** Mid-range shot. */
-        kMedium(350),
+        kMedium(-275),
         /** Far-range shot. */
-        kFar(500);
+        kFar(-350);
 
         /** Flywheel velocity in rad/s. */
         public final double velocity;

@@ -95,7 +95,7 @@ public final class ControlConstants {
         private Auto() {}
 
         /** Proportional gain for X and Y position errors (orthogonal axes). */
-        public static final double kOrthoP = 1.25;
+        public static final double kOrthoP = 2.00;
         /** Integral gain for orthogonal position errors. */
         public static final double kOrthoI = 0.00;
         /** Derivative gain for orthogonal position errors. */
@@ -130,7 +130,7 @@ public final class ControlConstants {
         public static final double kOrthoD = 0.00;
 
         /** Proportional gain for alignment rotation error. */
-        public static final double kTurnP = 2.60;
+        public static final double kTurnP = 2.75;
         /** Integral gain for alignment rotation error. */
         public static final double kTurnI = 0.00;
         /** Derivative gain for alignment rotation error. */
@@ -145,7 +145,7 @@ public final class ControlConstants {
         public static final Pose2d kTolerance = new Pose2d(
             0.03,
             0.03,
-            new Rotation2d(0.05)
+            new Rotation2d(0.03)
         );
     }
 

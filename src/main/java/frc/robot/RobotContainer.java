@@ -11,13 +11,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
+import frc.robot.commands.shooter.PointAndShoot;
+import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.controller.XboxEliteController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -129,6 +133,27 @@ public class RobotContainer {
         // Driver/unlocalized: point and shoot
         driverctl.rightBumper().whileTrue(new Shoot(spindexer));
         driverctl.rightBumper().whileFalse(new Shoot.ReverseTimed(spindexer));
+
+        driverctl
+            .y()
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kFar));
+
+        driverctl
+            .x()
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kMedium));
+
+        driverctl
+            .a()
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kNear));
+
+        driverctl
+            .b()
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new SetShooter(shooter, ShooterConstants.Setpoint.kRegress),
+                    new PointAndShoot(drive, spindexer, driverctl)
+                )
+            );
     }
 
     private void configureSysId() {
@@ -166,6 +191,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return selector.build(drive).cmd();
+        return selector.build(drive, shooter, spindexer).cmd();
     }
 }

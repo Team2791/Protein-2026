@@ -32,7 +32,7 @@ public class PointAtHub extends Command {
     final JoystickDrive jsd;
 
     /** PID controller for rotation toward hub. */
-    final PIDController rotController = new PIDController(
+    final PIDController ctl = new PIDController(
         ControlConstants.Nearby.kTurnP,
         ControlConstants.Nearby.kTurnI,
         ControlConstants.Nearby.kTurnD
@@ -40,34 +40,38 @@ public class PointAtHub extends Command {
 
     public PointAtHub(Drive drive, CommandXboxController ctl) {
         this.drive = drive;
-        this.jsd = new JoystickDrive(ctl, drive);
+        this.jsd = ctl == null ? null : new JoystickDrive(ctl, drive);
         addRequirements(drive);
 
-        rotController.enableContinuousInput(0, kTau);
-        rotController.setTolerance(
+        this.ctl.enableContinuousInput(0, kTau);
+        this.ctl.setTolerance(
             ControlConstants.Nearby.kTolerance.getRotation().getRadians()
         );
 
-        SmartDashboard.putData("Point/RotPID", rotController);
+        SmartDashboard.putData("Point/RotPID", this.ctl);
+    }
+
+    public PointAtHub(Drive drive) {
+        this(drive, null);
     }
 
     @Override
     public void execute() {
-        Pose2d posBlue = AllianceUtil.unsafe.autoflip(drive.getPose());
-        Pose2d blueHub = GameConstants.Objects.kHub;
-        Vec2 delta = new Vec2(posBlue).sub(new Vec2(blueHub));
+        Pose2d pose = AllianceUtil.unsafe.autoflip(drive.getPose());
+        Pose2d hub = GameConstants.Objects.kHub;
+        Vec2 delta = new Vec2(pose).sub(new Vec2(hub));
         Rotation2d theta = delta.theta().plus(Rotation2d.kPi);
-        double rot = rotController.calculate(
-            posBlue.getRotation().getRadians(),
+        double rot = ctl.calculate(
+            pose.getRotation().getRadians(),
             theta.getRadians()
         );
-        Vec2 linear = jsd.linear();
+        Vec2 linear = jsd == null ? new Vec2(0, 0) : jsd.linear();
 
         Logger.recordOutput(
-            "Point/Rot",
-            new Pose2d(posBlue.getTranslation(), theta)
+            "Drive/PointAtHub/Target",
+            new Pose2d(pose.getTranslation(), theta)
         );
-        Logger.recordOutput("Point/Cur", posBlue);
+        Logger.recordOutput("Drive/PointAtHub/Measured", pose);
 
         drive.drive(new ChassisSpeeds(linear.x, linear.y, rot));
     }

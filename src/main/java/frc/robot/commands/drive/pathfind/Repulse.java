@@ -151,7 +151,7 @@ class Repulse extends Command {
     @Override
     public void end(boolean interrupted) {
         Logger.recordOutput(KEY_TARGET, new Pose2d(-1, -1, new Rotation2d()));
-        Logger.recordOutput(KEY_TRAJ, new Translation2d[0]);
+        Logger.recordOutput(KEY_TRAJ, new Pose2d[0]);
         drive.field.getObject(KEY_TRAJ).setPoses(new Pose2d[0]);
     }
 

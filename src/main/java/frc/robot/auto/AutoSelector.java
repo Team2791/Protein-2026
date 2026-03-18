@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.auto.generated.ChoreoTraj;
 import frc.robot.commands.drive.pathfind.Pathfind;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.util.AllianceUtil;
 import java.util.*;
 import org.littletonrobotics.junction.Logger;
@@ -95,7 +97,7 @@ public class AutoSelector {
         LoggedDashboardChooser<AutoNode> s0 = choosers.get(0);
         add(s0, AutoNode.POS1);
         add(s0, AutoNode.POS2);
-        add(s0, AutoNode.POS3);
+        add(s0, AutoNode.POS3SKIP);
         add(s0, AutoNode.CANCEL);
 
         s0.onChange(node -> update(0, node));
@@ -183,20 +185,37 @@ public class AutoSelector {
      * @param drive The Drive subsystem to use for trajectory following
      * @return An AutoRoutine representing the selected autonomous path, or null if no valid selection was made
      */
-    public AutoRoutine build(Drive drive) {
+    public AutoRoutine build(
+        Drive drive,
+        Shooter shooter,
+        Spindexer spindexer
+    ) {
         AutoRoutine routine = factory.newRoutine("Auto");
-        if (current.isEmpty()) return routine; // no selection made, return empty routine
+        if (current.size() <= 1) return routine; // no selection made, return empty routine
+        if (current.get(current.size() - 1) != AutoNode.CANCEL) current.add(
+            AutoNode.CANCEL
+        );
 
-        Command seq = current.get(0).onEnter(routine);
+        System.out.println(current);
 
-        for (int i = 0; i < current.size() - 1; i++) {
+        Command seq = Commands.none();
+
+        for (int i = 0; i < current.size(); i++) {
             AutoNode node = current.get(i);
             AutoNode next = current.get(i + 1);
+
+            System.out.println("Commanding " + node + " onEnter");
+
+            seq = Commands.sequence(
+                seq,
+                node.onEnter(routine, drive, shooter, spindexer)
+            );
 
             if (next == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
 
             ChoreoTraj trj = graph.transition(node, next);
             Pose2d initial = trj.initialPoseBlue();
+            Pose2d end = trj.endPoseBlue();
 
             if (i == 0) {
                 // SAFETY: Dashboard set current auto, FMS/DS is connected.
@@ -204,15 +223,19 @@ public class AutoSelector {
                 drive.setPose(AllianceUtil.unsafe.autoflip(initial));
             }
 
-            if (node == AutoNode.CANCEL) break; // if any selection is "Cancel", stop building further commands
+            System.out.println("Commanding " + node + " to " + next);
+
             seq = Commands.sequence(
                 seq,
-                node.onEnter(routine),
                 new Pathfind.Supplied(drive, () -> {
                     // SAFETY: robot driving, therefore FMS/DS connection OK
                     return AllianceUtil.unsafe.autoflip(initial);
                 }),
-                trj.asAutoTraj(routine).cmd()
+                trj.asAutoTraj(routine).cmd(),
+                new Pathfind.Supplied(drive, () -> {
+                    // SAFETY: robot driving, therefore FMS/DS connection OK
+                    return AllianceUtil.unsafe.autoflip(end);
+                })
             );
         }
 

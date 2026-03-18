@@ -45,7 +45,7 @@ public final class IntakeConstants {
         public static final double kWheelRadius = Units.inchesToMeters(2);
 
         /** Target roller power */
-        public static final double kPower = -0.3;
+        public static final double kPower = -1;
     }
 
     /** Motor configuration constants for the intake pivot motors. */
@@ -84,6 +84,6 @@ public final class IntakeConstants {
          * Rollers will not spin until the pivot is within this threshold
          * of the deployed setpoint.
          */
-        public static final double kTolerance = 0.11;
+        public static final double kTolerance = 0.5;
     }
 }

@@ -23,7 +23,7 @@ public final class ChoreoVars {
     public static final Distance field_length = Units.Meters.of(16.541);
     public static final Distance field_width = Units.Meters.of(8.069);
     public static final Distance hub_inset = Units.Meters.of(4.626);
-    public static final LinearVelocity intake = Units.MetersPerSecond.of(1.5);
+    public static final LinearVelocity intake = Units.MetersPerSecond.of(0.75);
     public static final Distance koc_depot_rad = Units.Meters.of(0.533);
     public static final Distance outpost = Units.Meters.of(0.666);
     public static final Distance robot_padding = Units.Meters.of(0.514);

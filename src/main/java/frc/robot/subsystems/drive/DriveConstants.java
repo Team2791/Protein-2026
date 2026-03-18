@@ -58,7 +58,7 @@ public class DriveConstants {
   public static final double driveEncoderVelocityFactor = (2 * Math.PI) / 60.0 / driveMotorReduction;
 
   // Drive PID configuration
-  public static final double driveKp = 0.0;
+  public static final double driveKp = 0.02;
   public static final double driveKd = 0.0;
   public static final double driveKs = 0.20109;
   public static final double driveKv = 0.09462;

@@ -73,7 +73,7 @@ public class Shooter extends SubsystemBase {
      * @param setpoint The manual setpoint, or {@code null} for auto
      */
     public void manual(ShooterConstants.Setpoint setpoint) {
-        this.manual = setpoint != null;
+        this.manual = setpoint != ShooterConstants.Setpoint.kRegress;
         if (manual) io.setVelocity(setpoint.velocity);
     }
 
@@ -90,7 +90,7 @@ public class Shooter extends SubsystemBase {
         Pose2d blue = AllianceUtil.autoflip(pose).orElse(pose);
 
         if (blue.getX() > ShooterConstants.kSpinUpThreshold) {
-            io.setVelocity(0);
+            io.setVelocity(ShooterConstants.Setpoint.kNear.velocity);
             return;
         }
 

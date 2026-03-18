@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.constants.RuntimeConstants;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -65,7 +64,7 @@ public class Alerter {
      */
     private static String serialize(REVLibError error) {
         return switch (error) {
-            case kOk -> "Everything is fine";
+            case kOk -> "Ok again";
             case kError -> "General error";
             case kTimeout -> "Spark took too long to respond";
             case kNotImplemented -> "Function not implemented";
@@ -112,7 +111,7 @@ public class Alerter {
                 name,
                 SparkBase::getLastError,
                 Alerter::serialize,
-                new ArrayList<>(List.of(REVLibError.kOk))
+                REVLibError.kOk
             )
         );
     }
@@ -150,8 +149,8 @@ public class Alerter {
                 device,
                 name,
                 isConnected,
-                x -> x ? "" : "Disconnected",
-                new ArrayList<>(List.of(true))
+                x -> x ? "Connected Again" : "Disconnected",
+                true
             )
         );
     }

@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.Vec2;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -66,6 +67,16 @@ public class SampleFollower {
         Pose2d wants = sample.getPose();
 
         Logger.recordOutput("Auto/TargetPose", wants);
+        Logger.recordOutput(
+            "Auto/DeltaXY",
+            new Vec2(current).sub(new Vec2(wants)).mag()
+        );
+        Logger.recordOutput(
+            "Auto/DeltaRot",
+            Math.abs(
+                current.getRotation().minus(wants.getRotation()).getRadians()
+            )
+        );
 
         double currentHeading = current.getRotation().getRadians();
         double targetHeading = wants.getRotation().getRadians();
