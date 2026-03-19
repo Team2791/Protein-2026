@@ -15,7 +15,6 @@ public class Dashboard {
     static final double LEN_AUTO = 20.00;
     static final double LEN_TRANSITION = 10.00;
     static final double LEN_PHASE = 25.00;
-    static final double TELEOP_END = LEN_AUTO + LEN_TRANSITION + 4 * LEN_PHASE;
 
     static Dashboard instance = new Dashboard();
 
@@ -73,5 +72,6 @@ public class Dashboard {
         SmartDashboard.putNumber(PHASE, phaseH);
         SmartDashboard.putBoolean(SHOOT_OK, even == won);
         if (phaseT < 5) warn();
+        else SmartDashboard.putBoolean(SHOOT_WARNING, false);
     }
 }
