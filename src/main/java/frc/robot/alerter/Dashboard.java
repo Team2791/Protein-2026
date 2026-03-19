@@ -32,7 +32,10 @@ public class Dashboard {
         }
 
         if (DriverStation.isFMSAttached() && winner == null) {
-            winner = switch (DriverStation.getGameSpecificMessage().charAt(0)) {
+            String msg = DriverStation.getGameSpecificMessage();
+            if (msg.length() < 1) msg = "\0";
+
+            winner = switch (msg.charAt(0)) {
                 case 'R' -> Alliance.Red;
                 case 'B' -> Alliance.Blue;
                 default -> null;
