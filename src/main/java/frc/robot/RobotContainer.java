@@ -11,6 +11,7 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
 import frc.robot.commands.intake.Deploy;
+import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -148,6 +149,7 @@ public class RobotContainer {
 
         operctl.a().onTrue(new Deploy(intake, false));
         operctl.a().onFalse(new Deploy(intake, true));
+        operctl.rightBumper().whileTrue(new RunIntake(intake));
     }
 
     private void configureSysId() {

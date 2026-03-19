@@ -38,6 +38,9 @@ public class Intake extends SubsystemBase {
     /** The intake should initally deploy once at the beginning of the match */
     boolean autoDeployed = false;
 
+    /** Whether the intake should run IF DEPLOYED */
+    boolean running = false;
+
     /**
      * Constructs an Intake subsystem.
      *
@@ -79,6 +82,10 @@ public class Intake extends SubsystemBase {
      */
     public void deploy(boolean deployed) {
         this.deployed = deployed;
+    }
+
+    public void run(boolean running) {
+        this.running = running;
     }
 
     @Override
