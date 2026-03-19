@@ -97,7 +97,7 @@ public class AutoSelector {
         LoggedDashboardChooser<AutoNode> s0 = choosers.get(0);
         add(s0, AutoNode.POS1);
         add(s0, AutoNode.POS2);
-        add(s0, AutoNode.POS3SKIP);
+        add(s0, AutoNode.POS3);
         add(s0, AutoNode.CANCEL);
 
         s0.onChange(node -> update(0, node));
@@ -191,10 +191,10 @@ public class AutoSelector {
         Spindexer spindexer
     ) {
         AutoRoutine routine = factory.newRoutine("Auto");
-        if (current.size() <= 1) return routine; // no selection made, return empty routine
-        if (current.get(current.size() - 1) != AutoNode.CANCEL) current.add(
-            AutoNode.CANCEL
-        );
+
+        int end = current.size() - 1;
+        if (end < 0) return routine; // i.e. `current` empty
+        if (current.get(end) != AutoNode.CANCEL) current.add(AutoNode.CANCEL); // ins last as buffer
 
         System.out.println(current);
 
@@ -215,7 +215,7 @@ public class AutoSelector {
 
             ChoreoTraj trj = graph.transition(node, next);
             Pose2d initial = trj.initialPoseBlue();
-            Pose2d end = trj.endPoseBlue();
+            Pose2d fin = trj.endPoseBlue();
 
             if (i == 0) {
                 // SAFETY: Dashboard set current auto, FMS/DS is connected.
@@ -234,7 +234,7 @@ public class AutoSelector {
                 trj.asAutoTraj(routine).cmd(),
                 new Pathfind.Supplied(drive, () -> {
                     // SAFETY: robot driving, therefore FMS/DS connection OK
-                    return AllianceUtil.unsafe.autoflip(end);
+                    return AllianceUtil.unsafe.autoflip(fin);
                 })
             );
         }

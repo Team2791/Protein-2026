@@ -36,7 +36,7 @@
     "dimension":"Length",
     "var":{
      "exp":"climber_length + robot_size / 2 + 3 in",
-     "val":1.644904
+     "val":1.629029
     }
    },
    "climber_y":{
@@ -64,7 +64,7 @@
     "dimension":"Length",
     "var":{
      "exp":"robot_size / 2 + 8 in",
-     "val":0.66675
+     "val":0.650875
     }
    },
    "field_length":{
@@ -113,14 +113,14 @@
     "dimension":"Length",
     "var":{
      "exp":"robot_size / 2 + 2 in",
-     "val":0.51435
+     "val":0.498475
     }
    },
    "robot_size":{
     "dimension":"Length",
     "var":{
-     "exp":"36.5 in",
-     "val":0.9271
+     "exp":"35.25 in",
+     "val":0.89535
     }
    },
    "startline":{
@@ -134,7 +134,7 @@
     "dimension":"Length",
     "var":{
      "exp":"startline - robot_size / 2 - 3 in",
-     "val":3.4889439999999996
+     "val":3.5048190000000004
     }
    }
   },
@@ -142,7 +142,7 @@
    "depot_end":{
     "x":{
      "exp":"robot_padding",
-     "val":0.51435
+     "val":0.498475
     },
     "y":{
      "exp":"field_width - depot_inset - depot_width",
@@ -170,11 +170,11 @@
    "depot_start":{
     "x":{
      "exp":"robot_padding",
-     "val":0.51435
+     "val":0.498475
     },
     "y":{
      "exp":"field_width - depot_inset + robot_size / 2 + 2 in",
-     "val":7.012939999999999
+     "val":6.997065
     },
     "heading":{
      "exp":"0 deg",

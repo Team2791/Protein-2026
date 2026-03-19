@@ -25,8 +25,9 @@ import frc.robot.util.AllianceUtil;
 public enum AutoNode {
     POS1,
     POS2,
+    POS3S,
     POS3,
-    POS3SKIP,
+    POS2S,
     DEPOT,
     OUTPOST,
     CLIMB,
@@ -42,9 +43,10 @@ public enum AutoNode {
     String label() {
         return switch (this) {
             case POS1 -> "Position 1";
-            case POS2 -> "Position 2 and Shoot";
-            case POS3 -> "Position 3 and Shoot";
-            case POS3SKIP -> "Position 3";
+            case POS2 -> "Position 2";
+            case POS2S -> "Position 2 (Shoot Offset)";
+            case POS3S -> "Position 3 (Shoot Offset)";
+            case POS3 -> "Position 3";
             case DEPOT -> "Depot, Intake, and Shoot";
             case OUTPOST -> "Outpost, Intake, and Shoot";
             case CLIMB -> "Climb";
@@ -68,11 +70,11 @@ public enum AutoNode {
         Spindexer spindexer
     ) {
         return switch (this) {
-            case POS3 -> Commands.sequence(
+            case POS3S -> Commands.sequence(
                 Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
             );
-            case POS2 -> Commands.sequence(
-                new SetShooter(shooter, ShooterConstants.Setpoint.kNear),
+            case POS2S -> Commands.sequence(
+                new SetShooter(shooter, ShooterConstants.Setpoint.kMedium),
                 Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
             );
             case DEPOT -> Commands.sequence(
@@ -101,7 +103,7 @@ public enum AutoNode {
                     ChoreoTraj.seq_center_intake.asAutoTraj(routine).cmd()
                 )
             );
-            case POS1, CANCEL, POS3SKIP -> Commands.none();
+            case POS1, POS2, CANCEL, POS3 -> Commands.none();
         };
     }
 }

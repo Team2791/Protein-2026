@@ -1,13 +1,15 @@
+
 package frc.robot.auto.generated;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import java.util.Map;
+import java.util.OptionalInt;
 
 // If these imports cause errors because you're not using ChoreoLib,
 // turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import java.util.Map;
-import java.util.OptionalInt;
 
 /**
  * A class containing the name, start pose, end pose, and total time of every Choreo trajectory.
@@ -22,94 +24,101 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj center_pos3 = new ChoreoTraj(
-        "center_pos3",
-        OptionalInt.empty(),
-        1.86115,
-        new Pose2d(7.756, 3.52, Rotation2d.fromRadians(3.142)),
-        new Pose2d(4.416, 0.667, Rotation2d.fromRadians(1.571))
-    );
     public static final ChoreoTraj depot_climb = new ChoreoTraj(
-        "depot_climb",
-        OptionalInt.empty(),
-        0.84098,
-        new Pose2d(0.514, 5.432, Rotation2d.fromRadians(0)),
-        new Pose2d(1.645, 4.177, Rotation2d.fromRadians(-1.571))
-    );
-    public static final ChoreoTraj outpost_climb = new ChoreoTraj(
-        "outpost_climb",
-        OptionalInt.empty(),
-        4.28907,
-        new Pose2d(0.514, 0.666, Rotation2d.fromRadians(-1.571)),
-        new Pose2d(1.645, 3.314, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj pos1_depot = new ChoreoTraj(
-        "pos1_depot",
-        OptionalInt.empty(),
-        1.6395,
-        new Pose2d(4.416, 7.403, Rotation2d.fromRadians(-1.571)),
-        new Pose2d(0.514, 7.013, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj pos2_depot = new ChoreoTraj(
-        "pos2_depot",
-        OptionalInt.empty(),
-        1.55135,
-        new Pose2d(3.489, 4.035, Rotation2d.fromRadians(0)),
-        new Pose2d(0.514, 7.013, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj pos2_outpost = new ChoreoTraj(
-        "pos2_outpost",
-        OptionalInt.empty(),
-        1.59448,
-        new Pose2d(3.489, 4.035, Rotation2d.fromRadians(0)),
-        new Pose2d(0.514, 0.666, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj pos3skip_center = new ChoreoTraj(
-        "pos3skip_center",
-        OptionalInt.empty(),
-        1.36876,
-        new Pose2d(4.416, 0.667, Rotation2d.fromRadians(1.571)),
-        new Pose2d(7.756, 1.21, Rotation2d.fromRadians(3.142))
-    );
-    public static final ChoreoTraj seq_center_intake = new ChoreoTraj(
-        "seq_center_intake",
-        OptionalInt.empty(),
-        3.14595,
-        new Pose2d(7.756, 1.21, Rotation2d.fromRadians(3.142)),
-        new Pose2d(7.756, 3.52, Rotation2d.fromRadians(3.142))
-    );
-    public static final ChoreoTraj seq_depot_intake = new ChoreoTraj(
-        "seq_depot_intake",
-        OptionalInt.empty(),
-        1.17687,
-        new Pose2d(0.514, 7.013, Rotation2d.fromRadians(0)),
-        new Pose2d(0.514, 5.432, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj pos3_outpost = new ChoreoTraj(
-        "pos3_outpost",
-        OptionalInt.empty(),
-        1.41987,
-        new Pose2d(4.416, 0.667, Rotation2d.fromRadians(-1.571)),
-        new Pose2d(0.514, 0.666, Rotation2d.fromRadians(-1.571))
-    );
+	    "depot_climb",
+	    OptionalInt.empty(),
+	    0.84433,
+	    new Pose2d(0.498, 5.432, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.629, 4.177, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj outpost_climb = new ChoreoTraj(
+	    "outpost_climb",
+	    OptionalInt.empty(),
+	    1.19993,
+	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(1.629, 3.314, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos1_depot = new ChoreoTraj(
+	    "pos1_depot",
+	    OptionalInt.empty(),
+	    1.64096,
+	    new Pose2d(4.4, 7.418, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos2s_depot = new ChoreoTraj(
+	    "pos2s_depot",
+	    OptionalInt.empty(),
+	    1.38251,
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos2s_outpost = new ChoreoTraj(
+	    "pos2s_outpost",
+	    OptionalInt.empty(),
+	    1.37674,
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj seq_center_intake = new ChoreoTraj(
+	    "seq_center_intake",
+	    OptionalInt.empty(),
+	    3.14595,
+	    new Pose2d(7.772, 1.226, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(7.772, 3.536, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj seq_depot_intake = new ChoreoTraj(
+	    "seq_depot_intake",
+	    OptionalInt.empty(),
+	    1.16637,
+	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.498, 5.432, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj center_pos3s = new ChoreoTraj(
+	    "center_pos3s",
+	    OptionalInt.empty(),
+	    1.87909,
+	    new Pose2d(7.772, 3.536, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(4.4, 0.651, Rotation2d.fromRadians(1.571))
+	);
+	public static final ChoreoTraj pos3s_outpost = new ChoreoTraj(
+	    "pos3s_outpost",
+	    OptionalInt.empty(),
+	    1.41988,
+	    new Pose2d(4.4, 0.651, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj pos3_center = new ChoreoTraj(
+	    "pos3_center",
+	    OptionalInt.empty(),
+	    1.68352,
+	    new Pose2d(3.505, 0.651, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(7.772, 1.226, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj pos2_pos2s = new ChoreoTraj(
+	    "pos2_pos2s",
+	    OptionalInt.empty(),
+	    0.66613,
+	    new Pose2d(3.505, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
      * This allows for trajectory data to be looked up with strings during runtime.
      */
-    public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES =
-        Map.ofEntries(
-            Map.entry("center_pos3", center_pos3),
-            Map.entry("depot_climb", depot_climb),
-            Map.entry("outpost_climb", outpost_climb),
-            Map.entry("pos1_depot", pos1_depot),
-            Map.entry("pos2_depot", pos2_depot),
-            Map.entry("pos2_outpost", pos2_outpost),
-            Map.entry("pos3skip_center", pos3skip_center),
-            Map.entry("seq_center_intake", seq_center_intake),
-            Map.entry("seq_depot_intake", seq_depot_intake),
-            Map.entry("pos3_outpost", pos3_outpost)
-        );
+    public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
+    	Map.entry("depot_climb", depot_climb),
+		Map.entry("outpost_climb", outpost_climb),
+		Map.entry("pos1_depot", pos1_depot),
+		Map.entry("pos2s_depot", pos2s_depot),
+		Map.entry("pos2s_outpost", pos2s_outpost),
+		Map.entry("seq_center_intake", seq_center_intake),
+		Map.entry("seq_depot_intake", seq_depot_intake),
+		Map.entry("center_pos3s", center_pos3s),
+		Map.entry("pos3s_outpost", pos3s_outpost),
+		Map.entry("pos3_center", pos3_center),
+		Map.entry("pos2_pos2s", pos2_pos2s)
+    );
 
     /**
      * Looks up the ChoreoTraj segment of the given overall ChoreoTraj.
@@ -118,17 +127,11 @@ public record ChoreoTraj(
     public ChoreoTraj segment(int segment) {
         var traj = ChoreoTraj.ALL_TRAJECTORIES.get(this.name + "$" + segment);
         if (traj == null) {
-            throw new NullPointerException(
-                "Trajectory " +
-                    this.name +
-                    " does not have segment #" +
-                    segment +
-                    "."
-            );
+            throw new NullPointerException("Trajectory " + this.name + " does not have segment #" + segment + ".");
         }
         return traj;
     }
-
+    
     // If these methods cause errors because you're not using ChoreoLib,
     // turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
     /**
