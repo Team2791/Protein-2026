@@ -1,7 +1,7 @@
 package frc.robot.alerter;
 
 import frc.robot.util.Elastic;
-import frc.robot.util.Elastic.Notification.NotificationLevel;
+import frc.robot.util.Elastic.NotificationLevel;
 import java.util.function.Function;
 
 /**

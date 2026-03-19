@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.GameConstants;
 import frc.robot.util.Elastic.Notification;
-import frc.robot.util.Elastic.Notification.NotificationLevel;
+import frc.robot.util.Elastic.NotificationLevel;
 import java.util.Arrays;
 import java.util.Optional;
 
