@@ -68,7 +68,11 @@ public enum AutoNode {
         Spindexer spindexer
     ) {
         return switch (this) {
-            case POS2, POS3 -> Commands.sequence(
+            case POS3 -> Commands.sequence(
+                Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
+            );
+            case POS2 -> Commands.sequence(
+                new SetShooter(shooter, ShooterConstants.Setpoint.kNear),
                 Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
             );
             case DEPOT -> Commands.sequence(

@@ -295,7 +295,7 @@ public class Drive extends SubsystemBase {
      * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
      * return to their normal orientations the next time a nonzero velocity is requested.
      */
-    public void stopWithX() {
+    public void lockX() {
         Rotation2d[] headings = new Rotation2d[4];
         for (int i = 0; i < 4; i++) {
             headings[i] = moduleTranslations[i].getAngle();

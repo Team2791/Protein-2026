@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
     final RollerIO roller;
 
     /** Whether the intake is currently commanded to deploy. */
-    boolean deployed = true;
+    boolean deployed = false;
 
     /** The intake should initally deploy once at the beginning of the match */
     boolean autoDeployed = false;

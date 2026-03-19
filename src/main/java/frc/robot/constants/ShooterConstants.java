@@ -30,11 +30,11 @@ public final class ShooterConstants {
         /** Automatic (regression-powered) control */
         kRegress(0),
         /** Close-range shot. */
-        kNear(-175),
+        kNear(-235),
         /** Mid-range shot. */
-        kMedium(-275),
+        kMedium(-285),
         /** Far-range shot. */
-        kFar(-350);
+        kFar(-315);
 
         /** Flywheel velocity in rad/s. */
         public final double velocity;
@@ -65,7 +65,7 @@ public final class ShooterConstants {
         public static final double kLin = 0.0;
 
         /** Constant (offset) for the distance regression. */
-        public static final double kConst = 0.0;
+        public static final double kConst = -275;
 
         /**
          * Applies the regression to compute the required shooter velocity at a given distance.

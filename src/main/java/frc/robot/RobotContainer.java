@@ -17,6 +17,7 @@ import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
+import frc.robot.commands.intake.Deploy;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -124,11 +125,8 @@ public class RobotContainer {
                 ).ignoringDisable(true)
             );
 
-        // Driver: wheel lock
-        driverctl.a().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-        // Driver: point and shoot
-        // driverctl.x().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
+        // Driver: lock
+        driverctl.leftBumper().whileTrue(Commands.run(drive::lockX, drive));
 
         // Driver/unlocalized: point and shoot
         driverctl.rightBumper().whileTrue(new Shoot(spindexer));
@@ -154,6 +152,9 @@ public class RobotContainer {
                     new PointAndShoot(drive, spindexer, driverctl)
                 )
             );
+
+        operctl.a().onTrue(new Deploy(intake, false));
+        operctl.a().onFalse(new Deploy(intake, true));
     }
 
     private void configureSysId() {
