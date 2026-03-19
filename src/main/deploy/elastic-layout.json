@@ -9,37 +9,20 @@
           {
             "title": "System Stats",
             "x": 480.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 384.0,
+            "y": 128.0,
+            "width": 304.0,
+            "height": 272.0,
             "type": "List Layout",
             "properties": {
               "label_position": "LEFT"
             },
             "children": [
               {
-                "title": "Drivetrain",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
-                "type": "Boolean Box",
-                "properties": {
-                  "topic": "/AdvantageKit/RealOutputs/Drive/Ok",
-                  "period": 0.06,
-                  "data_type": "boolean",
-                  "true_color": 4283215696,
-                  "false_color": 4294198070,
-                  "true_icon": "None",
-                  "false_icon": "None"
-                }
-              },
-              {
                 "title": "Intake",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
+                "x": 528.0,
+                "y": 160.0,
+                "width": 288.0,
+                "height": 96.0,
                 "type": "Boolean Box",
                 "properties": {
                   "topic": "/AdvantageKit/RealOutputs/Intake/Ok",
@@ -52,65 +35,14 @@
                 }
               },
               {
-                "title": "Shooter",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
+                "title": "Radio",
+                "x": 848.0,
+                "y": 224.0,
+                "width": 240.0,
+                "height": 96.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/AdvantageKit/RealOutputs/Shooter/Ok",
-                  "period": 0.06,
-                  "data_type": "boolean",
-                  "true_color": 4283215696,
-                  "false_color": 4294198070,
-                  "true_icon": "None",
-                  "false_icon": "None"
-                }
-              },
-              {
-                "title": "Spindexer",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
-                "type": "Boolean Box",
-                "properties": {
-                  "topic": "/AdvantageKit/RealOutputs/Spindexer/Ok",
-                  "period": 0.06,
-                  "data_type": "boolean",
-                  "true_color": 4283215696,
-                  "false_color": 4294198070,
-                  "true_icon": "None",
-                  "false_icon": "None"
-                }
-              },
-              {
-                "title": "Gyro",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
-                "type": "Boolean Box",
-                "properties": {
-                  "topic": "/AdvantageKit/Drive/Gyro/Connected",
-                  "period": 0.06,
-                  "data_type": "boolean",
-                  "true_color": 4283215696,
-                  "false_color": 4294198070,
-                  "true_icon": "None",
-                  "false_icon": "None"
-                }
-              },
-              {
-                "title": "Quest",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 16.0,
-                "height": 16.0,
-                "type": "Boolean Box",
-                "properties": {
-                  "topic": "/AdvantageKit/Quest/connected",
+                  "topic": "/AdvantageKit/RadioStatus/Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -137,14 +69,31 @@
                 }
               },
               {
-                "title": "Radio",
-                "x": 848.0,
-                "y": 224.0,
-                "width": 240.0,
+                "title": "Quest",
+                "x": 512.0,
+                "y": 272.0,
+                "width": 288.0,
                 "height": 96.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/AdvantageKit/RadioStatus/Connected",
+                  "topic": "/AdvantageKit/RealOutputs/Quest/Ok",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Gyro",
+                "x": 544.0,
+                "y": 288.0,
+                "width": 240.0,
+                "height": 112.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/AdvantageKit/Drive/Gyro/Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -160,9 +109,9 @@
           {
             "title": "Shoot?",
             "x": 0.0,
-            "y": 0.0,
+            "y": 400.0,
             "width": 480.0,
-            "height": 176.0,
+            "height": 320.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Status/ShootOk",
@@ -176,10 +125,10 @@
           },
           {
             "title": "Time Left",
-            "x": 0.0,
-            "y": 176.0,
-            "width": 480.0,
-            "height": 176.0,
+            "x": 992.0,
+            "y": 400.0,
+            "width": 320.0,
+            "height": 320.0,
             "type": "Match Time",
             "properties": {
               "topic": "/SmartDashboard/Status/ShootTimer",
@@ -192,10 +141,10 @@
           },
           {
             "title": "Phase Number",
-            "x": 0.0,
-            "y": 352.0,
-            "width": 480.0,
-            "height": 160.0,
+            "x": 1312.0,
+            "y": 400.0,
+            "width": 272.0,
+            "height": 320.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/SmartDashboard/Status/Phase",
@@ -206,9 +155,9 @@
           {
             "title": "Get Ready to Shoot!!",
             "x": 0.0,
-            "y": 512.0,
+            "y": 0.0,
             "width": 480.0,
-            "height": 208.0,
+            "height": 400.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Status/ShootWarning",
@@ -222,10 +171,10 @@
           },
           {
             "title": "Subway Surfers",
-            "x": 1024.0,
-            "y": 368.0,
-            "width": 304.0,
-            "height": 352.0,
+            "x": 1136.0,
+            "y": 0.0,
+            "width": 368.0,
+            "height": 400.0,
             "type": "Camera Stream",
             "properties": {
               "topic": "/CameraPublisher/SubwaySurfers",
@@ -235,10 +184,10 @@
           },
           {
             "title": "Field",
-            "x": 1024.0,
+            "x": 1504.0,
             "y": 0.0,
-            "width": 896.0,
-            "height": 368.0,
+            "width": 416.0,
+            "height": 400.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -256,10 +205,10 @@
           },
           {
             "title": "Match Timer",
-            "x": 1328.0,
-            "y": 368.0,
-            "width": 592.0,
-            "height": 352.0,
+            "x": 1584.0,
+            "y": 400.0,
+            "width": 336.0,
+            "height": 320.0,
             "type": "Match Time",
             "properties": {
               "topic": "/SmartDashboard/MatchTime",
@@ -272,10 +221,10 @@
           },
           {
             "title": "Battery Voltage",
-            "x": 736.0,
+            "x": 480.0,
             "y": 0.0,
-            "width": 288.0,
-            "height": 160.0,
+            "width": 304.0,
+            "height": 128.0,
             "type": "Voltage View",
             "properties": {
               "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
@@ -290,10 +239,10 @@
           },
           {
             "title": "Enabled",
-            "x": 736.0,
-            "y": 160.0,
-            "width": 288.0,
-            "height": 224.0,
+            "x": 784.0,
+            "y": 0.0,
+            "width": 352.0,
+            "height": 400.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/Enabled",
@@ -308,9 +257,9 @@
           {
             "title": "Camera",
             "x": 480.0,
-            "y": 384.0,
-            "width": 544.0,
-            "height": 336.0,
+            "y": 400.0,
+            "width": 512.0,
+            "height": 320.0,
             "type": "Camera Stream",
             "properties": {
               "topic": "/CameraPublisher/photonvision_Port_1188_Output_MJPEG_Server",
