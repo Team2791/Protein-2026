@@ -54,7 +54,7 @@ public class SpindexerSpark extends SpindexerIO {
 
     @Override
     public void update() {
-        data.spindexer = SparkData.read(spindexer);
-        data.kicker = SparkData.read(kicker);
+        data.spindexer = SparkData.read(spindexer, data.spindexer);
+        data.kicker = SparkData.read(kicker, data.kicker);
     }
 }

@@ -60,7 +60,7 @@ public class PivotSpark extends PivotIO {
 
     @Override
     public void update() {
-        data.leader = SparkData.read(leader);
-        data.follower = SparkData.read(follower);
+        data.leader = SparkData.read(leader, data.leader);
+        data.follower = SparkData.read(follower, data.follower);
     }
 }

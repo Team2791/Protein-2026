@@ -47,7 +47,7 @@ public class RollerSpark extends RollerIO {
 
     @Override
     public void update() {
-        data.leader = SparkData.read(leader);
-        data.follower = SparkData.read(follower);
+        data.leader = SparkData.read(leader, data.leader);
+        data.follower = SparkData.read(follower, data.follower);
     }
 }
