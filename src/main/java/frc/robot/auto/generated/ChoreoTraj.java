@@ -45,20 +45,6 @@ public record ChoreoTraj(
 	    new Pose2d(4.4, 7.418, Rotation2d.fromRadians(-1.571)),
 	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj pos2s_depot = new ChoreoTraj(
-	    "pos2s_depot",
-	    OptionalInt.empty(),
-	    1.38251,
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj pos2s_outpost = new ChoreoTraj(
-	    "pos2s_outpost",
-	    OptionalInt.empty(),
-	    1.37674,
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(0))
-	);
 	public static final ChoreoTraj seq_center_intake = new ChoreoTraj(
 	    "seq_center_intake",
 	    OptionalInt.empty(),
@@ -72,6 +58,27 @@ public record ChoreoTraj(
 	    1.16637,
 	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0)),
 	    new Pose2d(0.498, 5.432, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos2_pos2s = new ChoreoTraj(
+	    "pos2_pos2s",
+	    OptionalInt.empty(),
+	    0.66613,
+	    new Pose2d(3.505, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos2s_depot = new ChoreoTraj(
+	    "pos2s_depot",
+	    OptionalInt.empty(),
+	    1.38251,
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj pos2s_outpost = new ChoreoTraj(
+	    "pos2s_outpost",
+	    OptionalInt.empty(),
+	    1.37674,
+	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj center_pos3s = new ChoreoTraj(
 	    "center_pos3s",
@@ -94,13 +101,6 @@ public record ChoreoTraj(
 	    new Pose2d(3.505, 0.651, Rotation2d.fromRadians(1.571)),
 	    new Pose2d(7.772, 1.226, Rotation2d.fromRadians(3.142))
 	);
-	public static final ChoreoTraj pos2_pos2s = new ChoreoTraj(
-	    "pos2_pos2s",
-	    OptionalInt.empty(),
-	    0.66613,
-	    new Pose2d(3.505, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0))
-	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -110,14 +110,14 @@ public record ChoreoTraj(
     	Map.entry("depot_climb", depot_climb),
 		Map.entry("outpost_climb", outpost_climb),
 		Map.entry("pos1_depot", pos1_depot),
-		Map.entry("pos2s_depot", pos2s_depot),
-		Map.entry("pos2s_outpost", pos2s_outpost),
 		Map.entry("seq_center_intake", seq_center_intake),
 		Map.entry("seq_depot_intake", seq_depot_intake),
+		Map.entry("pos2_pos2s", pos2_pos2s),
+		Map.entry("pos2s_depot", pos2s_depot),
+		Map.entry("pos2s_outpost", pos2s_outpost),
 		Map.entry("center_pos3s", center_pos3s),
 		Map.entry("pos3s_outpost", pos3s_outpost),
-		Map.entry("pos3_center", pos3_center),
-		Map.entry("pos2_pos2s", pos2_pos2s)
+		Map.entry("pos3_center", pos3_center)
     );
 
     /**

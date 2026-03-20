@@ -45,7 +45,7 @@ public final class IntakeConstants {
         public static final double kWheelRadius = Units.inchesToMeters(2);
 
         /** Target roller power */
-        public static final double kPower = -1;
+        public static final double kPower = -0.75;
     }
 
     /** Motor configuration constants for the intake pivot motors. */
