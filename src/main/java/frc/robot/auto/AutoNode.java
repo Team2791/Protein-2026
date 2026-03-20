@@ -75,7 +75,7 @@ public enum AutoNode {
             );
             case POS2S -> Commands.sequence(
                 new SetShooter(shooter, ShooterConstants.Setpoint.kMedium),
-                Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
+                new Shoot(spindexer)
             );
             case DEPOT -> Commands.sequence(
                 ChoreoTraj.seq_depot_intake.asAutoTraj(routine).cmd(),
