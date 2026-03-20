@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
@@ -12,7 +11,6 @@ import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
 import frc.robot.commands.intake.Deploy;
 import frc.robot.commands.intake.RunIntake;
-import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
@@ -140,12 +138,7 @@ public class RobotContainer {
 
         driverctl
             .b()
-            .whileTrue(
-                new ParallelCommandGroup(
-                    new SetShooter(shooter, ShooterConstants.Setpoint.kRegress),
-                    new PointAndShoot(drive, spindexer, driverctl)
-                )
-            );
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kLow));
 
         operctl.a().onTrue(new Deploy(intake, false));
         operctl.a().onFalse(new Deploy(intake, true));

@@ -29,6 +29,8 @@ public final class ShooterConstants {
     public enum Setpoint {
         /** Automatic (regression-powered) control */
         kRegress(0),
+        /** Idle Mode */
+        kLow(-50),
         /** Close-range shot. */
         kNear(-235),
         /** Mid-range shot. */
