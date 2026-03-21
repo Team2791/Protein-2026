@@ -87,7 +87,7 @@ public class PIDLerp extends Command {
 
         for (; farthest < path.length; farthest++) {
             Vec2 tt = path[farthest];
-            boolean ok = AStar.query(us, tt);
+            boolean ok = AStar.raycast(us, tt);
             if (!ok) break;
         }
 

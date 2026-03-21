@@ -201,7 +201,7 @@ public class AStar {
         return pts.toArray(new Vec2[0]);
     }
 
-    public static boolean query(Vec2 from, Vec2 to) {
+    public static boolean raycast(Vec2 from, Vec2 to) {
         int x0 = (int) (from.x / ng.node_size_meters);
         int y0 = (int) (from.y / ng.node_size_meters);
         int x1 = (int) (to.x / ng.node_size_meters);
