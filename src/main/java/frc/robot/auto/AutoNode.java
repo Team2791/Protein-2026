@@ -1,9 +1,6 @@
 package frc.robot.auto;
 
-import static frc.robot.constants.RobotConstants.DriveBase.kBumperLength;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,12 +17,6 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.util.AllianceUtil;
-
-class Constants {
-
-    static final double START_LINE = Units.inchesToMeters(158.61);
-    static final double START_X = START_LINE - kBumperLength / 2;
-}
 
 /**
  * Enumeration representing different autonomous routine nodes/states for the robot.
