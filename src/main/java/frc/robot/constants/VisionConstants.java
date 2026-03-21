@@ -64,13 +64,14 @@ public final class VisionConstants {
     }
 
     /**
-     * Transform from robot center to Quest Pro headset.
-     *
-     * <p>
-     * TODO: Measure and configure actual transform.
+     * Transform from robot center to headset.
      */
-    public static Transform3d kBotToQuest = new Transform3d(
-        new Translation3d(0, Inches.of(12).in(Meters), 0),
+    public static final Transform3d kBotToQuest = new Transform3d(
+        new Translation3d(
+            Inches.of(5.75).in(Meters),
+            Inches.of(10).in(Meters),
+            Inches.of(17.5).in(Meters)
+        ),
         new Rotation3d(0, 0, Math.PI / 2)
     );
 

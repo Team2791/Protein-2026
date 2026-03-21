@@ -197,18 +197,27 @@ public class AutoSelector {
 
             if (node == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
 
+            if (i == 0) {
+                System.out.println("Resetting " + node);
+
+                command = Commands.sequence(
+                    command,
+                    Commands.runOnce(
+                        () ->
+                            drive.setPose(
+                                AllianceUtil.unsafe.autoflip(node.pose)
+                            ),
+                        drive
+                    )
+                );
+            }
+
             System.out.println("Commanding " + node);
 
             command = Commands.sequence(
                 command,
                 node.full(drive, shooter, spindexer)
             );
-
-            if (i == 0) {
-                // SAFETY: Dashboard set current auto, FMS/DS is connected.
-                // note: will be overridden if cameras get a good read.
-                drive.setPose(AllianceUtil.unsafe.autoflip(node.pose));
-            }
         }
 
         return command;

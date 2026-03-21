@@ -109,6 +109,9 @@ public class Quest {
         );
     }
 
+    boolean init = false;
+    boolean reset = false;
+
     /**
      * Periodic update method called every robot tick.
      *
@@ -141,6 +144,17 @@ public class Quest {
             // Create and report vision measurement
             VisionMeasurement est = new VisionMeasurement(bot, kQuestDevs, ts);
             addMeasurement.accept(est);
+        }
+
+        if (quest.data.connected) init = true;
+        if (init && !reset) {
+            quest.reset(
+                new Pose3d(
+                    kBotToQuest.getTranslation(),
+                    kBotToQuest.getRotation()
+                )
+            );
+            reset = true;
         }
     }
 }
