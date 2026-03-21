@@ -146,7 +146,7 @@ public class Quest {
             addMeasurement.accept(est);
         }
 
-        if (quest.data.connected) init = true;
+        if (!init && quest.data.connected) init = true;
         if (init && !reset) {
             quest.reset(
                 new Pose3d(
