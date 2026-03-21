@@ -200,15 +200,12 @@ public class AutoSelector {
             if (i == 0) {
                 System.out.println("Resetting " + node);
 
+                Pose2d fieldPose = AllianceUtil.unsafe.autoflip(node.pose);
+
+                drive.setPose(fieldPose);
                 command = Commands.sequence(
                     command,
-                    Commands.runOnce(
-                        () ->
-                            drive.setPose(
-                                AllianceUtil.unsafe.autoflip(node.pose)
-                            ),
-                        drive
-                    )
+                    Commands.runOnce(() -> drive.setPose(fieldPose), drive)
                 );
             }
 
