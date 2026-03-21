@@ -2,6 +2,7 @@ package frc.robot.commands.drive.pathfind;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,9 +33,6 @@ public class PIDLerp extends Command {
         );
 
         public TunablePID() {
-            xctl.setTolerance(ControlConstants.Nearby.kTolerance.getX());
-            yctl.setTolerance(ControlConstants.Nearby.kTolerance.getY());
-
             SmartDashboard.putData("PID/PIDLerpX", xctl);
             SmartDashboard.putData("PID/PIDLerpY", yctl);
         }
@@ -94,6 +92,10 @@ public class PIDLerp extends Command {
         farthest = Math.min(farthest, path.length - 1);
     }
 
+    boolean atlast() {
+        return farthest == path.length - 1;
+    }
+
     @Override
     public void initialize() {
         Vec2 bot = blue();
@@ -104,12 +106,24 @@ public class PIDLerp extends Command {
             new Translation2d[] { bot.wpi(), target.getTranslation() }
         );
 
+        drive.field
+            .getObject("PIDLerp/Direct")
+            .setPoses(new Pose2d[] { bot.wpi(new Rotation2d()), target });
+
         Logger.recordOutput(
             "PIDLerp/Path",
             Arrays.stream(this.path)
                 .map(v -> v.wpi())
                 .toArray(Translation2d[]::new)
         );
+
+        drive.field
+            .getObject("PIDLerp/Path")
+            .setPoses(
+                Arrays.stream(this.path)
+                    .map(v -> v.wpi(new Rotation2d()))
+                    .toList()
+            );
     }
 
     @Override
@@ -117,7 +131,7 @@ public class PIDLerp extends Command {
         search();
 
         Vec2 bot = blue();
-        Vec2 target = path[farthest];
+        Vec2 target = atlast() ? new Vec2(this.target) : path[farthest];
         Vec2 speeds = ctl.commanded(bot, target);
 
         if (speeds.mag() > maxVel) {
@@ -129,16 +143,34 @@ public class PIDLerp extends Command {
             new Translation2d[] { bot.wpi(), target.wpi() }
         );
 
+        drive.field
+            .getObject("PIDLerp/CurrentLerp")
+            .setPoses(
+                new Pose2d[] {
+                    bot.wpi(new Rotation2d()),
+                    target.wpi(new Rotation2d()),
+                }
+            );
+
         drive.drive(new ChassisSpeeds(speeds.x, speeds.y, 0));
     }
 
     @Override
     public void end(boolean interrupted) {
         drive.runVelocity(new ChassisSpeeds());
+
+        drive.field.getObject("PIDLerp/Direct").setPoses();
+        drive.field.getObject("PIDLerp/CurrentLerp").setPoses();
+        drive.field.getObject("PIDLerp/Path").setPoses();
     }
 
     @Override
     public boolean isFinished() {
-        return ctl.atTarget() && farthest == path.length - 1;
+        double mag = blue().sub(new Vec2(target)).mag();
+        return (
+            mag < 0.005 &&
+            atlast() &&
+            new Vec2(drive.getChassisSpeeds()).mag() < 0.1
+        );
     }
 }

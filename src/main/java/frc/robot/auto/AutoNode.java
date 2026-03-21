@@ -104,13 +104,14 @@ public enum AutoNode {
             drive,
             AllianceUtil.unsafe.autoflip(pose.getRotation())
         );
-        Command lerp = new PIDLerp(drive, pose, maxVel);
+        Command lerp1 = new PIDLerp(drive, pose, maxVel);
+
         Command enter = onEnter(drive, shooter, spindexer);
 
         if (deg == 0 || deg == 180) {
-            return new SequentialCommandGroup(lerp, point, enter);
+            return new SequentialCommandGroup(lerp1, point, enter);
         }
 
-        return new SequentialCommandGroup(point, lerp, enter);
+        return new SequentialCommandGroup(point, lerp1, enter);
     }
 }

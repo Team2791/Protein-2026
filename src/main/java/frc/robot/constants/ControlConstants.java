@@ -143,8 +143,8 @@ public final class ControlConstants {
 
         /** Position and rotation tolerance for "at target" detection. TODO: May need adjustment for shooter vs PnP. */
         public static final Pose2d kTolerance = new Pose2d(
-            0.03,
-            0.03,
+            0.015,
+            0.015,
             new Rotation2d(0.03)
         );
     }

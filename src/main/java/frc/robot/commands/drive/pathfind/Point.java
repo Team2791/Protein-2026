@@ -37,9 +37,7 @@ public class Point extends Command {
                 ControlConstants.Nearby.kTurnD
             );
             super.enableContinuousInput(0, kTau);
-            super.setTolerance(
-                ControlConstants.Nearby.kTolerance.getRotation().getRadians()
-            );
+            super.setTolerance(0.015);
 
             SmartDashboard.putData("PID/Point", this);
         }
