@@ -192,8 +192,8 @@ public class AStar {
             // Change: Vec2 constructor directly builds the waypoint
             pts.add(
                 new Vec2(
-                    (n.x()) * ng.node_size_meters,
-                    (n.y()) * ng.node_size_meters
+                    (n.x() + 0.5) * ng.node_size_meters,
+                    (n.y() + 0.5) * ng.node_size_meters
                 )
             );
         }
