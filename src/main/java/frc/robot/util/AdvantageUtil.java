@@ -8,13 +8,26 @@ public final class AdvantageUtil {
     private AdvantageUtil() {}
 
     public static <T> T match(T real, T replay) {
+        return match(real, replay, replay);
+    }
+
+    public static <T> T match(T real, T sim, T replay) {
         return switch (RuntimeConstants.kCurrentMode) {
             case REAL -> real;
-            case REPLAY, SIM -> replay;
+            case SIM -> sim;
+            case REPLAY -> replay;
         };
     }
 
     public static <T> T match(Supplier<T> real, Supplier<T> replay) {
-        return AdvantageUtil.<Supplier<T>>match(real, replay).get();
+        return match(real, replay, replay);
+    }
+
+    public static <T> T match(
+        Supplier<T> real,
+        Supplier<T> sim,
+        Supplier<T> replay
+    ) {
+        return AdvantageUtil.<Supplier<T>>match(real, sim, replay).get();
     }
 }

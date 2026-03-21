@@ -28,10 +28,10 @@ public class GameConstants {
 
     private GameConstants() {}
 
-    /** Field width (short dimension) */
+    /** Field width (Y, short dimension) */
     public static final double kFieldWidth = Inches.of(317.69).in(Meters);
 
-    /** Field length (long dimension) */
+    /** Field length (X, long dimension) */
     public static final double kFieldLength = Inches.of(651.22).in(Meters);
 
     /**

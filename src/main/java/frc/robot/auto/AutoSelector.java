@@ -4,7 +4,6 @@ import choreo.auto.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.auto.generated.ChoreoTraj;
-import frc.robot.commands.drive.pathfind.Pathfind;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
@@ -48,11 +47,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class AutoSelector {
 
     final AutoFactory factory;
-    final AutoGraph graph = new AutoGraph();
     final List<AutoNode> current = new ArrayList<>();
 
     List<LoggedDashboardChooser<AutoNode>> choosers = new ArrayList<>();
-    static final int NUM_CHOOSERS = 4;
+    static final int NUM_CHOOSERS = 5;
 
     /**
      * Constructs an AutoSelector with the given Drive subsystem.
@@ -138,7 +136,7 @@ public class AutoSelector {
         current.add(change);
 
         // update next chooser based on new selection
-        Set<AutoNode> next = graph.transitionsFrom(change);
+        Set<AutoNode> next = EnumSet.allOf(AutoNode.class);
         LoggedDashboardChooser<AutoNode> s = choosers.get(n + 1);
 
         for (AutoNode node : next) add(s, node); // populate next chooser with valid transitions from new selection
@@ -185,61 +183,34 @@ public class AutoSelector {
      * @param drive The Drive subsystem to use for trajectory following
      * @return An AutoRoutine representing the selected autonomous path, or null if no valid selection was made
      */
-    public AutoRoutine build(
-        Drive drive,
-        Shooter shooter,
-        Spindexer spindexer
-    ) {
-        AutoRoutine routine = factory.newRoutine("Auto");
+    public Command build(Drive drive, Shooter shooter, Spindexer spindexer) {
+        Command command = Commands.none();
 
         int end = current.size() - 1;
-        if (end < 0) return routine; // i.e. `current` empty
+        if (end < 0) return command; // i.e. `current` empty
         if (current.get(end) != AutoNode.CANCEL) current.add(AutoNode.CANCEL); // ins last as buffer
 
         System.out.println(current);
 
-        Command seq = Commands.none();
-
         for (int i = 0; i < current.size(); i++) {
             AutoNode node = current.get(i);
-            AutoNode next = current.get(i + 1);
 
-            System.out.println("Commanding " + node + " onEnter");
+            if (node == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
 
-            seq = Commands.sequence(
-                seq,
-                node.onEnter(routine, drive, shooter, spindexer)
+            System.out.println("Commanding " + node);
+
+            command = Commands.sequence(
+                command,
+                node.full(drive, shooter, spindexer)
             );
-
-            if (next == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
-
-            ChoreoTraj trj = graph.transition(node, next);
-            Pose2d initial = trj.initialPoseBlue();
-            Pose2d fin = trj.endPoseBlue();
 
             if (i == 0) {
                 // SAFETY: Dashboard set current auto, FMS/DS is connected.
                 // note: will be overridden if cameras get a good read.
-                drive.setPose(AllianceUtil.unsafe.autoflip(initial));
+                drive.setPose(AllianceUtil.unsafe.autoflip(node.pose));
             }
-
-            System.out.println("Commanding " + node + " to " + next);
-
-            seq = Commands.sequence(
-                seq,
-                new Pathfind.Supplied(drive, () -> {
-                    // SAFETY: robot driving, therefore FMS/DS connection OK
-                    return AllianceUtil.unsafe.autoflip(initial);
-                }),
-                trj.asAutoTraj(routine).cmd(),
-                new Pathfind.Supplied(drive, () -> {
-                    // SAFETY: robot driving, therefore FMS/DS connection OK
-                    return AllianceUtil.unsafe.autoflip(fin);
-                })
-            );
         }
 
-        routine.active().onTrue(seq);
-        return routine;
+        return command;
     }
 }

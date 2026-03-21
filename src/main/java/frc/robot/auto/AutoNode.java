@@ -1,20 +1,31 @@
 package frc.robot.auto;
 
-import choreo.auto.AutoRoutine;
+import static frc.robot.constants.RobotConstants.DriveBase.kBumperLength;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.auto.generated.ChoreoTraj;
-import frc.robot.commands.drive.pathfind.Pathfind;
+import frc.robot.auto.generated.ChoreoVars;
+import frc.robot.commands.drive.pathfind.PIDLerp;
+import frc.robot.commands.drive.pathfind.Point;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
-import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ShooterConstants.Setpoint;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.util.AllianceUtil;
+
+class Constants {
+
+    static final double START_LINE = Units.inchesToMeters(158.61);
+    static final double START_X = START_LINE - kBumperLength / 2;
+}
 
 /**
  * Enumeration representing different autonomous routine nodes/states for the robot.
@@ -23,16 +34,30 @@ import frc.robot.util.AllianceUtil;
  * or climbing.
  */
 public enum AutoNode {
-    POS1,
-    POS2,
-    POS3S,
-    POS3,
-    POS2S,
-    DEPOT,
-    OUTPOST,
-    CLIMB,
-    CENTER,
-    CANCEL;
+    POS1(ChoreoVars.Poses.pos_1),
+    POS2(ChoreoVars.Poses.pos_2),
+    POS3(ChoreoVars.Poses.pos_3),
+    BALLS_LHS(ChoreoVars.Poses.balls_lhs),
+    BALLS_RHS(ChoreoVars.Poses.balls_rhs),
+    CENTER_LHS(ChoreoVars.Poses.center_lhs, 1.5),
+    CENTER_RHS(ChoreoVars.Poses.center_rhs, 1.5),
+    TRENCH_SCORE(ChoreoVars.Poses.trench_score),
+    HUB_SCORE(ChoreoVars.Poses.hub_score),
+    OUTPOST(ChoreoVars.Poses.outpost),
+    OUTPOST_SCORE(ChoreoVars.Poses.outpost_score),
+    CANCEL(new Pose2d());
+
+    final Pose2d pose;
+    final double maxVel;
+
+    AutoNode(Pose2d pose) {
+        this(pose, DriveConstants.maxSpeedMetersPerSec);
+    }
+
+    AutoNode(Pose2d pose, double maxVel) {
+        this.pose = pose;
+        this.maxVel = maxVel;
+    }
 
     /**
      * Returns a human-readable label for this autonomous node.
@@ -42,16 +67,18 @@ public enum AutoNode {
      */
     String label() {
         return switch (this) {
-            case POS1 -> "Position 1";
-            case POS2 -> "Position 2";
-            case POS2S -> "Position 2 (Shoot Offset)";
-            case POS3S -> "Position 3 (Shoot Offset)";
-            case POS3 -> "Position 3";
-            case DEPOT -> "Depot, Intake, and Shoot";
-            case OUTPOST -> "Outpost, Intake, and Shoot";
-            case CLIMB -> "Climb";
-            case CENTER -> "Center and Collection";
-            case CANCEL -> "Stop there";
+            case POS1 -> "Position 1 (Left)";
+            case POS2 -> "Position 2 (Middle)";
+            case POS3 -> "Position 3 (Right)";
+            case BALLS_LHS -> "Center Intake (Left)";
+            case BALLS_RHS -> "Center Intake (Right)";
+            case CENTER_LHS -> "Center (Left)";
+            case CENTER_RHS -> "Center (Right)";
+            case TRENCH_SCORE -> "Trench Score";
+            case HUB_SCORE -> "Center Score";
+            case OUTPOST -> "Outpost";
+            case OUTPOST_SCORE -> "Outpost Score";
+            case CANCEL -> "All Done";
         };
     }
 
@@ -63,47 +90,36 @@ public enum AutoNode {
      * @param routine The autonomous routine context that provides access to trajectory commands
      * @return The command to execute when entering this node, or null if no action is required
      */
-    Command onEnter(
-        AutoRoutine routine,
-        Drive drive,
-        Shooter shooter,
-        Spindexer spindexer
-    ) {
+    Command onEnter(Drive drive, Shooter shooter, Spindexer spindexer) {
         return switch (this) {
-            case POS3S -> Commands.sequence(
-                Commands.deadline(new WaitCommand(15), new Shoot(spindexer))
+            case POS1, POS3 -> Commands.none();
+            case POS2 -> new SetShooter(shooter, Setpoint.kMedium);
+            case BALLS_LHS, BALLS_RHS -> Commands.none(); // I/A in future, start intake
+            case CENTER_LHS, CENTER_RHS -> new SetShooter(
+                shooter,
+                Setpoint.kMedium
             );
-            case POS2S -> Commands.sequence(
-                new SetShooter(shooter, ShooterConstants.Setpoint.kMedium),
-                new Shoot(spindexer)
-            );
-            case DEPOT -> Commands.sequence(
-                ChoreoTraj.seq_depot_intake.asAutoTraj(routine).cmd(),
-                // TODO: stop intake
-                new InstantCommand(),
-                // TODO: aim and shoot all balls
-                new InstantCommand()
-            );
-            case OUTPOST -> Commands.sequence(
-                // wait for human player to load balls
-                new WaitCommand(3),
-                // TODO: aim and shoot all balls
-                new PointAndShoot(null, spindexer, null)
-            );
-            case CLIMB -> Commands.none(); // TODO: when ready, climb.
-            case CENTER -> Commands.sequence(
-                new Pathfind.Supplied(
-                    drive,
-                    AllianceUtil.unsafe.autoflip(
-                        ChoreoTraj.seq_center_intake.initialPoseBlue()
-                    )
-                ),
-                Commands.parallel(
-                    new SetShooter(shooter, ShooterConstants.Setpoint.kMedium),
-                    ChoreoTraj.seq_center_intake.asAutoTraj(routine).cmd()
-                )
-            );
-            case POS1, POS2, CANCEL, POS3 -> Commands.none();
+            case TRENCH_SCORE, HUB_SCORE -> new Shoot(spindexer);
+            case OUTPOST -> new WaitCommand(5); // Wait load balls
+            case OUTPOST_SCORE -> new PointAndShoot(drive, spindexer, null);
+            case CANCEL -> Commands.none();
         };
+    }
+
+    Command full(Drive drive, Shooter shooter, Spindexer spindexer) {
+        int deg = (int) Math.round(pose.getRotation().getDegrees());
+
+        Command point = new Point(
+            drive,
+            AllianceUtil.unsafe.autoflip(pose.getRotation())
+        );
+        Command lerp = new PIDLerp(drive, pose, maxVel);
+        Command enter = onEnter(drive, shooter, spindexer);
+
+        if (deg == 0 || deg == 180) {
+            return new SequentialCommandGroup(lerp, point, enter);
+        }
+
+        return new SequentialCommandGroup(point, lerp, enter);
     }
 }

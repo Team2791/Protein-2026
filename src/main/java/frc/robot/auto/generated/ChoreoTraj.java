@@ -24,82 +24,12 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj depot_climb = new ChoreoTraj(
-	    "depot_climb",
+    public static final ChoreoTraj reference = new ChoreoTraj(
+	    "reference",
 	    OptionalInt.empty(),
-	    0.84433,
-	    new Pose2d(0.498, 5.432, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.629, 4.177, Rotation2d.fromRadians(-1.571))
-	);
-	public static final ChoreoTraj outpost_climb = new ChoreoTraj(
-	    "outpost_climb",
-	    OptionalInt.empty(),
-	    1.19993,
-	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(1.629, 3.314, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj pos1_depot = new ChoreoTraj(
-	    "pos1_depot",
-	    OptionalInt.empty(),
-	    1.64096,
-	    new Pose2d(4.4, 7.418, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj seq_center_intake = new ChoreoTraj(
-	    "seq_center_intake",
-	    OptionalInt.empty(),
-	    3.14595,
-	    new Pose2d(7.772, 1.226, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(7.772, 3.536, Rotation2d.fromRadians(3.142))
-	);
-	public static final ChoreoTraj seq_depot_intake = new ChoreoTraj(
-	    "seq_depot_intake",
-	    OptionalInt.empty(),
-	    1.16637,
-	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.498, 5.432, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj pos2_pos2s = new ChoreoTraj(
-	    "pos2_pos2s",
-	    OptionalInt.empty(),
-	    0.66613,
-	    new Pose2d(3.505, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj pos2s_depot = new ChoreoTraj(
-	    "pos2s_depot",
-	    OptionalInt.empty(),
-	    1.38251,
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.498, 6.997, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj pos2s_outpost = new ChoreoTraj(
-	    "pos2s_outpost",
-	    OptionalInt.empty(),
-	    1.37674,
-	    new Pose2d(2.162, 4.035, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj center_pos3s = new ChoreoTraj(
-	    "center_pos3s",
-	    OptionalInt.empty(),
-	    1.87909,
-	    new Pose2d(7.772, 3.536, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(4.4, 0.651, Rotation2d.fromRadians(1.571))
-	);
-	public static final ChoreoTraj pos3s_outpost = new ChoreoTraj(
-	    "pos3s_outpost",
-	    OptionalInt.empty(),
-	    1.41988,
-	    new Pose2d(4.4, 0.651, Rotation2d.fromRadians(-1.571)),
-	    new Pose2d(0.498, 0.666, Rotation2d.fromRadians(-1.571))
-	);
-	public static final ChoreoTraj pos3_center = new ChoreoTraj(
-	    "pos3_center",
-	    OptionalInt.empty(),
-	    1.68352,
-	    new Pose2d(3.505, 0.651, Rotation2d.fromRadians(1.571)),
-	    new Pose2d(7.772, 1.226, Rotation2d.fromRadians(3.142))
+	    10.97211,
+	    new Pose2d(3.556, 0.634, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(7.772, 4.533, Rotation2d.fromRadians(0))
 	);
 
     /**
@@ -107,17 +37,7 @@ public record ChoreoTraj(
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("depot_climb", depot_climb),
-		Map.entry("outpost_climb", outpost_climb),
-		Map.entry("pos1_depot", pos1_depot),
-		Map.entry("seq_center_intake", seq_center_intake),
-		Map.entry("seq_depot_intake", seq_depot_intake),
-		Map.entry("pos2_pos2s", pos2_pos2s),
-		Map.entry("pos2s_depot", pos2s_depot),
-		Map.entry("pos2s_outpost", pos2s_outpost),
-		Map.entry("center_pos3s", center_pos3s),
-		Map.entry("pos3s_outpost", pos3s_outpost),
-		Map.entry("pos3_center", pos3_center)
+    	Map.entry("reference", reference)
     );
 
     /**

@@ -321,6 +321,14 @@ public class Vec2 implements StructSerializable {
         return this.dot(this);
     }
 
+    public Pose2d wpi(Rotation2d rotation) {
+        return new Pose2d(x, y, rotation);
+    }
+
+    public Translation2d wpi() {
+        return new Translation2d(x, y);
+    }
+
     /** Vec2 struct for WPI serialization */
     public static final Vec2Struct struct = new Vec2Struct();
 }

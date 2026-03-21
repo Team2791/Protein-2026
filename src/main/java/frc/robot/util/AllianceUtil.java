@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.GameConstants;
@@ -126,6 +127,10 @@ public class AllianceUtil {
          */
         public Rotation2d autoflip(Rotation2d rotation) {
             return invert() ? AllianceUtil.flip(rotation) : rotation;
+        }
+
+        public Translation2d autoflip(Translation2d translation) {
+            return invert() ? AllianceUtil.flip(translation) : translation;
         }
 
         /**
@@ -254,5 +259,16 @@ public class AllianceUtil {
      */
     public static Optional<Integer> sign() {
         return invert().map(x -> x ? -1 : 1);
+    }
+
+    public static Translation2d flip(Translation2d t2d) {
+        return new Translation2d(
+            GameConstants.kFieldLength - t2d.getX(),
+            GameConstants.kFieldWidth - t2d.getY()
+        );
+    }
+
+    public static Optional<Translation2d> autoflip(Translation2d t2d) {
+        return invert().map(x -> x ? flip(t2d) : t2d);
     }
 }

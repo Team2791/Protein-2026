@@ -4,251 +4,230 @@
  "type":"Swerve",
  "variables":{
   "expressions":{
-   "balls_bottom":{
+   "balls_rad":{
     "dimension":"Length",
     "var":{
-     "exp":"field_width / 2 - balls_width / 2",
-     "val":1.724533
+     "exp":"90.95 in",
+     "val":2.31013
     }
    },
-   "balls_width":{
+   "bot_rad":{
     "dimension":"Length",
     "var":{
-     "exp":"90.95 in * 2",
-     "val":4.62026
+     "exp":"35.25 in / 2",
+     "val":0.447675
     }
    },
-   "climber_halfwidth":{
+   "center_x":{
     "dimension":"Length",
     "var":{
-     "exp":"17 in",
-     "val":0.4318
+     "exp":"325.61 in",
+     "val":8.270494
     }
    },
-   "climber_length":{
+   "hub_y":{
     "dimension":"Length",
     "var":{
-     "exp":"43.51 in",
-     "val":1.105154
+     "exp":"158.844 in",
+     "val":4.0346376
     }
    },
-   "climber_x":{
-    "dimension":"Length",
-    "var":{
-     "exp":"climber_length + robot_size / 2 + 3 in",
-     "val":1.629029
-    }
-   },
-   "climber_y":{
-    "dimension":"Length",
-    "var":{
-     "exp":"147.46 in",
-     "val":3.745484
-    }
-   },
-   "depot_inset":{
-    "dimension":"Length",
-    "var":{
-     "exp":"61.84 in",
-     "val":1.570736
-    }
-   },
-   "depot_width":{
-    "dimension":"Length",
-    "var":{
-     "exp":"42 in",
-     "val":1.0668
-    }
-   },
-   "endpos_inset":{
-    "dimension":"Length",
-    "var":{
-     "exp":"robot_size / 2 + 8 in",
-     "val":0.650875
-    }
-   },
-   "field_length":{
-    "dimension":"Length",
-    "var":{
-     "exp":"651.22 in",
-     "val":16.540988
-    }
-   },
-   "field_width":{
-    "dimension":"Length",
-    "var":{
-     "exp":"317.69 in",
-     "val":8.069326
-    }
-   },
-   "hub_inset":{
-    "dimension":"Length",
-    "var":{
-     "exp":"182.11 in",
-     "val":4.625594
-    }
-   },
-   "intake":{
-    "dimension":"LinVel",
-    "var":{
-     "exp":"0.75 m / s",
-     "val":0.75
-    }
-   },
-   "koc_depot_rad":{
-    "dimension":"Length",
-    "var":{
-     "exp":"depot_width / 2",
-     "val":0.5334
-    }
-   },
-   "outpost":{
+   "outpost_y":{
     "dimension":"Length",
     "var":{
      "exp":"26.22 in",
      "val":0.6659879999999999
     }
    },
-   "robot_padding":{
+   "pad":{
     "dimension":"Length",
     "var":{
-     "exp":"robot_size / 2 + 2 in",
-     "val":0.498475
+     "exp":"2 in",
+     "val":0.0508
     }
    },
-   "robot_size":{
+   "start_line":{
     "dimension":"Length",
     "var":{
-     "exp":"35.25 in",
-     "val":0.89535
+     "exp":"157.61 in",
+     "val":4.003294
     }
    },
-   "startline":{
+   "start_x":{
     "dimension":"Length",
     "var":{
-     "exp":"158.61 in",
-     "val":4.028694
+     "exp":"start_line - bot_rad",
+     "val":3.555619
     }
    },
-   "startline_bot":{
+   "trench_lhs_center":{
     "dimension":"Length",
     "var":{
-     "exp":"startline - robot_size / 2 - 3 in",
-     "val":3.5048190000000004
+     "exp":"292.72 in",
+     "val":7.435088
+    }
+   },
+   "trench_rhs_center":{
+    "dimension":"Length",
+    "var":{
+     "exp":"24.97 in",
+     "val":0.634238
     }
    }
   },
   "poses":{
-   "depot_end":{
+   "balls_lhs":{
     "x":{
-     "exp":"robot_padding",
+     "exp":"center_x - bot_rad - pad",
+     "val":7.772019
+    },
+    "y":{
+     "exp":"hub_y + balls_rad + bot_rad + pad",
+     "val":6.843242599999999
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "balls_rhs":{
+    "x":{
+     "exp":"center_x - bot_rad - pad",
+     "val":7.772019
+    },
+    "y":{
+     "exp":"hub_y - balls_rad - bot_rad - pad",
+     "val":1.2260326
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "center_lhs":{
+    "x":{
+     "exp":"center_x - bot_rad - pad",
+     "val":7.772019
+    },
+    "y":{
+     "exp":"hub_y + bot_rad + pad",
+     "val":4.5331126
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "center_rhs":{
+    "x":{
+     "exp":"center_x - bot_rad - pad",
+     "val":7.772019
+    },
+    "y":{
+     "exp":"hub_y - bot_rad - pad",
+     "val":3.5361625999999995
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "hub_score":{
+    "x":{
+     "exp":"start_line - 4 * bot_rad",
+     "val":2.212594
+    },
+    "y":{
+     "exp":"hub_y",
+     "val":4.0346376
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "outpost":{
+    "x":{
+     "exp":"bot_rad + pad",
      "val":0.498475
     },
     "y":{
-     "exp":"field_width - depot_inset - depot_width",
-     "val":5.43179
+     "exp":"outpost_y",
+     "val":0.6659879999999999
     },
     "heading":{
-     "exp":"0 deg",
-     "val":0.0
-    }
-   },
-   "depot_score":{
-    "x":{
-     "exp":"1.75 m",
-     "val":1.75
-    },
-    "y":{
-     "exp":"5 m",
-     "val":5.0
-    },
-    "heading":{
-     "exp":"0 deg",
-     "val":0.0
-    }
-   },
-   "depot_start":{
-    "x":{
-     "exp":"robot_padding",
-     "val":0.498475
-    },
-    "y":{
-     "exp":"field_width - depot_inset + robot_size / 2 + 2 in",
-     "val":6.997065
-    },
-    "heading":{
-     "exp":"0 deg",
-     "val":0.0
-    }
-   },
-   "koc_depot":{
-    "x":{
-     "exp":"20 in",
-     "val":0.508
-    },
-    "y":{
-     "exp":"field_width - depot_inset - depot_width / 2",
-     "val":5.96519
-    },
-    "heading":{
-     "exp":"0 rad",
-     "val":0.0
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
    "outpost_score":{
     "x":{
-     "exp":"2 m",
-     "val":2.0
+     "exp":"2 * bot_rad + pad",
+     "val":0.94615
     },
     "y":{
-     "exp":"2.5 m",
-     "val":2.5
+     "exp":"outpost_y + 4 * pad",
+     "val":0.869188
     },
     "heading":{
-     "exp":"0 rad",
-     "val":0.0
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
-   "path1_end":{
+   "pos_1":{
     "x":{
-     "exp":"7.7619147300720215 m",
-     "val":7.761914730072021
+     "exp":"start_x",
+     "val":3.555619
     },
     "y":{
-     "exp":"6.878525257110596 m",
-     "val":6.878525257110596
+     "exp":"trench_lhs_center",
+     "val":7.435088
     },
     "heading":{
      "exp":"-90 deg",
      "val":-1.5707963267948966
     }
    },
-   "pos1_score":{
+   "pos_2":{
     "x":{
-     "exp":"3 m",
-     "val":3.0
+     "exp":"start_x",
+     "val":3.555619
     },
     "y":{
-     "exp":"5.25 m",
-     "val":5.25
+     "exp":"hub_y",
+     "val":4.0346376
     },
     "heading":{
-     "exp":"0 rad",
+     "exp":"0 deg",
      "val":0.0
     }
    },
-   "pos3_score":{
+   "pos_3":{
     "x":{
-     "exp":"3 m",
-     "val":3.0
+     "exp":"start_x",
+     "val":3.555619
     },
     "y":{
-     "exp":"2.75 m",
-     "val":2.75
+     "exp":"trench_rhs_center",
+     "val":0.634238
     },
     "heading":{
-     "exp":"0 rad",
-     "val":0.0
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "trench_score":{
+    "x":{
+     "exp":"start_line + bot_rad",
+     "val":4.450969000000001
+    },
+    "y":{
+     "exp":"trench_rhs_center",
+     "val":0.634238
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    }
   }

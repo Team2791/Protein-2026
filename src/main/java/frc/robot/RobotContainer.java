@@ -20,6 +20,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.pivot.PivotReplay;
@@ -49,7 +50,11 @@ public class RobotContainer {
     // Subsystems
     final Drive drive = new Drive(
         AdvantageUtil.match(GyroIONavX::new, () -> new GyroIO() {}),
-        AdvantageUtil.match(ModuleIOSpark::new, moduleId -> new ModuleIO() {})
+        AdvantageUtil.match(
+            ModuleIOSpark::new,
+            moduleId -> new ModuleIOSim(),
+            moduleId -> new ModuleIO() {}
+        )
     );
 
     final Shooter shooter = new Shooter(
@@ -180,6 +185,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return selector.build(drive, shooter, spindexer).cmd();
+        return selector.build(drive, shooter, spindexer);
     }
 }
