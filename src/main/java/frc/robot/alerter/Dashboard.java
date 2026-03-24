@@ -15,6 +15,9 @@ public class Dashboard {
     static final double LEN_AUTO = 20.00;
     static final double LEN_TRANSITION = 10.00;
     static final double LEN_PHASE = 25.00;
+    static final double LEN_ENDGAME = 30.00;
+    static final double LEN_MATCH =
+        LEN_AUTO + LEN_TRANSITION + 4 * LEN_PHASE + LEN_ENDGAME;
 
     static Dashboard instance = new Dashboard();
 
@@ -51,11 +54,13 @@ public class Dashboard {
     }
 
     public void update() {
-        double timer = DriverStation.getMatchTime();
-        if (timer < LEN_AUTO) return;
+        double timedown = DriverStation.getMatchTime();
+        double timer = LEN_MATCH - timedown;
 
+        if (timer < LEN_AUTO) return;
         if (!fetchFMS()) return;
 
+        System.out.println("time spent in match" + timer);
         double timerN = timer - LEN_AUTO - LEN_TRANSITION; // normalized for our calculations
 
         if (timerN < 0) {
@@ -74,7 +79,7 @@ public class Dashboard {
         SmartDashboard.putNumber(SHOOT_TIMER, phaseT);
         SmartDashboard.putNumber(PHASE, phaseH);
         SmartDashboard.putBoolean(SHOOT_OK, even == won);
-        if (phaseT < 5) warn();
+        if (phaseT < 5 && phaseT > 0) warn();
         else SmartDashboard.putBoolean(SHOOT_WARNING, false);
     }
 }
