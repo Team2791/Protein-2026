@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.alerter.Rumbler;
 import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
+import frc.robot.commands.drive.PointAtHub;
 import frc.robot.commands.drive.SysId;
 import frc.robot.commands.intake.Deploy;
 import frc.robot.commands.intake.Roll;
-import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
@@ -130,7 +130,7 @@ public class RobotContainer {
         // Driver: point and shoot
         driverctl.rightBumper().whileTrue(new Shoot(spindexer));
         driverctl.rightBumper().whileFalse(new Shoot.ReverseTimed(spindexer));
-        operctl.b().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
+        driverctl.rightTrigger().whileTrue(new PointAtHub(drive, driverctl));
 
         driverctl
             .y()
