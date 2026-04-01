@@ -44,8 +44,17 @@ public final class IntakeConstants {
          */
         public static final double kWheelRadius = Units.inchesToMeters(2);
 
-        /** Target roller power */
-        public static final double kPower = -0.5;
+        public enum RollerState {
+            kNormal(-0.5),
+            kStopped(0),
+            kReverse(-RollerState.kNormal.power);
+
+            public final double power;
+
+            RollerState(double power) {
+                this.power = power;
+            }
+        }
     }
 
     /** Motor configuration constants for the intake pivot motors. */
@@ -67,7 +76,7 @@ public final class IntakeConstants {
          * (i.e. a value {@literal >} 1 means the motor spins faster than the output).
          * Adjust this to match the physical gearbox ratio.
          */
-        public static final double kReduction = 20;
+        public static final double kReduction = 9;
 
         /**
          * The deployed (down) position setpoint for the pivot, in radians.
@@ -75,7 +84,7 @@ public final class IntakeConstants {
          * <p>
          * The retracted position is assumed to be 0 rad.
          */
-        public static final double kDeployedPosition = -1.59;
+        public static final double kDeployedPosition = -0.266;
 
         /**
          * Tolerance for considering the pivot "at position", in radians.
@@ -84,6 +93,6 @@ public final class IntakeConstants {
          * Rollers will not spin until the pivot is within this threshold
          * of the deployed setpoint.
          */
-        public static final double kTolerance = 0.5;
+        public static final double kTolerance = 0.2;
     }
 }

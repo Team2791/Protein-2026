@@ -4,6 +4,7 @@ import static frc.robot.util.MathPlus.kTau;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveConstants;
 
 /**
@@ -56,17 +57,17 @@ public final class ControlConstants {
         public static final double kRollerI = 0;
         /** Derivative gain for roller velocity control. */
         public static final double kRollerD = 0;
-        /** Feedforward static friction constant */
-        public static final double kRollerS = .2875;
-        /** Feedforward velocity factor */
-        public static final double kRollerV = .035;
 
         /** Proportional gain for pivot position control. */
-        public static final double kPivotP = 0.1;
+        public static final double kPivotP = 0.5;
         /** Integral gain for pivot position control. */
         public static final double kPivotI = 0;
         /** Derivative gain for pivot position control. */
         public static final double kPivotD = 0;
+
+        public static final double kPivotS = 0.21;
+        public static final double kPivotG = 1.00;
+        public static final double kPivotZero = Units.degreesToRadians(78.8);
     }
 
     /**

@@ -124,7 +124,7 @@ public class SparkConfigConstants {
             kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
             kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
 
-            // encoder conversion: motor rad → output rad (includes reduction)
+            // encoder conversion: motor rev and rpm → output rad and rad/sec
             kLeader.encoder.positionConversionFactor(
                 kTau / IntakeConstants.Pivot.kReduction
             );
@@ -138,6 +138,10 @@ public class SparkConfigConstants {
                 ControlConstants.Intake.kPivotI,
                 ControlConstants.Intake.kPivotD
             );
+            kLeader.closedLoop.feedForward
+                .kS(ControlConstants.Intake.kPivotS)
+                .kCos(ControlConstants.Intake.kPivotG)
+                .kCosRatio(1.0 / kTau);
             kLeader.closedLoop.allowedClosedLoopError(
                 IntakeConstants.Pivot.kTolerance,
                 ClosedLoopSlot.kSlot0

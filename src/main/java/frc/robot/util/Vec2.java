@@ -329,6 +329,24 @@ public class Vec2 implements StructSerializable {
         return new Translation2d(x, y);
     }
 
+    /**
+     * Strictly less than, as in, both x and y components are less
+     * @param other the other vec
+     * @return if we are strictly less than other
+     */
+    public boolean ltstrict(Vec2 other) {
+        return x < other.x && y < other.y;
+    }
+
+    /**
+     * Strictly greater than, as in, both x and y components are greater
+     * @param other the other vec
+     * @return if we are strictly greater than other
+     */
+    public boolean gtstrict(Vec2 other) {
+        return x > other.x && y > other.y;
+    }
+
     /** Vec2 struct for WPI serialization */
     public static final Vec2Struct struct = new Vec2Struct();
 }

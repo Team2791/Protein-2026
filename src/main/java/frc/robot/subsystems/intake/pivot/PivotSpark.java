@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import frc.robot.constants.ControlConstants;
 import frc.robot.constants.IOConstants;
 import frc.robot.constants.SparkConfigConstants;
 import frc.robot.data.SparkData;
@@ -45,7 +46,7 @@ public class PivotSpark extends PivotIO {
             SparkConfigConstants.kPersist
         );
 
-        leader.getEncoder().setPosition(0);
+        leader.getEncoder().setPosition(ControlConstants.Intake.kPivotZero);
     }
 
     @Override

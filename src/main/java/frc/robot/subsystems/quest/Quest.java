@@ -6,7 +6,9 @@ import static frc.robot.constants.VisionConstants.kQuestDevs;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.quest.QuestIO.QuestData;
+import frc.robot.util.Vec2;
 import frc.robot.util.VisionMeasurement;
 import gg.questnav.questnav.PoseFrame;
 import java.util.Arrays;
@@ -53,7 +55,6 @@ public class Quest {
     public Quest(QuestIO quest, Consumer<VisionMeasurement> addMeasurement) {
         this.quest = quest;
         this.addMeasurement = addMeasurement;
-
         AutoLogOutputManager.addObject(this);
     }
 
@@ -109,6 +110,8 @@ public class Quest {
         );
     }
 
+    boolean reset = false;
+
     /**
      * Periodic update method called every robot tick.
      *
@@ -118,6 +121,11 @@ public class Quest {
     public void update() {
         // Refresh Quest data
         this.quest.update();
+
+        if (!reset && quest.data.connected && quest.data.tracking) {
+            reset = true;
+            reset();
+        }
 
         // Record all outputs
         Logger.processInputs("Quest", this.quest.data);
@@ -142,5 +150,19 @@ public class Quest {
             VisionMeasurement est = new VisionMeasurement(bot, kQuestDevs, ts);
             addMeasurement.accept(est);
         }
+    }
+
+    private void reset() {
+        // check if quest is within perimeter
+        if (quest.data.readings.length == 0) return;
+
+        PoseFrame f = quest.data.readings[0];
+        Pose3d bot = f.questPose3d().transformBy(kBotToQuest.inverse());
+        Vec2 bot2 = new Vec2(bot.toPose2d());
+
+        // check persistence
+        if (bot2.ltstrict(new Vec2(GameConstants.kRedOrigin))) return;
+
+        quest.reset(new Pose3d());
     }
 }

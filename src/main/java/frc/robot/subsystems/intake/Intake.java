@@ -2,7 +2,9 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.ControlConstants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.Roller.RollerState;
 import frc.robot.subsystems.intake.pivot.PivotIO;
 import frc.robot.subsystems.intake.roller.RollerIO;
 import frc.robot.util.MathPlus;
@@ -33,13 +35,13 @@ public class Intake extends SubsystemBase {
     final RollerIO roller;
 
     /** Whether the intake is currently commanded to deploy. */
-    boolean deployed = false;
+    boolean deployed = true;
 
     /** The intake should initally deploy once at the beginning of the match */
     boolean autoDeployed = false;
 
     /** Whether the intake should run IF DEPLOYED */
-    boolean running = false;
+    RollerState roll = RollerState.kNormal;
 
     /**
      * Constructs an Intake subsystem.
@@ -84,8 +86,8 @@ public class Intake extends SubsystemBase {
         this.deployed = deployed;
     }
 
-    public void run(boolean running) {
-        this.running = running;
+    public void roll(RollerState state) {
+        this.roll = state;
     }
 
     @Override
@@ -106,9 +108,11 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("Intake/Pivot", pivot.data);
         Logger.processInputs("Intake/Roller", roller.data);
 
+        roller.set(roll.power);
+
         if (!deployed) {
             roller.set(0);
-            pivot.setPosition(0.0);
+            pivot.setPosition(ControlConstants.Intake.kPivotZero);
             return;
         }
 
@@ -124,6 +128,5 @@ public class Intake extends SubsystemBase {
         }
 
         pivot.setPosition(pivot.data.leader.position());
-        roller.set(IntakeConstants.Roller.kPower);
     }
 }

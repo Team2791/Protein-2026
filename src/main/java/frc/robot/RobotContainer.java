@@ -10,10 +10,12 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.SysId;
 import frc.robot.commands.intake.Deploy;
-import frc.robot.commands.intake.RunIntake;
+import frc.robot.commands.intake.Roll;
+import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.IOConstants;
+import frc.robot.constants.IntakeConstants.Roller.RollerState;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.controller.XboxEliteController;
 import frc.robot.subsystems.drive.Drive;
@@ -125,9 +127,10 @@ public class RobotContainer {
         // Driver: lock
         driverctl.leftBumper().whileTrue(Commands.run(drive::lockX, drive));
 
-        // Driver/unlocalized: point and shoot
+        // Driver: point and shoot
         driverctl.rightBumper().whileTrue(new Shoot(spindexer));
         driverctl.rightBumper().whileFalse(new Shoot.ReverseTimed(spindexer));
+        operctl.b().whileTrue(new PointAndShoot(drive, spindexer, driverctl));
 
         driverctl
             .y()
@@ -147,7 +150,8 @@ public class RobotContainer {
 
         operctl.a().onTrue(new Deploy(intake, false));
         operctl.a().onFalse(new Deploy(intake, true));
-        operctl.rightBumper().whileTrue(new RunIntake(intake));
+        operctl.rightBumper().whileTrue(new Roll(intake, RollerState.kStopped));
+        operctl.leftBumper().whileTrue(new Roll(intake, RollerState.kReverse));
     }
 
     private void configureSysId() {
