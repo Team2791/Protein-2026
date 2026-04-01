@@ -218,8 +218,8 @@
    },
    "trench_score":{
     "x":{
-     "exp":"start_line + bot_rad",
-     "val":4.450969000000001
+     "exp":"start_line + bot_rad - pad",
+     "val":4.400169000000001
     },
     "y":{
      "exp":"trench_rhs_center",

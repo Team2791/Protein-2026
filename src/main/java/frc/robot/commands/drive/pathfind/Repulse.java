@@ -44,16 +44,16 @@ class Repulse extends Command {
 
     /** PID controller for orthogonal movement correction. */
     final PIDController orthoController = new PIDController(
-        ControlConstants.Auto.kOrthoP,
-        ControlConstants.Auto.kOrthoI,
-        ControlConstants.Auto.kOrthoD
+        ControlConstants.Repulsor.kOrthoP,
+        ControlConstants.Repulsor.kOrthoI,
+        ControlConstants.Repulsor.kOrthoD
     );
 
     /** PID controller for rotational movement correction. */
     final PIDController rotController = new PIDController(
-        ControlConstants.Auto.kTurnP,
-        ControlConstants.Auto.kTurnI,
-        ControlConstants.Auto.kTurnD
+        ControlConstants.Repulsor.kTurnP,
+        ControlConstants.Repulsor.kTurnI,
+        ControlConstants.Repulsor.kTurnD
     );
 
     /** Currently targeted pose, reset every {@link #initialize()} */
@@ -160,7 +160,7 @@ class Repulse extends Command {
      *
      * <p>
      * Finishes when the robot is within the nearby threshold distance of the target.
-     * See {@link ControlConstants.Auto#kNearbyThreshold}.
+     * See {@link ControlConstants.PIDLerp#kNearbyThreshold}.
      */
     @Override
     public boolean isFinished() {
@@ -168,6 +168,6 @@ class Repulse extends Command {
         Vec2 target = new Vec2(currentTarget);
         Vec2 dist = target.sub(pose);
 
-        return dist.mag() < ControlConstants.Auto.kNearbyThreshold;
+        return dist.mag() < ControlConstants.Repulsor.kNearbyThreshold;
     }
 }

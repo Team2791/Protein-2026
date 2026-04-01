@@ -16,6 +16,9 @@ import frc.robot.util.Vec2;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * Use in conjunction with {@link Point} for a complete pathfind
+ */
 public class PIDLerp extends Command {
 
     static class TunablePID {
@@ -68,6 +71,11 @@ public class PIDLerp extends Command {
         this(drive, target, DriveConstants.maxSpeedMetersPerSec);
     }
 
+    /**
+     * Target is blue-side pose thanks.
+     *
+     * @see frc.robot.auto.AutoNode
+     */
     public PIDLerp(Drive drive, Pose2d target, double maxVel) {
         this.drive = drive;
         this.target = target;
@@ -166,9 +174,10 @@ public class PIDLerp extends Command {
 
     @Override
     public boolean isFinished() {
-        double mag = blue().sub(new Vec2(target)).mag();
+        double posErr = blue().sub(new Vec2(target)).mag();
+
         return (
-            mag < 0.005 &&
+            posErr < ControlConstants.PIDLerp.kRotationTolerance &&
             atlast() &&
             new Vec2(drive.getChassisSpeeds()).mag() < 0.1
         );

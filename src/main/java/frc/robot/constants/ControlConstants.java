@@ -2,8 +2,6 @@ package frc.robot.constants;
 
 import static frc.robot.util.MathPlus.kTau;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveConstants;
 
@@ -86,30 +84,52 @@ public final class ControlConstants {
     }
 
     /**
-     * Autonomous trajectory following PID constants.
-     *
-     * <p>
-     * Used by {@link frc.robot.autos.AutoManager} for Choreo trajectory following.
+     * PIDLerp's PID constants.
      */
-    public static final class Auto {
+    public static final class PIDLerp {
 
-        private Auto() {}
+        private PIDLerp() {}
 
-        /** Proportional gain for X and Y position errors (orthogonal axes). */
-        public static final double kOrthoP = 2.00;
-        /** Integral gain for orthogonal position errors. */
+        /** Proportional gain for X and Y alignment errors. */
+        public static final double kOrthoP = 4.75;
+        /** Integral gain for alignment position errors. */
         public static final double kOrthoI = 0.00;
-        /** Derivative gain for orthogonal position errors. */
+        /** Derivative gain for alignment position errors. */
         public static final double kOrthoD = 0.00;
 
-        /** Proportional gain for rotation error. */
-        public static final double kTurnP = 0.00;
-        /** Integral gain for rotation error. */
+        /** Proportional gain for alignment rotation error. */
+        public static final double kTurnP = 2.75;
+        /** Integral gain for alignment rotation error. */
         public static final double kTurnI = 0.00;
-        /** Derivative gain for rotation error. */
-        public static final double kTurnD = 0.00;
+        /** Derivative gain for alignment rotation error. */
+        public static final double kTurnD = 0.04;
 
-        /** Threshold to switch to nearby control. */
+        /** Position tolerance, meters (euclidian) */
+        public static final double kPositionTolerance = 0.005;
+        /** Rotational tolerance, radians */
+        public static final double kRotationTolerance = 0.03;
+    }
+
+    /**
+     * Repulsor's PID constants
+     */
+    public static final class Repulsor {
+
+        /** Proportional gain for X and Y alignment errors. */
+        public static final double kOrthoP = 4.75;
+        /** Integral gain for alignment position errors. */
+        public static final double kOrthoI = 0.00;
+        /** Derivative gain for alignment position errors. */
+        public static final double kOrthoD = 0.00;
+
+        /** Proportional gain for alignment rotation error. */
+        public static final double kTurnP = 2.75;
+        /** Integral gain for alignment rotation error. */
+        public static final double kTurnI = 0.00;
+        /** Derivative gain for alignment rotation error. */
+        public static final double kTurnD = 0.04;
+
+        /** Threshold to switch to nearby control, meters (euclidian) */
         public static final double kNearbyThreshold = 0.25;
     }
 
@@ -142,12 +162,10 @@ public final class ControlConstants {
         /** Maximum angular acceleration during alignment (radians/second²). */
         public static final double kMaxTurnAcceleration = kTau;
 
-        /** Position and rotation tolerance for "at target" detection. TODO: May need adjustment for shooter vs PnP. */
-        public static final Pose2d kTolerance = new Pose2d(
-            0.015,
-            0.015,
-            new Rotation2d(0.03)
-        );
+        /** Position tolerance, meters (euclidian) */
+        public static final double kPositionTolerance = 0.005;
+        /** Rotational tolerance, radians */
+        public static final double kRotationTolerance = 0.03;
     }
 
     /** Drivetrain motion constraints. */

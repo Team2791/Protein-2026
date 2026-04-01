@@ -105,7 +105,6 @@ public enum AutoNode {
             AllianceUtil.unsafe.autoflip(pose.getRotation())
         );
         Command lerp1 = new PIDLerp(drive, pose, maxVel);
-
         Command enter = onEnter(drive, shooter, spindexer);
 
         if (deg == 0 || deg == 180) {

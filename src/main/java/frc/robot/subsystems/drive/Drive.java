@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.auto.SampleFollower;
 import frc.robot.subsystems.quest.Meta3S;
 import frc.robot.subsystems.quest.Quest;
 import frc.robot.subsystems.quest.QuestReplay;
@@ -80,9 +79,6 @@ public class Drive extends SubsystemBase {
 
     /** Field widget */
     public final Field2d field = new Field2d();
-
-    /** SwerveSample follower */
-    public final SampleFollower follower = new SampleFollower(this);
 
     /** vision measurements collected before robot start */
     final List<VisionMeasurement> calibrators = new ArrayList<>();

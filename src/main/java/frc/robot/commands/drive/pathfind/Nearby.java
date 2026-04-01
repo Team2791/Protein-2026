@@ -6,12 +6,14 @@ import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.Vec2;
 import java.util.function.Supplier;
 
 /**
@@ -26,7 +28,7 @@ import java.util.function.Supplier;
  * to move the robot to a target pose. The controller calculates the required
  * chassis speeds (x, y, rotation) to reach the target.
  */
-class Nearby extends Command {
+public class Nearby extends Command {
 
     static class TunableController extends HolonomicDriveController {
 
@@ -55,7 +57,13 @@ class Nearby extends Command {
                 )
             );
             this.getThetaController().enableContinuousInput(0, kTau);
-            this.setTolerance(ControlConstants.Nearby.kTolerance);
+            this.setTolerance(
+                new Pose2d(
+                    ControlConstants.Nearby.kPositionTolerance,
+                    ControlConstants.Nearby.kPositionTolerance,
+                    new Rotation2d(ControlConstants.Nearby.kRotationTolerance)
+                )
+            );
 
             SmartDashboard.putData("PID/NearbyX", this.getXController());
             SmartDashboard.putData("PID/NearbyY", this.getYController());
@@ -93,7 +101,7 @@ class Nearby extends Command {
      * @param drive Drive subsystem for movement control
      * @param target The target supplier
      */
-    Nearby(Drive drive, Supplier<Pose2d> target) {
+    public Nearby(Drive drive, Supplier<Pose2d> target) {
         this.drive = drive;
         this.target = target;
 
@@ -173,6 +181,9 @@ class Nearby extends Command {
      */
     @Override
     public boolean isFinished() {
-        return controller.atReference();
+        return (
+            controller.atReference() &&
+            new Vec2(drive.getChassisSpeeds()).mag() < 0.1
+        );
     }
 }

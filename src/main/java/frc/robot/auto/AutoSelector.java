@@ -61,7 +61,7 @@ public class AutoSelector {
         factory = new AutoFactory(
             drive::getPose,
             drive::setPose,
-            drive.follower::follow,
+            s -> {},
             true,
             drive,
             (traj, starting) -> {
@@ -198,8 +198,6 @@ public class AutoSelector {
             if (node == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
 
             if (i == 0) {
-                System.out.println("Resetting " + node);
-
                 Pose2d fieldPose = AllianceUtil.unsafe.autoflip(node.pose);
 
                 drive.setPose(fieldPose);
@@ -208,8 +206,6 @@ public class AutoSelector {
                     Commands.runOnce(() -> drive.setPose(fieldPose), drive)
                 );
             }
-
-            System.out.println("Commanding " + node);
 
             command = Commands.sequence(
                 command,

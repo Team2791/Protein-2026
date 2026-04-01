@@ -27,7 +27,7 @@ public record ChoreoTraj(
     public static final ChoreoTraj reference = new ChoreoTraj(
 	    "reference",
 	    OptionalInt.empty(),
-	    10.97211,
+	    11.42303,
 	    new Pose2d(3.556, 0.634, Rotation2d.fromRadians(1.571)),
 	    new Pose2d(7.772, 4.533, Rotation2d.fromRadians(0))
 	);

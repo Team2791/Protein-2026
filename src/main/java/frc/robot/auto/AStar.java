@@ -44,7 +44,6 @@ public class AStar {
             throw new RuntimeException(e);
         }
 
-        System.out.println("KBR" + kBumperRadius);
         // Run this once after ng is loaded
         int radiusCells =
             (int) Math.floor(kBumperRadius / ng.node_size_meters) - 1;

@@ -44,9 +44,7 @@ public class PointAtHub extends Command {
         addRequirements(drive);
 
         this.ctl.enableContinuousInput(0, kTau);
-        this.ctl.setTolerance(
-            ControlConstants.Nearby.kTolerance.getRotation().getRadians()
-        );
+        this.ctl.setTolerance(ControlConstants.Nearby.kRotationTolerance);
 
         SmartDashboard.putData("Point/RotPID", this.ctl);
     }
