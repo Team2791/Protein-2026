@@ -111,6 +111,11 @@ public enum AutoNode {
             return new SequentialCommandGroup(lerp1, point, enter);
         }
 
-        return new SequentialCommandGroup(point, lerp1, enter);
+        return new SequentialCommandGroup(
+            point,
+            lerp1,
+            new Point(drive, AllianceUtil.unsafe.autoflip(pose.getRotation())),
+            enter
+        );
     }
 }
