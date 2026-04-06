@@ -130,7 +130,9 @@ public class RobotContainer {
         // Driver: point and shoot
         driverctl.rightBumper().whileTrue(new Shoot(spindexer));
         driverctl.rightBumper().whileFalse(new Shoot.ReverseTimed(spindexer));
-        driverctl.rightTrigger().whileTrue(new PointAtHub(drive, driverctl));
+        driverctl
+            .rightTrigger()
+            .whileTrue(new PointAtHub(drive, shooter, driverctl));
 
         driverctl
             .y()

@@ -4,6 +4,9 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * Constants for the shooter subsystem, including motor configuration and
@@ -103,4 +106,13 @@ public final class ShooterConstants {
         /** Duration (seconds) the spindexer reverses between shots. */
         public static final double kReverseDuration = 0.25;
     }
+
+    public static final Transform2d kBotToShooter = new Transform2d(
+        Units.inchesToMeters(7.21875),
+        Units.inchesToMeters(-8.25),
+        new Rotation2d()
+    );
+
+    public static final double kAimFactor = 1.0;
+    public static final double kWheelRadius = Units.inchesToMeters(2.0);
 }

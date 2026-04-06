@@ -63,5 +63,6 @@
     ],
     "java.dependency.enableDependencyCheckup": false,
     "editor.formatOnSave": true,
-    "prettier-plugin-java-vscode.prettierConfigPath": "${workspaceFolder}/.pretterrc"
+    "prettier-plugin-java-vscode.prettierConfigPath": "${workspaceFolder}/.pretterrc",
+    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
 }
