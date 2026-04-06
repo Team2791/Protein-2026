@@ -272,11 +272,25 @@ public class Vec2 implements StructSerializable {
      * @return A Rotation2d representing the angle of this vector
      */
     public Rotation2d theta() {
-        return new Rotation2d(Math.atan2(this.y, this.x));
+        return new Rotation2d(atan2());
+    }
+
+    public double atan2() {
+        return Math.atan2(this.y, this.x);
     }
 
     /**
      * Rotates this vector by a given angle, counterclockwise.
+     * @param angle The angle to rotate by
+     * @return A new Vec2 representing the rotated vector
+     * @see #rotate(double)
+     */
+    public Vec2 rotate(Rotation2d angle) {
+        return rotate(angle.getRadians());
+    }
+
+    /**
+     * Rotates this vector by a given angle, in radians, counterclockwise.
      *
      * <p>
      * This multiplies the translation vector by a counterclockwise rotation matrix of the given
@@ -290,9 +304,9 @@ public class Vec2 implements StructSerializable {
      * @param angle The angle to rotate by
      * @return A new Vec2 representing the rotated vector
      */
-    public Vec2 rotate(Rotation2d angle) {
-        double cosA = angle.getCos();
-        double sinA = angle.getSin();
+    public Vec2 rotate(double angle) {
+        double cosA = Math.cos(angle);
+        double sinA = Math.sin(angle);
         double newX = cosA * this.x - sinA * this.y;
         double newY = sinA * this.x + cosA * this.y;
         return new Vec2(newX, newY);

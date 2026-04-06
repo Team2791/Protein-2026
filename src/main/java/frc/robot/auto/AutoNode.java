@@ -92,7 +92,12 @@ public enum AutoNode {
             );
             case TRENCH_SCORE, HUB_SCORE -> new Shoot(spindexer);
             case OUTPOST -> new WaitCommand(5); // Wait load balls
-            case OUTPOST_SCORE -> new PointAndShoot(drive, spindexer, null);
+            case OUTPOST_SCORE -> new PointAndShoot(
+                drive,
+                spindexer,
+                shooter,
+                null
+            );
             case CANCEL -> Commands.none();
         };
     }
