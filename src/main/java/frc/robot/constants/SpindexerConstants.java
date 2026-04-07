@@ -28,7 +28,7 @@ public final class SpindexerConstants {
      * <p>
      * Positive values spin the motor forward. Tune this value on the robot.
      */
-    public static final double kSpindexerPower = 0.8;
+    public static final double kSpindexerPower = 1;
 
     /**
      * Duty-cycle power for the SparkMax (Neo) motor, in the range [-1, 1].
@@ -36,5 +36,5 @@ public final class SpindexerConstants {
      * <p>
      * Positive values spin the motor forward. Tune this value on the robot.
      */
-    public static final double kKickerPower = -0.8;
+    public static final double kKickerPower = -1;
 }

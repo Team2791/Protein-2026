@@ -25,7 +25,7 @@ public final class IOConstants {
         private Drivetrain() {}
 
         /** NavX gyro communication port type. */
-        public static final NavXComType kGyroPort = NavXComType.kMXP_SPI;
+        public static final NavXComType kGyroPort = NavXComType.kUSB1;
     }
 
     /**
