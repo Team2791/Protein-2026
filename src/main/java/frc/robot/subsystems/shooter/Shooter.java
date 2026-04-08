@@ -90,7 +90,7 @@ public class Shooter extends SubsystemBase {
         Pose2d blue = AllianceUtil.autoflip(pose).orElse(pose);
 
         if (blue.getX() > ShooterConstants.kSpinUpThreshold) {
-            io.setVelocity(ShooterConstants.Setpoint.kNear.velocity);
+            io.setVelocity(ShooterConstants.Setpoint.kLow.velocity);
             return;
         }
 
@@ -99,7 +99,7 @@ public class Shooter extends SubsystemBase {
         double dist = delta.mag();
 
         // regress
-        double vel = ShooterConstants.Regression.apply(dist);
+        double vel = -ShooterConstants.Regression.apply(dist);
         io.setVelocity(vel);
     }
 }

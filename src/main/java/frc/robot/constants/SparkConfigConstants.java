@@ -4,7 +4,6 @@ import static frc.robot.util.MathPlus.kTau;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -133,19 +132,6 @@ public class SparkConfigConstants {
             );
 
             // pivot PID (position)
-            kLeader.closedLoop.pid(
-                ControlConstants.Intake.kPivotP,
-                ControlConstants.Intake.kPivotI,
-                ControlConstants.Intake.kPivotD
-            );
-            kLeader.closedLoop.feedForward
-                .kS(ControlConstants.Intake.kPivotS)
-                .kCos(ControlConstants.Intake.kPivotG)
-                .kCosRatio(1.0 / kTau);
-            kLeader.closedLoop.allowedClosedLoopError(
-                IntakeConstants.Pivot.kTolerance,
-                ClosedLoopSlot.kSlot0
-            );
             kLeader.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
             kLeader.idleMode(IntakeConstants.Pivot.kIdleMode);

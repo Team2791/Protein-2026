@@ -12,12 +12,9 @@ public class PivotReplay extends PivotIO {
 
     /** No-op: position setpoint is not applied in replay mode. */
     @Override
-    public void setPosition(double position) {}
+    public void set(double position) {}
 
     /** No-op: data is populated from the log, not from hardware. */
     @Override
     public void update() {}
-
-    @Override
-    public void resetPosition(double position) {}
 }

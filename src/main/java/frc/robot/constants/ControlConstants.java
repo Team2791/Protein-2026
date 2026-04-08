@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import static frc.robot.util.MathPlus.kTau;
 
-import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveConstants;
 
 /**
@@ -40,32 +39,6 @@ public final class ControlConstants {
         public static final double kShooterS = .2375;
         /** Feedforward velocity factor */
         public static final double kShooterV = .0172;
-    }
-
-    /**
-     * Intake mechanism PID constants.
-     */
-    public static final class Intake {
-
-        private Intake() {}
-
-        /** Proportional gain for roller velocity control. */
-        public static final double kRollerP = 0;
-        /** Integral gain for roller velocity control. */
-        public static final double kRollerI = 0;
-        /** Derivative gain for roller velocity control. */
-        public static final double kRollerD = 0;
-
-        /** Proportional gain for pivot position control. */
-        public static final double kPivotP = 0.5;
-        /** Integral gain for pivot position control. */
-        public static final double kPivotI = 0;
-        /** Derivative gain for pivot position control. */
-        public static final double kPivotD = 0;
-
-        public static final double kPivotS = 0.21;
-        public static final double kPivotG = 1.00;
-        public static final double kPivotZero = Units.degreesToRadians(78.8);
     }
 
     /**

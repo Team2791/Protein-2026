@@ -70,7 +70,7 @@ public final class ShooterConstants {
         public static final double kLin = 0.0;
 
         /** Constant (offset) for the distance regression. */
-        public static final double kConst = -275;
+        public static final double kConst = 275;
 
         /**
          * Applies the regression to compute the required shooter velocity at a given distance.

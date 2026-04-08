@@ -32,14 +32,7 @@ public abstract class PivotIO {
     public abstract void update();
 
     /**
-     * Sets the pivot position setpoint in radians (at the output shaft).
-     *
-     * @param position target position in rad
+     * Sets the pivot power [-1..1]
      */
-    public abstract void setPosition(double position);
-
-    /**
-     * Debugging: Reset current encoder position
-     */
-    public abstract void resetPosition(double position);
+    public abstract void set(double power);
 }

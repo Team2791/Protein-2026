@@ -1,13 +1,10 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.ControlConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.Roller.RollerState;
 import frc.robot.subsystems.intake.pivot.PivotIO;
 import frc.robot.subsystems.intake.roller.RollerIO;
-import frc.robot.util.MathPlus;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.Logger;
@@ -37,8 +34,10 @@ public class Intake extends SubsystemBase {
     /** Whether the intake is currently commanded to deploy. */
     boolean deployed = true;
 
-    /** The intake should initally deploy once at the beginning of the match */
-    boolean autoDeployed = false;
+    private boolean lastDeployed = false;
+    private boolean pivotMoving = false;
+    private boolean pivotDone = false;
+    private double completedPosition = 0;
 
     /** Whether the intake should run IF DEPLOYED */
     RollerState roll = RollerState.kNormal;
@@ -92,16 +91,6 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!autoDeployed && !deployed && DriverStation.isEnabled()) {
-            deploy(true);
-            autoDeployed = true;
-        }
-
-        if (!autoDeployed && deployed && DriverStation.isEnabled()) {
-            pivot.resetPosition(IntakeConstants.Pivot.kDeployedPosition);
-            autoDeployed = true;
-        }
-
         pivot.update();
         roller.update();
 
@@ -110,23 +99,42 @@ public class Intake extends SubsystemBase {
 
         roller.set(roll.power);
 
-        if (!deployed) {
-            roller.set(0);
-            pivot.setPosition(ControlConstants.Intake.kPivotZero);
-            return;
+        double vel = Math.abs(pivot.data.leader.velocity());
+
+        if (deployed != lastDeployed) {
+            pivotMoving = false;
+            pivotDone = false;
+            lastDeployed = deployed;
         }
 
-        if (
-            !MathPlus.atTolerance(
-                pivot.data.leader.position(),
-                IntakeConstants.Pivot.kDeployedPosition,
-                IntakeConstants.Pivot.kTolerance
-            )
-        ) {
-            pivot.setPosition(IntakeConstants.Pivot.kDeployedPosition);
-            return;
-        }
+        if (!pivotDone) {
+            double power = deployed
+                ? -IntakeConstants.Pivot.kDeployPower
+                : IntakeConstants.Pivot.kDeployPower;
+            pivot.set(power);
 
-        pivot.setPosition(pivot.data.leader.position());
+            if (
+                !pivotMoving && vel > IntakeConstants.Pivot.kVelocityThreshold
+            ) {
+                pivotMoving = true;
+            } else if (
+                pivotMoving && vel <= IntakeConstants.Pivot.kVelocityThreshold
+            ) {
+                pivot.set(0);
+                completedPosition = pivot.data.leader.position();
+                pivotDone = true;
+            }
+        } else {
+            double pos = pivot.data.leader.position();
+            if (deployed && pos > completedPosition + IntakeConstants.Pivot.kPushThreshold) {
+                // Ball pushing pivot up while deployed — push back down
+                pivot.set(-IntakeConstants.Pivot.kDeployPower);
+            } else if (!deployed && pos < completedPosition - IntakeConstants.Pivot.kPushThreshold) {
+                // Something pushing pivot down while retracted — push back up
+                pivot.set(IntakeConstants.Pivot.kDeployPower);
+            } else {
+                pivot.set(0);
+            }
+        }
     }
 }

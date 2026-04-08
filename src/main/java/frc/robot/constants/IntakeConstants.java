@@ -78,21 +78,12 @@ public final class IntakeConstants {
          */
         public static final double kReduction = 9;
 
-        /**
-         * The deployed (down) position setpoint for the pivot, in radians.
-         *
-         * <p>
-         * The retracted position is assumed to be 0 rad.
-         */
-        public static final double kDeployedPosition = -0.266;
+        public static final double kVelocityThreshold = 1;
 
-        /**
-         * Tolerance for considering the pivot "at position", in radians.
-         *
-         * <p>
-         * Rollers will not spin until the pivot is within this threshold
-         * of the deployed setpoint.
-         */
-        public static final double kTolerance = 0.2;
+        /** Position delta (rad) above the deployed rest position that triggers corrective downward power. */
+        public static final double kPushThreshold = 0.1;
+
+        /** Duty cycle applied to the pivot motor during deploy/retract. */
+        public static final double kDeployPower = 0.3;
     }
 }
