@@ -1,4 +1,4 @@
-
+// spotless:off
 package frc.robot.auto.generated;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -6,10 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.Map;
 import java.util.OptionalInt;
 
-// If these imports cause errors because you're not using ChoreoLib,
-// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+// If the 2 imports above cause errors because you're not using ChoreoLib,
+// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 
 /**
  * A class containing the name, start pose, end pose, and total time of every Choreo trajectory.
@@ -25,19 +25,19 @@ public record ChoreoTraj(
     Pose2d endPoseBlue
 ) {
     public static final ChoreoTraj reference = new ChoreoTraj(
-	    "reference",
-	    OptionalInt.empty(),
-	    11.42303,
-	    new Pose2d(3.556, 0.634, Rotation2d.fromRadians(1.571)),
-	    new Pose2d(7.772, 4.533, Rotation2d.fromRadians(0))
-	);
+        "reference",
+        OptionalInt.empty(),
+        11.41308,
+        new Pose2d(3.55562, 0.63424, Rotation2d.fromRadians(1.5708)),
+        new Pose2d(7.77202, 4.53311, Rotation2d.fromRadians(0))
+    );
 
     /**
      * A map between trajectory names and their corresponding data.
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("reference", reference)
+        Map.entry("reference", reference)
     );
 
     /**
@@ -64,3 +64,4 @@ public record ChoreoTraj(
         return routine.trajectory(this.name);
     }
 }
+// spotless:on

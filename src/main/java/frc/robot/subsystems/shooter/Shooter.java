@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.GameConstants;
 import frc.robot.constants.ShooterConstants;
@@ -47,6 +48,8 @@ public class Shooter extends SubsystemBase {
         this.io = io;
         this.drive = drive;
         AutoLogOutputManager.addObject(this);
+
+        SmartDashboard.putNumber("Shooter/Setpoint", 0);
     }
 
     /**
@@ -83,20 +86,27 @@ public class Shooter extends SubsystemBase {
         io.update();
         Logger.processInputs("Shooter", io.data);
 
-        if (manual) return;
-
-        // Automatic control logic
         Pose2d pose = drive.getPose();
         Pose2d blue = AllianceUtil.autoflip(pose).orElse(pose);
+
+        Vec2 hub = new Vec2(GameConstants.Objects.kHub);
+        Vec2 delta = hub.sub(new Vec2(blue));
+        double dist = delta.mag();
+
+        SmartDashboard.putNumber("Shooter/Dist2Hub", dist);
+        double dbvel = SmartDashboard.getNumber("Shooter/Setpoint", 0);
+
+        if (dbvel != 0) {
+            io.setVelocity(-dbvel);
+            return;
+        }
+
+        if (manual) return;
 
         if (blue.getX() > ShooterConstants.kSpinUpThreshold) {
             io.setVelocity(ShooterConstants.Setpoint.kLow.velocity);
             return;
         }
-
-        Vec2 hub = new Vec2(GameConstants.Objects.kHub);
-        Vec2 delta = hub.sub(new Vec2(blue));
-        double dist = delta.mag();
 
         // regress
         double vel = -ShooterConstants.Regression.apply(dist);

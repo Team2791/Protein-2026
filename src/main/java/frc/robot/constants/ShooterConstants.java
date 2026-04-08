@@ -63,14 +63,11 @@ public final class ShooterConstants {
 
         private Regression() {}
 
-        /** Quadratic coefficient for the distance regression. */
-        public static final double kSq = 0.0;
-
         /** Linear coefficient for the distance regression. */
-        public static final double kLin = 0.0;
+        public static final double kLin = 39.964;
 
         /** Constant (offset) for the distance regression. */
-        public static final double kConst = 275;
+        public static final double kConst = 168.311;
 
         /**
          * Applies the regression to compute the required shooter velocity at a given distance.
@@ -79,7 +76,7 @@ public final class ShooterConstants {
          * @return The required flywheel velocity in radians/second
          */
         public static double apply(double dist) {
-            return kSq * dist * dist + kLin * dist + kConst;
+            return kLin * dist + kConst;
         }
     }
 
@@ -108,8 +105,8 @@ public final class ShooterConstants {
     }
 
     public static final Transform2d kBotToShooter = new Transform2d(
-        Units.inchesToMeters(7.21875),
-        Units.inchesToMeters(-8.25),
+        Units.inchesToMeters(-8.0625),
+        Units.inchesToMeters(8.25),
         new Rotation2d()
     );
 

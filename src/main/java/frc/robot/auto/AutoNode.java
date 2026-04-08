@@ -10,7 +10,6 @@ import frc.robot.commands.drive.pathfind.PIDLerp;
 import frc.robot.commands.drive.pathfind.Point;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
-import frc.robot.commands.shooter.Shoot;
 import frc.robot.constants.ShooterConstants.Setpoint;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -30,8 +29,8 @@ public enum AutoNode {
     POS3(ChoreoVars.Poses.pos_3),
     BALLS_LHS(ChoreoVars.Poses.balls_lhs),
     BALLS_RHS(ChoreoVars.Poses.balls_rhs),
-    CENTER_LHS(ChoreoVars.Poses.center_lhs, 1),
-    CENTER_RHS(ChoreoVars.Poses.center_rhs, 1),
+    CENTER_LHS(ChoreoVars.Poses.center_lhs, 0.75),
+    CENTER_RHS(ChoreoVars.Poses.center_rhs, 0.75),
     TRENCH_SCORE(ChoreoVars.Poses.trench_score),
     HUB_SCORE(ChoreoVars.Poses.hub_score),
     OUTPOST(ChoreoVars.Poses.outpost),
@@ -90,9 +89,8 @@ public enum AutoNode {
                 shooter,
                 Setpoint.kMedium
             );
-            case TRENCH_SCORE, HUB_SCORE -> new Shoot(spindexer);
             case OUTPOST -> new WaitCommand(5); // Wait load balls
-            case OUTPOST_SCORE -> new PointAndShoot(
+            case OUTPOST_SCORE, TRENCH_SCORE, HUB_SCORE -> new PointAndShoot(
                 drive,
                 spindexer,
                 shooter,

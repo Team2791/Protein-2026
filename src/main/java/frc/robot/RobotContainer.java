@@ -10,7 +10,7 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.commands.drive.JoystickDrive;
 import frc.robot.commands.drive.PointAtHub;
 import frc.robot.commands.drive.SysId;
-import frc.robot.commands.intake.Deploy;
+import frc.robot.commands.intake.Retract;
 import frc.robot.commands.intake.Roll;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -150,8 +150,7 @@ public class RobotContainer {
             .b()
             .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kLow));
 
-        operctl.a().onTrue(new Deploy(intake, false));
-        operctl.a().onFalse(new Deploy(intake, true));
+        operctl.a().toggleOnTrue(new Retract(intake));
         operctl.rightBumper().whileTrue(new Roll(intake, RollerState.kStopped));
         operctl.leftBumper().whileTrue(new Roll(intake, RollerState.kReverse));
     }

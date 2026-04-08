@@ -95,6 +95,10 @@ public class Quest {
      * @return The latest heading, if available
      */
     public Optional<Rotation2d> heading() {
+        return botPose().map(pose -> pose.getRotation());
+    }
+
+    public Optional<Pose2d> botPose() {
         PoseFrame[] frames = this.quest.data.readings;
         PoseFrame[] tracking = Arrays.stream(frames)
             .filter(PoseFrame::isTracking)
@@ -106,7 +110,6 @@ public class Quest {
             tracking[tracking.length - 1].questPose3d()
                 .transformBy(kBotToQuest.inverse())
                 .toPose2d()
-                .getRotation()
         );
     }
 

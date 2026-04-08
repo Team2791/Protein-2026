@@ -10,10 +10,9 @@ import frc.robot.subsystems.intake.Intake;
  * <p>
  * Finishes once the pivot PID reports at-target (deployed or retracted).
  */
-public class Deploy extends Command {
+public class Retract extends Command {
 
     final Intake intake;
-    final boolean deployed;
 
     /**
      * Creates a Deploy command.
@@ -21,19 +20,23 @@ public class Deploy extends Command {
      * @param intake   The intake subsystem
      * @param deployed {@code true} to deploy, {@code false} to retract
      */
-    public Deploy(Intake intake, boolean deployed) {
+    public Retract(Intake intake) {
         this.intake = intake;
-        this.deployed = deployed;
         addRequirements(intake);
     }
 
     @Override
     public void initialize() {
-        intake.deploy(deployed);
+        intake.deploy(false);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        intake.deploy(true);
     }
 
     @Override
     public boolean isFinished() {
-        return intake.pivotData().leader.pid().atTarget();
+        return false;
     }
 }

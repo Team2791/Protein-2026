@@ -64,7 +64,7 @@ public class SparkConfigConstants {
             kSpindexer.smartCurrentLimit(
                 MotorConstants.NeoVortex.kCurrentLimit
             );
-            kKicker.smartCurrentLimit(50);
+            kKicker.smartCurrentLimit(60);
 
             kSpindexer.encoder.positionConversionFactor(kTau);
             kSpindexer.encoder.velocityConversionFactor(kTau / 60.0);

@@ -81,7 +81,7 @@ public final class IntakeConstants {
         public static final double kVelocityThreshold = 1;
 
         /** Position delta (rad) above the deployed rest position that triggers corrective downward power. */
-        public static final double kPushThreshold = 0.1;
+        public static final double kPushThreshold = 0.05;
 
         /** Duty cycle applied to the pivot motor during deploy/retract. */
         public static final double kDeployPower = 0.3;
