@@ -19,7 +19,7 @@ public final class SpindexerConstants {
         private Motor() {}
 
         /** Idle mode for the spindexer motors (brake holds position when stopped). */
-        public static final IdleMode kIdleMode = IdleMode.kBrake;
+        public static final IdleMode kIdleMode = IdleMode.kCoast;
     }
 
     /**
