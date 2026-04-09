@@ -9,8 +9,6 @@ import frc.robot.auto.generated.ChoreoVars;
 import frc.robot.commands.drive.pathfind.PIDLerp;
 import frc.robot.commands.drive.pathfind.Point;
 import frc.robot.commands.shooter.PointAndShoot;
-import frc.robot.commands.shooter.SetShooter;
-import frc.robot.constants.ShooterConstants.Setpoint;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -83,12 +81,7 @@ public enum AutoNode {
     Command onEnter(Drive drive, Shooter shooter, Spindexer spindexer) {
         return switch (this) {
             case POS1, POS3 -> Commands.none();
-            case POS2 -> new SetShooter(shooter, Setpoint.kMedium);
             case BALLS_LHS, BALLS_RHS -> Commands.none(); // I/A in future, start intake
-            case CENTER_LHS, CENTER_RHS -> new SetShooter(
-                shooter,
-                Setpoint.kMedium
-            );
             case OUTPOST -> new WaitCommand(5); // Wait load balls
             case OUTPOST_SCORE, TRENCH_SCORE, HUB_SCORE -> new PointAndShoot(
                 drive,
@@ -96,7 +89,7 @@ public enum AutoNode {
                 shooter,
                 null
             );
-            case CANCEL -> Commands.none();
+            case CANCEL, POS2, CENTER_LHS, CENTER_RHS -> Commands.none();
         };
     }
 

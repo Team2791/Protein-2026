@@ -136,19 +136,15 @@ public class RobotContainer {
 
         driverctl
             .y()
-            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kFar));
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kHigh));
 
         driverctl
             .x()
-            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kMedium));
-
-        driverctl
-            .a()
-            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kNear));
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kLow));
 
         driverctl
             .b()
-            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kLow));
+            .onTrue(new SetShooter(shooter, ShooterConstants.Setpoint.kAuto));
 
         operctl.a().toggleOnTrue(new Retract(intake));
         operctl.rightBumper().whileTrue(new Roll(intake, RollerState.kStopped));

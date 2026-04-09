@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase {
      * @param setpoint The manual setpoint, or {@code null} for auto
      */
     public void manual(ShooterConstants.Setpoint setpoint) {
-        this.manual = setpoint != ShooterConstants.Setpoint.kRegress;
+        this.manual = setpoint != ShooterConstants.Setpoint.kAuto;
         if (manual) io.setVelocity(setpoint.velocity);
     }
 
@@ -93,18 +93,10 @@ public class Shooter extends SubsystemBase {
         Vec2 delta = hub.sub(new Vec2(blue));
         double dist = delta.mag();
 
-        SmartDashboard.putNumber("Shooter/Dist2Hub", dist);
-        double dbvel = SmartDashboard.getNumber("Shooter/Setpoint", 0);
-
-        if (dbvel != 0) {
-            io.setVelocity(-dbvel);
-            return;
-        }
-
         if (manual) return;
 
         if (blue.getX() > ShooterConstants.kSpinUpThreshold) {
-            io.setVelocity(ShooterConstants.Setpoint.kLow.velocity);
+            io.setVelocity(ShooterConstants.Setpoint.kSpinDown.velocity);
             return;
         }
 
