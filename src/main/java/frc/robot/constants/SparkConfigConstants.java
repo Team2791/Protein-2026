@@ -88,8 +88,8 @@ public class SparkConfigConstants {
             kFollower = new SparkFlexConfig();
 
             // current limits
-            kLeader.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
-            kFollower.smartCurrentLimit(MotorConstants.NeoVortex.kCurrentLimit);
+            kLeader.smartCurrentLimit(80);
+            kFollower.smartCurrentLimit(80);
 
             // encoder conversion: motor rad → wheel rad (includes reduction)
             kLeader.encoder.positionConversionFactor(

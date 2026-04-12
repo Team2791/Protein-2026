@@ -76,14 +76,14 @@ public final class IntakeConstants {
          * (i.e. a value {@literal >} 1 means the motor spins faster than the output).
          * Adjust this to match the physical gearbox ratio.
          */
-        public static final double kReduction = 9;
+        public static final double kReduction = 20;
 
         public static final double kVelocityThreshold = 1;
 
         /** Position delta (rad) above the deployed rest position that triggers corrective downward power. */
-        public static final double kPushThreshold = 0.05;
+        public static final double kPushThreshold = 0.1;
 
         /** Duty cycle applied to the pivot motor during deploy/retract. */
-        public static final double kDeployPower = 0.3;
+        public static final double kDeployPower = -0.5;
     }
 }
