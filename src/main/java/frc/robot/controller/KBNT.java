@@ -40,6 +40,8 @@ import java.util.function.BooleanSupplier;
  *   // Create a trigger that activates when a key is pressed. Will never trigger if not registered.
  *   Trigger aTrigger = kbnt.trigger('a');
  * </pre>
+ *
+ * @see https://github.com/onlycs/kbnt
  */
 public class KBNT {
 

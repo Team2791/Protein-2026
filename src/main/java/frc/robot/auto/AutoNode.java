@@ -9,6 +9,9 @@ import frc.robot.auto.generated.ChoreoVars;
 import frc.robot.commands.drive.pathfind.PIDLerp;
 import frc.robot.commands.drive.pathfind.Point;
 import frc.robot.commands.shooter.PointAndShoot;
+import frc.robot.commands.shooter.SetShooter;
+import frc.robot.commands.shooter.Shoot;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -22,17 +25,21 @@ import frc.robot.util.AllianceUtil;
  * or climbing.
  */
 public enum AutoNode {
-    POS1(ChoreoVars.Poses.pos_1),
-    POS2(ChoreoVars.Poses.pos_2),
-    POS3(ChoreoVars.Poses.pos_3),
     BALLS_LHS(ChoreoVars.Poses.balls_lhs),
     BALLS_RHS(ChoreoVars.Poses.balls_rhs),
     CENTER_LHS(ChoreoVars.Poses.center_lhs, 0.75),
     CENTER_RHS(ChoreoVars.Poses.center_rhs, 0.75),
-    TRENCH_SCORE(ChoreoVars.Poses.trench_score),
+    DEPOT(ChoreoVars.Poses.depot),
     HUB_SCORE(ChoreoVars.Poses.hub_score),
     OUTPOST(ChoreoVars.Poses.outpost),
     OUTPOST_SCORE(ChoreoVars.Poses.outpost_score),
+    POS1(ChoreoVars.Poses.pos_1),
+    LHS_SCORE(ChoreoVars.Poses.pos_1),
+    POS2(ChoreoVars.Poses.pos_2),
+    POS3(ChoreoVars.Poses.pos_3),
+    SHUTTLE_LHS(ChoreoVars.Poses.shuttle_lhs),
+    SHUTTLE_RHS(ChoreoVars.Poses.shuttle_rhs),
+    TRENCH_SCORE(ChoreoVars.Poses.trench_score),
     CANCEL(new Pose2d());
 
     final Pose2d pose;
@@ -58,15 +65,19 @@ public enum AutoNode {
             case POS1 -> "Position 1 (Left)";
             case POS2 -> "Position 2 (Middle)";
             case POS3 -> "Position 3 (Right)";
-            case BALLS_LHS -> "Center Intake (Left)";
-            case BALLS_RHS -> "Center Intake (Right)";
-            case CENTER_LHS -> "Center (Left)";
-            case CENTER_RHS -> "Center (Right)";
-            case TRENCH_SCORE -> "Trench Score";
+            case BALLS_LHS -> "Start Center Intake (Left)";
+            case BALLS_RHS -> "Start Center Intake (Right)";
+            case CENTER_LHS -> "End Center Intake (Left)";
+            case CENTER_RHS -> "End Center Intake (Right)";
+            case SHUTTLE_LHS -> "Shuttle (Left)";
+            case SHUTTLE_RHS -> "Shuttle (Right)";
+            case TRENCH_SCORE -> "Trench Score (Right)";
             case HUB_SCORE -> "Center Score";
             case OUTPOST -> "Outpost";
             case OUTPOST_SCORE -> "Outpost Score";
+            case LHS_SCORE -> "Trench Score (Left)";
             case CANCEL -> "All Done";
+            case DEPOT -> "Depot";
         };
     }
 
@@ -80,16 +91,29 @@ public enum AutoNode {
      */
     Command onEnter(Drive drive, Shooter shooter, Spindexer spindexer) {
         return switch (this) {
-            case POS1, POS3 -> Commands.none();
-            case BALLS_LHS, BALLS_RHS -> Commands.none(); // I/A in future, start intake
-            case OUTPOST -> new WaitCommand(5); // Wait load balls
-            case OUTPOST_SCORE, TRENCH_SCORE, HUB_SCORE -> new PointAndShoot(
-                drive,
-                spindexer,
-                shooter,
-                null
+            case OUTPOST, DEPOT -> new WaitCommand(3); // Wait load balls
+            case
+                OUTPOST_SCORE,
+                TRENCH_SCORE,
+                HUB_SCORE,
+                LHS_SCORE -> Commands.sequence(
+                new SetShooter(shooter, ShooterConstants.Setpoint.kAuto),
+                new PointAndShoot(drive, spindexer, shooter).withTimeout(5)
             );
-            case CANCEL, POS2, CENTER_LHS, CENTER_RHS -> Commands.none();
+            case SHUTTLE_LHS, SHUTTLE_RHS -> Commands.sequence(
+                new SetShooter(shooter, ShooterConstants.Setpoint.kHigh),
+                new Shoot(spindexer).withTimeout(3),
+                new SetShooter(shooter, ShooterConstants.Setpoint.kAuto)
+            );
+            case
+                POS1,
+                POS3,
+                BALLS_LHS,
+                BALLS_RHS,
+                CANCEL,
+                POS2,
+                CENTER_LHS,
+                CENTER_RHS -> Commands.none();
         };
     }
 

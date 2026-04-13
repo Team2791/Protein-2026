@@ -263,9 +263,9 @@
         "layouts": [
           {
             "title": "System Stats",
-            "x": 400.0,
+            "x": 944.0,
             "y": 416.0,
-            "width": 528.0,
+            "width": 464.0,
             "height": 304.0,
             "type": "List Layout",
             "properties": {
@@ -348,7 +348,7 @@
                 "height": 16.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/AdvantageKit/Quest/connected",
+                  "topic": "/AdvantageKit/RealOutputs/Quest/Ok",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -379,11 +379,11 @@
         ],
         "containers": [
           {
-            "title": "Auto Starting Position",
+            "title": "StartPos",
             "x": 0.0,
             "y": 0.0,
-            "width": 400.0,
-            "height": 112.0,
+            "width": 272.0,
+            "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto/StartPos",
@@ -392,11 +392,11 @@
             }
           },
           {
-            "title": "Auto First Task",
+            "title": "Task1",
             "x": 0.0,
-            "y": 112.0,
-            "width": 400.0,
-            "height": 112.0,
+            "y": 128.0,
+            "width": 272.0,
+            "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto/Task1",
@@ -405,11 +405,11 @@
             }
           },
           {
-            "title": "Auto Second Task",
+            "title": "Task2",
             "x": 0.0,
-            "y": 224.0,
-            "width": 400.0,
-            "height": 112.0,
+            "y": 256.0,
+            "width": 272.0,
+            "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto/Task2",
@@ -418,10 +418,10 @@
             }
           },
           {
-            "title": "Auto Third Task",
+            "title": "Task3",
             "x": 0.0,
-            "y": 336.0,
-            "width": 400.0,
+            "y": 384.0,
+            "width": 272.0,
             "height": 112.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -432,9 +432,9 @@
           },
           {
             "title": "Field",
-            "x": 400.0,
+            "x": 544.0,
             "y": 0.0,
-            "width": 1008.0,
+            "width": 864.0,
             "height": 416.0,
             "type": "Field",
             "properties": {
@@ -453,8 +453,8 @@
           },
           {
             "title": "Battery Voltage",
-            "x": 0.0,
-            "y": 448.0,
+            "x": 544.0,
+            "y": 416.0,
             "width": 400.0,
             "height": 144.0,
             "type": "Voltage View",
@@ -471,10 +471,10 @@
           },
           {
             "title": "Enabled",
-            "x": 0.0,
-            "y": 592.0,
+            "x": 544.0,
+            "y": 560.0,
             "width": 400.0,
-            "height": 128.0,
+            "height": 160.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/Enabled",
@@ -484,19 +484,6 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
-            }
-          },
-          {
-            "title": "Camera",
-            "x": 928.0,
-            "y": 416.0,
-            "width": 480.0,
-            "height": 304.0,
-            "type": "Camera Stream",
-            "properties": {
-              "topic": "/CameraPublisher/photonvision_Port_1188_Output_MJPEG_Server",
-              "period": 0.06,
-              "rotation_turns": 0
             }
           },
           {
@@ -510,6 +497,110 @@
               "topic": "/CameraPublisher/SubwaySurfers",
               "period": 0.06,
               "rotation_turns": 0
+            }
+          },
+          {
+            "title": "Task4",
+            "x": 0.0,
+            "y": 496.0,
+            "width": 272.0,
+            "height": 112.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task4",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task6",
+            "x": 272.0,
+            "y": 0.0,
+            "width": 272.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task6",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task7",
+            "x": 272.0,
+            "y": 128.0,
+            "width": 272.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task7",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task8",
+            "x": 272.0,
+            "y": 256.0,
+            "width": 272.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task8",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task9",
+            "x": 272.0,
+            "y": 384.0,
+            "width": 272.0,
+            "height": 112.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task9",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task10",
+            "x": 272.0,
+            "y": 496.0,
+            "width": 272.0,
+            "height": 112.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task10",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task11",
+            "x": 272.0,
+            "y": 608.0,
+            "width": 272.0,
+            "height": 112.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task11",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Task5",
+            "x": 0.0,
+            "y": 608.0,
+            "width": 272.0,
+            "height": 112.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Task5",
+              "period": 0.06,
+              "sort_options": false
             }
           }
         ]

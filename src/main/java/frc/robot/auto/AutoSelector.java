@@ -50,7 +50,7 @@ public class AutoSelector {
     final List<AutoNode> current = new ArrayList<>();
 
     List<LoggedDashboardChooser<AutoNode>> choosers = new ArrayList<>();
-    static final int NUM_CHOOSERS = 5;
+    static final int NUM_CHOOSERS = 12;
 
     /**
      * Constructs an AutoSelector with the given Drive subsystem.

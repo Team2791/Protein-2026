@@ -23,4 +23,8 @@ public class PointAndShoot extends ParallelCommandGroup {
     ) {
         addCommands(new PointAtHub(drive, shooter, ctl), new Shoot(spindexer));
     }
+
+    public PointAndShoot(Drive drive, Spindexer spindexer, Shooter shooter) {
+        this(drive, spindexer, shooter, null);
+    }
 }

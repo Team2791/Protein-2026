@@ -14,6 +14,8 @@ public final class ChoreoVars {
     public static final Distance balls_rad = Units.Meters.of(2.31013);
     public static final Distance bot_rad = Units.Meters.of(0.447675);
     public static final Distance center_x = Units.Meters.of(8.270494);
+    public static final Distance depot_center = Units.Meters.of(5.9632596);
+    public static final Distance depot_width = Units.Meters.of(0.6858);
     public static final Distance hub_y = Units.Meters.of(4.0346376);
     public static final Distance outpost_y = Units.Meters.of(0.665988);
     public static final Distance pad = Units.Meters.of(0.0508);
@@ -27,12 +29,15 @@ public final class ChoreoVars {
         public static final Pose2d balls_rhs = new Pose2d(7.772019, 1.2260326, Rotation2d.fromRadians(3.1415927));
         public static final Pose2d center_lhs = new Pose2d(7.772019, 4.5331126, Rotation2d.fromRadians(0));
         public static final Pose2d center_rhs = new Pose2d(7.772019, 3.5361626, Rotation2d.fromRadians(3.1415927));
+        public static final Pose2d depot = new Pose2d(1.184275, 5.9632596, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d hub_score = new Pose2d(2.212594, 4.0346376, Rotation2d.fromRadians(0));
-        public static final Pose2d outpost = new Pose2d(0.498475, 0.665988, Rotation2d.fromRadians(1.5707963));
+        public static final Pose2d outpost = new Pose2d(0.752475, 0.665988, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d outpost_score = new Pose2d(0.94615, 0.869188, Rotation2d.fromRadians(1.5707963));
         public static final Pose2d pos_1 = new Pose2d(3.555619, 7.435088, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d pos_2 = new Pose2d(3.555619, 4.0346376, Rotation2d.fromRadians(0));
         public static final Pose2d pos_3 = new Pose2d(3.555619, 0.634238, Rotation2d.fromRadians(1.5707963));
+        public static final Pose2d shuttle_lhs = new Pose2d(6.25, 5.5, Rotation2d.fromRadians(3.1415927));
+        public static final Pose2d shuttle_rhs = new Pose2d(6.25, 2.5, Rotation2d.fromRadians(3.1415927));
         public static final Pose2d trench_score = new Pose2d(4.298569, 0.634238, Rotation2d.fromRadians(1.5707963));
     }
 }

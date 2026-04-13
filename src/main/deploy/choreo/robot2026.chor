@@ -25,6 +25,20 @@
      "val":8.270494
     }
    },
+   "depot_center":{
+    "dimension":"Length",
+    "var":{
+     "exp":"hub_y + 75.93 in",
+     "val":5.9632596
+    }
+   },
+   "depot_width":{
+    "dimension":"Length",
+    "var":{
+     "exp":"27 in",
+     "val":0.6858
+    }
+   },
    "hub_y":{
     "dimension":"Length",
     "var":{
@@ -132,6 +146,20 @@
      "val":3.141592653589793
     }
    },
+   "depot":{
+    "x":{
+     "exp":"depot_width + bot_rad + pad",
+     "val":1.184275
+    },
+    "y":{
+     "exp":"depot_center",
+     "val":5.9632596
+    },
+    "heading":{
+     "exp":"-90 deg",
+     "val":-1.5707963267948966
+    }
+   },
    "hub_score":{
     "x":{
      "exp":"start_line - 4 * bot_rad",
@@ -148,16 +176,16 @@
    },
    "outpost":{
     "x":{
-     "exp":"bot_rad + pad",
-     "val":0.498475
+     "exp":"bot_rad + 6 * pad",
+     "val":0.752475
     },
     "y":{
      "exp":"outpost_y",
      "val":0.6659879999999999
     },
     "heading":{
-     "exp":"90 deg",
-     "val":1.5707963267948966
+     "exp":"-90 deg",
+     "val":-1.5707963267948966
     }
    },
    "outpost_score":{
@@ -214,6 +242,34 @@
     "heading":{
      "exp":"90 deg",
      "val":1.5707963267948966
+    }
+   },
+   "shuttle_lhs":{
+    "x":{
+     "exp":"6.25 m",
+     "val":6.25
+    },
+    "y":{
+     "exp":"5.5 m",
+     "val":5.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "shuttle_rhs":{
+    "x":{
+     "exp":"6.25 m",
+     "val":6.25
+    },
+    "y":{
+     "exp":"2.5 m",
+     "val":2.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    },
    "trench_score":{
