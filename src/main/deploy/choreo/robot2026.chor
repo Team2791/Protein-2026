@@ -124,8 +124,8 @@
      "val":7.772019
     },
     "y":{
-     "exp":"hub_y + bot_rad + pad",
-     "val":4.5331126
+     "exp":"hub_y + bot_rad + 12 * pad",
+     "val":5.091912600000001
     },
     "heading":{
      "exp":"0 deg",
@@ -138,8 +138,8 @@
      "val":7.772019
     },
     "y":{
-     "exp":"hub_y - bot_rad - pad",
-     "val":3.5361625999999995
+     "exp":"hub_y - bot_rad - 12 * pad",
+     "val":2.9773626
     },
     "heading":{
      "exp":"180 deg",
@@ -358,7 +358,7 @@
  },
  "generationFeatures":[],
  "codegen":{
-  "root":"../../java/frc/robot/auto/generated",
+  "root":"..\\..\\java\\frc\\robot\\auto\\generated",
   "genVars":true,
   "genTrajData":true,
   "useChoreoLib":true

@@ -82,7 +82,7 @@ public final class ShooterConstants {
      * When the robot's blue-frame X position exceeds this value, the robot is too
      * far from the hub to shoot and the flywheel is commanded to stop.
      */
-    public static final double kSpinUpThreshold = Inches.of(215.61).in(Meters);
+    public static final double kSpinUpThreshold = Inches.of(230).in(Meters);
 
     /** Constants for the {@link frc.robot.commands.shooter.Shoot} command. */
     public static final class Shoot {
@@ -100,8 +100,8 @@ public final class ShooterConstants {
     }
 
     public static final Transform2d kBotToShooter = new Transform2d(
-        Units.inchesToMeters(-8.0625),
-        Units.inchesToMeters(8.25),
+        Units.inchesToMeters(-7.5),
+        Units.inchesToMeters(7.195),
         new Rotation2d()
     );
 

@@ -98,7 +98,8 @@ public enum AutoNode {
                 HUB_SCORE,
                 LHS_SCORE -> Commands.sequence(
                 new SetShooter(shooter, ShooterConstants.Setpoint.kAuto),
-                new PointAndShoot(drive, spindexer, shooter).withTimeout(5)
+                Commands.waitUntil(shooter::inTolerance),
+                new PointAndShoot(drive, spindexer, shooter)
             );
             case SHUTTLE_LHS, SHUTTLE_RHS -> Commands.sequence(
                 new SetShooter(shooter, ShooterConstants.Setpoint.kHigh),

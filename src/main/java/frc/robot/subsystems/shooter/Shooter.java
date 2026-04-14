@@ -8,6 +8,7 @@ import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.MathPlus;
 import frc.robot.util.Vec2;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.AutoLogOutputManager;
@@ -78,6 +79,10 @@ public class Shooter extends SubsystemBase {
     public void manual(ShooterConstants.Setpoint setpoint) {
         this.manual = setpoint != ShooterConstants.Setpoint.kAuto;
         if (manual) io.setVelocity(setpoint.velocity);
+    }
+
+    public boolean inTolerance() {
+        return MathPlus.atTolerance(io.data.leader.velocity(), io.data.leader.pid().target(), 50);
     }
 
     /** Calls {@link ShooterIO#update()} every robot loop to refresh sensor data. */
