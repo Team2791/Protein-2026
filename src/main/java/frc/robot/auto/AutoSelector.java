@@ -13,49 +13,58 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * AutoSelector provides a three-stage autonomous routine selection system for FRC robots.
+ * Builds autonomous routines from an ordered sequence of {@link AutoTask} steps
+ * selected via a cascade of up to {@value #NUM_CHOOSERS} SmartDashboard choosers.
  *
- * This class creates a hierarchical selection interface using three dashboard choosers that
- * dynamically update based on previous selections. The first chooser allows selection of
- * starting positions, the second chooser populates with valid transitions from the first
- * selection, and the third chooser populates with valid transitions from the second selection.
+ * <h3>Selection model</h3>
+ * <p>The first chooser ({@code Auto/StartPos}) always offers the three starting positions
+ * plus {@link AutoTask#Cancel}. When the driver picks a value, {@link #update(int, AutoTask)}
+ * fires, populates chooser 1 ({@code Auto/Task1}) with all available tasks, and registers
+ * the same listener on it. Each subsequent chooser cascades the same way: selecting a value
+ * populates the next chooser. Selecting {@link AutoTask#Cancel} at any stage leaves
+ * subsequent choosers empty and signals {@link #build} to stop there.
  *
- * The selector uses an AutoGraph to determine valid transitions between AutoNodes and
- * automatically loads all available Choreo trajectories into the factory cache for
- * efficient path planning.
+ * <p>If the driver goes back and changes an earlier chooser, {@link #cutoff(int)} tears down
+ * all later choosers and rebuilds them from scratch so stale selections cannot leak into
+ * the built routine.
  *
- * Key Features:
- * - Dynamic chooser population based on graph transitions
- * - Automatic trajectory caching from ChoreoTraj
- * - Support for canceling autonomous sequences at any stage
- * - Integration with Elastic notifications for error reporting
- * - Alliance-aware pose handling with automatic field flipping
+ * <h3>Building a routine</h3>
+ * <p>Call {@link #build(Drive, Shooter, Spindexer)} from {@code Robot.autonomousInit()}.
+ * The method iterates {@link #current}, prepends an odometry reset for starting-position
+ * steps, and sequences the {@link AutoTask#full} commands into a single {@link Command}.
  *
- * Usage:
- * 1. Create an AutoSelector instance with a Drive subsystem
- * 2. Call build() to generate an AutoRoutine based on current selections
- * 3. The routine will execute the selected path with appropriate transitions
+ * <h3>Trajectory caching</h3>
+ * <p>All {@link ChoreoTraj} trajectories are loaded into the {@link AutoFactory} cache at
+ * construction time so that the first autonomous run incurs no I/O delay.
  *
- * The selector handles null selections gracefully and provides feedback through
- * Elastic notifications when trajectory transitions are not available.
- *
- * @see AutoFactory
- * @see AutoNode
- * @see AutoGraph
- * @see ChoreoTraj
+ * @see AutoTask
  */
 public class AutoSelector {
 
+    /** Choreo trajectory factory used for path-following segments. */
     final AutoFactory factory;
-    final List<AutoNode> current = new ArrayList<>();
 
-    List<LoggedDashboardChooser<AutoNode>> choosers = new ArrayList<>();
+    /**
+     * Ordered list of the driver's current selections, one entry per chooser that has
+     * been touched. {@link AutoTask#Cancel} is not stored here — it acts as a sentinel
+     * during {@link #build} and terminates iteration.
+     */
+    final List<AutoTask> current = new ArrayList<>();
+
+    /**
+     * Live list of dashboard choosers. Index {@code i} corresponds to the
+     * {@code (i+1)}-th decision the driver makes (index 0 = start position).
+     */
+    List<LoggedDashboardChooser<AutoTask>> choosers = new ArrayList<>();
+
+    /** Maximum number of sequential task selections supported. */
     static final int NUM_CHOOSERS = 12;
 
     /**
-     * Constructs an AutoSelector with the given Drive subsystem.
-     * @param drive Drive subsystem
-     * @see AutoSelector
+     * Constructs the AutoSelector, wires the trajectory factory, pre-loads all
+     * Choreo trajectories, and initializes the start-position chooser.
+     *
+     * @param drive drive subsystem (used for pose getter/setter and field visualization)
      */
     public AutoSelector(Drive drive) {
         factory = new AutoFactory(
@@ -65,9 +74,9 @@ public class AutoSelector {
             true,
             drive,
             (traj, starting) -> {
-                // this function is called if a trajectory starts or finished
-                // the `starting` parameter is true if the trajectory is starting, false if it is ending
-                // if we are ending a trajectory, do cleanup...
+                // Called whenever a Choreo trajectory starts or finishes.
+                // On finish: clear the trajectory visualization.
+                // On start: log and visualize the full trajectory path.
                 if (!starting) {
                     Pose2d[] empty = new Pose2d[0];
                     Logger.recordOutput("Auto/Trajectory", empty);
@@ -75,7 +84,6 @@ public class AutoSelector {
                     return;
                 }
 
-                // otherwise, log+visualize the trajectory
                 Pose2d[] trj = traj.getPoses();
                 Pose2d[] flipped = AllianceUtil.autoflip(trj).orElse(trj);
                 Logger.recordOutput("Auto/Trajectory", flipped);
@@ -83,122 +91,143 @@ public class AutoSelector {
             }
         );
 
+        // Pre-load all trajectories into the factory cache to avoid I/O at match start.
         for (ChoreoTraj traj : ChoreoTraj.ALL_TRAJECTORIES.values()) {
             factory.cache().loadTrajectory(traj.name());
         }
 
+        // Create all choosers upfront; only the first is populated here.
         for (int i = 0; i < NUM_CHOOSERS; i++) {
-            LoggedDashboardChooser<AutoNode> c = chooser(i);
+            LoggedDashboardChooser<AutoTask> c = chooser(i);
             choosers.add(c);
         }
 
-        LoggedDashboardChooser<AutoNode> s0 = choosers.get(0);
-        add(s0, AutoNode.POS1);
-        add(s0, AutoNode.POS2);
-        add(s0, AutoNode.POS3);
-        add(s0, AutoNode.CANCEL);
+        // Populate chooser 0 with the three starting positions.
+        LoggedDashboardChooser<AutoTask> s0 = choosers.get(0);
+        add(s0, AutoTask.StartPos1);
+        add(s0, AutoTask.StartPos2);
+        add(s0, AutoTask.StartPos3);
+        add(s0, AutoTask.Cancel);
 
         s0.onChange(node -> update(0, node));
     }
 
     /**
-     * Helper method to add an AutoNode option to a chooser.
-     * @param c The chooser to add the option to
-     * @param n The AutoNode to add as an option
+     * Adds {@code n} to chooser {@code c} using its {@link AutoTask#label()} as the
+     * display string.
      */
-    private void add(LoggedDashboardChooser<AutoNode> c, AutoNode n) {
+    private void add(LoggedDashboardChooser<AutoTask> c, AutoTask n) {
         c.addOption(n.label(), n);
     }
 
     /**
-     * Called when chooser {@code n} changes to {@code change}.
+     * Handles a selection change on chooser {@code n}.
      *
      * <ol>
-     *   <li>Trims all selections and choosers after index {@code n}.
-     *   <li>Records the new selection at index {@code n}.
-     *   <li>Populates the next chooser with valid graph transitions from {@code change},
-     *       plus a {@link AutoNode#CANCEL} stop option.
-     *   <li>Registers this method recursively as the next chooser's change listener.
+     *   <li>If a later selection already exists at index {@code n}, {@link #cutoff(int)}
+     *       tears down all choosers and entries from index {@code n+1} onward, then
+     *       removes the stale entry at index {@code n} from {@link #current}.
+     *   <li>Appends {@code change} to {@link #current} at index {@code n}.
+     *   <li>Populates chooser {@code n+1} with all {@link AutoTask} values plus
+     *       {@link AutoTask#Cancel}, and registers this method recursively as its listener.
      * </ol>
      *
-     * @param n      The index of the chooser that changed (0-based)
-     * @param change The newly selected {@link AutoNode}
+     * <p>If {@code n} is the last chooser index ({@value #NUM_CHOOSERS}{@code  - 1}),
+     * the method returns immediately — there is no next chooser to update.
+     *
+     * @param n      zero-based index of the chooser that changed
+     * @param change the newly selected step
      */
-    public void update(int n, AutoNode change) {
-        if (n >= NUM_CHOOSERS - 1) return; // if last chooser changed, no next chooser to update
+    public void update(int n, AutoTask change) {
+        if (n >= NUM_CHOOSERS - 1) return;
 
         if (current.size() > n) {
-            cutoff(n + 1); // reset subsequent choosers and selections
-            current.remove(n); // remove current selection at index n (last index)
+            cutoff(n + 1);
+            current.remove(n);
         }
 
-        // current.size() currently equal to n. add new selection at index n
         current.add(change);
 
-        // update next chooser based on new selection
-        Set<AutoNode> next = EnumSet.allOf(AutoNode.class);
-        LoggedDashboardChooser<AutoNode> s = choosers.get(n + 1);
+        Set<AutoTask> next = EnumSet.allOf(AutoTask.class);
+        LoggedDashboardChooser<AutoTask> s = choosers.get(n + 1);
 
-        for (AutoNode node : next) add(s, node); // populate next chooser with valid transitions from new selection
-        add(s, AutoNode.CANCEL); // add cancel/stop option to next chooser
-        s.onChange(node -> update(n + 1, node)); // set up next chooser to update after selection
+        for (AutoTask node : next) add(s, node);
+        add(s, AutoTask.Cancel);
+        s.onChange(node -> update(n + 1, node));
     }
 
     /**
-     * Recursively cuts off choosers and current selections starting from index n.
-     * This method is called when a selection is changed in one of the choosers, and it
-     * ensures that all subsequent choosers are reset and repopulated based on the new selection.
+     * Resets all choosers and current-selection entries from index {@code n} onward.
      *
-     * @param n The index of the chooser that has changed and from which to start cutting off subsequent choosers
+     * <p>Each chooser's underlying {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser}
+     * is closed and replaced with a fresh instance so the dashboard reflects the reset.
+     * The corresponding entries in {@link #current} are bulk-removed.
+     *
+     * <p>Called by {@link #update} whenever the driver changes a selection that has
+     * already cascaded to later choosers.
+     *
+     * @param n index of the first chooser to reset (inclusive)
      */
     private void cutoff(int n) {
         current.subList(n, current.size()).clear();
 
         while (n < choosers.size()) {
             choosers.get(n).getSendableChooser().close();
-            LoggedDashboardChooser<AutoNode> next = chooser(n);
+            LoggedDashboardChooser<AutoTask> next = chooser(n);
             choosers.set(n, next);
             n++;
         }
     }
 
     /**
-     * Helper method to create a LoggedDashboardChooser for AutoNode selections.
-     * @param n The index of the chooser (used for naming and identification)
-     * @return A new LoggedDashboardChooser instance
+     * Creates a fresh, empty {@link LoggedDashboardChooser} for position {@code n}.
+     *
+     * <p>Chooser 0 is named {@code Auto/StartPos}; all others are named
+     * {@code Auto/Task}<i>n</i>.
+     *
+     * @param n zero-based chooser index
+     * @return a new, unpopulated chooser
      */
-    private LoggedDashboardChooser<AutoNode> chooser(int n) {
+    private LoggedDashboardChooser<AutoTask> chooser(int n) {
         if (n == 0) return new LoggedDashboardChooser<>("Auto/StartPos");
         else return new LoggedDashboardChooser<>("Auto/Task" + n);
     }
 
     /**
-     * Builds an AutoRoutine based on the current selections in the choosers.
+     * Assembles a {@link Command} that executes all currently selected steps in order.
      *
-     * <p>
-     * This method retrieves the selected AutoNodes from the three choosers and constructs a command sequence
-     * that follows the selected path through the AutoGraph. It handles null selections and "Cancel" options
-     * gracefully, allowing for flexible autonomous routine construction.
+     * <p>For each step in {@link #current} (up to but not including the first
+     * {@link AutoTask#Cancel}):
+     * <ol>
+     *   <li>If the step has a non-null {@link AutoTask#resetTo}, prepends a
+     *       {@code Commands.runOnce} that calls {@link Drive#setPose} with the
+     *       alliance-flipped pose, ensuring odometry is correct before the step runs.
+     *   <li>Appends the step's command via {@link AutoTask#full}.
+     * </ol>
      *
-     * @param drive The Drive subsystem to use for trajectory following
-     * @return An AutoRoutine representing the selected autonomous path, or null if no valid selection was made
+     * <p>Returns {@link Commands#none()} if no selections have been made.
+     *
+     * @param drive     drive subsystem
+     * @param shooter   shooter subsystem
+     * @param spindexer spindexer subsystem
+     * @return the assembled autonomous command sequence
      */
     public Command build(Drive drive, Shooter shooter, Spindexer spindexer) {
         Command command = Commands.none();
 
         int end = current.size() - 1;
-        if (end < 0) return command; // i.e. `current` empty
-        if (current.get(end) != AutoNode.CANCEL) current.add(AutoNode.CANCEL); // ins last as buffer
+        if (end < 0) return command;
+        if (current.get(end) != AutoTask.Cancel) current.add(AutoTask.Cancel);
 
         System.out.println(current);
 
         for (int i = 0; i < current.size(); i++) {
-            AutoNode node = current.get(i);
+            AutoTask node = current.get(i);
 
-            if (node == AutoNode.CANCEL) break; // if next selection is "Cancel", stop building further commands
+            if (node == AutoTask.Cancel) break;
 
-            if (i == 0) {
-                Pose2d fieldPose = AllianceUtil.unsafe.autoflip(node.pose);
+            if (node.resetTo != null) {
+                Pose2d fieldPose = AllianceUtil.unsafe.autoflip(node.resetTo);
 
                 drive.setPose(fieldPose);
                 command = Commands.sequence(

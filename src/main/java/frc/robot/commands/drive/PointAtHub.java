@@ -37,9 +37,9 @@ public class PointAtHub extends Command {
 
     /** PID controller for rotation toward hub. */
     final PIDController ctl = new PIDController(
-        ControlConstants.Nearby.kTurnP,
-        ControlConstants.Nearby.kTurnI,
-        ControlConstants.Nearby.kTurnD
+        ControlConstants.PIDLerp.kTurnP,
+        ControlConstants.PIDLerp.kTurnI,
+        ControlConstants.PIDLerp.kTurnD
     );
 
     public PointAtHub(Drive drive, Shooter shooter, CommandXboxController ctl) {
@@ -49,7 +49,7 @@ public class PointAtHub extends Command {
         addRequirements(drive); // shooter read-only in this command
 
         this.ctl.enableContinuousInput(0, kTau);
-        this.ctl.setTolerance(ControlConstants.Nearby.kRotationTolerance);
+        this.ctl.setTolerance(ControlConstants.PIDLerp.kRotationTolerance);
 
         SmartDashboard.putData("Point/RotPID", this.ctl);
     }

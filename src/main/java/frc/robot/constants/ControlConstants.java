@@ -1,7 +1,5 @@
 package frc.robot.constants;
 
-import static frc.robot.util.MathPlus.kTau;
-
 import frc.robot.subsystems.drive.DriveConstants;
 
 /**
@@ -57,64 +55,12 @@ public final class ControlConstants {
     }
 
     /**
-     * PIDLerp's PID constants.
+     * PIDLerp's PID constants. Shared by {@link frc.robot.commands.drive.pathfind.PIDLerp},
+     * {@link frc.robot.commands.drive.pathfind.Point}, and {@link frc.robot.commands.drive.PointAtHub}.
      */
     public static final class PIDLerp {
 
         private PIDLerp() {}
-
-        /** Proportional gain for X and Y alignment errors. */
-        public static final double kOrthoP = 4.75;
-        /** Integral gain for alignment position errors. */
-        public static final double kOrthoI = 0.00;
-        /** Derivative gain for alignment position errors. */
-        public static final double kOrthoD = 0.00;
-
-        /** Proportional gain for alignment rotation error. */
-        public static final double kTurnP = 2.75;
-        /** Integral gain for alignment rotation error. */
-        public static final double kTurnI = 0.00;
-        /** Derivative gain for alignment rotation error. */
-        public static final double kTurnD = 0.04;
-
-        /** Position tolerance, meters (euclidian) */
-        public static final double kPositionTolerance = 0.005;
-        /** Rotational tolerance, radians */
-        public static final double kRotationTolerance = 0.03;
-    }
-
-    /**
-     * Repulsor's PID constants
-     */
-    public static final class Repulsor {
-
-        /** Proportional gain for X and Y alignment errors. */
-        public static final double kOrthoP = 4.75;
-        /** Integral gain for alignment position errors. */
-        public static final double kOrthoI = 0.00;
-        /** Derivative gain for alignment position errors. */
-        public static final double kOrthoD = 0.00;
-
-        /** Proportional gain for alignment rotation error. */
-        public static final double kTurnP = 2.75;
-        /** Integral gain for alignment rotation error. */
-        public static final double kTurnI = 0.00;
-        /** Derivative gain for alignment rotation error. */
-        public static final double kTurnD = 0.04;
-
-        /** Threshold to switch to nearby control, meters (euclidian) */
-        public static final double kNearbyThreshold = 0.25;
-    }
-
-    /**
-     * Vision-based alignment PID constants.
-     *
-     * <p>
-     * Used by {@link frc.robot.commands.drive.pathfind.Nearby} for fine alignment
-     */
-    public static final class Nearby {
-
-        private Nearby() {}
 
         /** Proportional gain for X and Y alignment errors. */
         public static final double kOrthoP = 4.75;
@@ -130,13 +76,8 @@ public final class ControlConstants {
         /** Derivative gain for alignment rotation error. */
         public static final double kTurnD = 0.00;
 
-        /** Maximum angular velocity during alignment (radians/second). TODO: May be increased. */
-        public static final double kMaxTurnVelocity = kTau;
-        /** Maximum angular acceleration during alignment (radians/second²). */
-        public static final double kMaxTurnAcceleration = kTau;
-
         /** Position tolerance, meters (euclidian) */
-        public static final double kPositionTolerance = 0.005;
+        public static final double kPositionTolerance = 0.03;
         /** Rotational tolerance, radians */
         public static final double kRotationTolerance = 0.03;
     }
