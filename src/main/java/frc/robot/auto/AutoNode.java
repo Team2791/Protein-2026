@@ -40,6 +40,7 @@ public enum AutoNode {
     SHUTTLE_LHS(ChoreoVars.Poses.shuttle_lhs),
     SHUTTLE_RHS(ChoreoVars.Poses.shuttle_rhs),
     TRENCH_SCORE(ChoreoVars.Poses.trench_score),
+    INTERMEDIARY(ChoreoVars.Poses.ballreturn_intermediary),
     CANCEL(new Pose2d());
 
     final Pose2d pose;
@@ -67,6 +68,7 @@ public enum AutoNode {
             case POS3 -> "Position 3 (Right)";
             case BALLS_LHS -> "Start Center Intake (Left)";
             case BALLS_RHS -> "Start Center Intake (Right)";
+            case INTERMEDIARY -> "ADD AFTER (END CENTER INTAKE, LEFT ONLY)!!!!!";
             case CENTER_LHS -> "End Center Intake (Left)";
             case CENTER_RHS -> "End Center Intake (Right)";
             case SHUTTLE_LHS -> "Shuttle (Left)";
@@ -114,7 +116,8 @@ public enum AutoNode {
                 CANCEL,
                 POS2,
                 CENTER_LHS,
-                CENTER_RHS -> Commands.none();
+                CENTER_RHS,
+                INTERMEDIARY -> Commands.none();
         };
     }
 
