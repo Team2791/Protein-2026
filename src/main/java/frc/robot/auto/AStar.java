@@ -45,7 +45,8 @@ public class AStar {
         }
 
         // Run this once after ng is loaded
-        int radiusCells = (int) Math.floor(kBumperRadius / ng.node_size_meters);
+        int radiusCells =
+            (int) Math.floor(kBumperRadius / ng.node_size_meters) - 1;
         int rows = ng.grid.length;
         int cols = ng.grid[0].length;
         boolean[][] inflated = new boolean[rows][cols];
