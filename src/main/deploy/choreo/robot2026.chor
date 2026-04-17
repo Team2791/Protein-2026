@@ -124,8 +124,8 @@
      "val":7.772019
     },
     "y":{
-     "exp":"hub_y + bot_rad + 12 * pad",
-     "val":5.091912600000001
+     "exp":"hub_y + bot_rad + 16 * pad",
+     "val":5.2951126
     },
     "heading":{
      "exp":"0 deg",
@@ -138,8 +138,8 @@
      "val":7.772019
     },
     "y":{
-     "exp":"hub_y - bot_rad - 12 * pad",
-     "val":2.9773626
+     "exp":"hub_y - bot_rad - 16 * pad",
+     "val":2.7741626000000004
     },
     "heading":{
      "exp":"180 deg",
