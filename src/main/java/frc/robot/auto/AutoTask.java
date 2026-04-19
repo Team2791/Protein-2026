@@ -2,12 +2,11 @@ package frc.robot.auto;
 
 import static frc.robot.auto.generated.ChoreoVars.Poses.*;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.drive.pathfind.ResetPose;
 import frc.robot.commands.drive.pathfind.Pathfind;
+import frc.robot.commands.drive.pathfind.ResetPose;
 import frc.robot.commands.shooter.PointAndShoot;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -50,19 +49,18 @@ import java.util.function.Function;
  * @see Pathfind
  */
 public enum AutoTask {
-
     // -------------------------------------------------------------------------
     // Starting positions — each resets odometry to the named pose
     // -------------------------------------------------------------------------
 
     /** Teleports odometry to starting position 1 (left side of the field). */
-    StartPos1(s -> new ResetPose(s.drive(), pos_1), pos_1),
+    StartPos1(s -> new ResetPose(s.drive(), pos_1)),
 
     /** Teleports odometry to starting position 2 (center of the field). */
-    StartPos2(s -> new ResetPose(s.drive(), pos_2), pos_2),
+    StartPos2(s -> new ResetPose(s.drive(), pos_2)),
 
     /** Teleports odometry to starting position 3 (right side of the field). */
-    StartPos3(s -> new ResetPose(s.drive(), pos_3), pos_3),
+    StartPos3(s -> new ResetPose(s.drive(), pos_3)),
 
     // -------------------------------------------------------------------------
     // Center ball collection — intake from the center line
@@ -220,21 +218,8 @@ public enum AutoTask {
      */
     final Function<Subsystems, Command> perform;
 
-    /**
-     * Blue-alliance pose to reset odometry to before this step runs, or {@code null}
-     * if no reset is needed. Only set for {@code StartPos*} constants.
-     *
-     * @see AutoSelector#build
-     */
-    final Pose2d resetTo;
-
     AutoTask(Function<Subsystems, Command> f) {
-        this(f, null);
-    }
-
-    AutoTask(Function<Subsystems, Command> f, Pose2d resetTo) {
         this.perform = f;
-        this.resetTo = resetTo;
     }
 
     /**

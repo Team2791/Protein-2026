@@ -199,7 +199,7 @@ public class AutoSelector {
      * <p>For each step in {@link #current} (up to but not including the first
      * {@link AutoTask#Cancel}):
      * <ol>
-     *   <li>If the step has a non-null {@link AutoTask#resetTo}, prepends a
+     *   <li>If the step has a non-null {@link AutoTask#immediateReset}, prepends a
      *       {@code Commands.runOnce} that calls {@link Drive#setPose} with the
      *       alliance-flipped pose, ensuring odometry is correct before the step runs.
      *   <li>Appends the step's command via {@link AutoTask#full}.
@@ -219,22 +219,10 @@ public class AutoSelector {
         if (end < 0) return command;
         if (current.get(end) != AutoTask.Cancel) current.add(AutoTask.Cancel);
 
-        System.out.println(current);
-
         for (int i = 0; i < current.size(); i++) {
             AutoTask node = current.get(i);
 
             if (node == AutoTask.Cancel) break;
-
-            if (node.resetTo != null) {
-                Pose2d fieldPose = AllianceUtil.unsafe.autoflip(node.resetTo);
-
-                drive.setPose(fieldPose);
-                command = Commands.sequence(
-                    command,
-                    Commands.runOnce(() -> drive.setPose(fieldPose), drive)
-                );
-            }
 
             command = Commands.sequence(
                 command,
