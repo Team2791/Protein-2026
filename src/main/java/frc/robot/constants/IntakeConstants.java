@@ -84,6 +84,6 @@ public final class IntakeConstants {
         public static final double kPushThreshold = 0.1;
 
         /** Duty cycle applied to the pivot motor during deploy/retract. */
-        public static final double kDeployPower = -0.5;
+        public static final double kDeployPower = -0.75;//prev -0.5
     }
 }
