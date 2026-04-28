@@ -144,6 +144,8 @@ public class PIDLerp extends Command {
 
         if (speeds.mag() > maxVel) {
             speeds = speeds.norm().mul(maxVel);
+        } else if(speeds.mag() <0.75 && !atlast()) { // set minimum speed
+            speeds = speeds.norm().mul(0.75);
         }
 
         Logger.recordOutput(
