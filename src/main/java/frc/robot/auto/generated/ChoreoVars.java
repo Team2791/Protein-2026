@@ -27,7 +27,7 @@ public final class ChoreoVars {
     public static final class Poses {
         public static final Pose2d balls_lhs = new Pose2d(7.772019, 6.8432426, Rotation2d.fromRadians(0));
         public static final Pose2d balls_rhs = new Pose2d(7.772019, 1.2260326, Rotation2d.fromRadians(3.1415927));
-        public static final Pose2d center_lhs = new Pose2d(7.772019, 5.2951126, Rotation2d.fromRadians(0));
+        public static final Pose2d center_lhs = new Pose2d(7.772019, 4.5413399, Rotation2d.fromRadians(0)); // change 4.541339874267578 from 5.294 
         public static final Pose2d center_rhs = new Pose2d(7.772019, 2.7741626, Rotation2d.fromRadians(3.1415927));
         public static final Pose2d depot = new Pose2d(1.184275, 5.9632596, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d hub_score = new Pose2d(2.212594, 4.0346376, Rotation2d.fromRadians(0));
