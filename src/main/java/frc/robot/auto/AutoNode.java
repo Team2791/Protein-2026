@@ -99,7 +99,7 @@ public enum AutoNode {
                 LHS_SCORE -> Commands.sequence(
                 new SetShooter(shooter, ShooterConstants.Setpoint.kAuto),
                 Commands.waitUntil(shooter::inTolerance),
-                new PointAndShoot(drive, spindexer, shooter).withTimeout(7) // added .withTimeout(7)
+                new PointAndShoot(drive, spindexer, shooter).withTimeout(5) // added .withTimeout(7)
             );
             case SHUTTLE_LHS, SHUTTLE_RHS -> Commands.sequence(
                 new SetShooter(shooter, ShooterConstants.Setpoint.kHigh),
