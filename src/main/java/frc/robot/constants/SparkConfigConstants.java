@@ -54,11 +54,11 @@ public class SparkConfigConstants {
     public static final class Spindexer {
 
         public static final SparkFlexConfig kSpindexer;
-        public static final SparkMaxConfig kKicker;
+        public static final SparkFlexConfig kKicker;
 
         static {
             kSpindexer = new SparkFlexConfig();
-            kKicker = new SparkMaxConfig();
+            kKicker = new SparkFlexConfig();
 
             // current limits
             kSpindexer.smartCurrentLimit(
