@@ -45,7 +45,7 @@ public final class IntakeConstants {
         public static final double kWheelRadius = Units.inchesToMeters(2);
 
         public enum RollerState {
-            kNormal(-0.5),
+            kNormal(-0.25),
             kStopped(0),
             kReverse(-RollerState.kNormal.power);
 
