@@ -45,7 +45,7 @@ public final class IntakeConstants {
         public static final double kWheelRadius = Units.inchesToMeters(2);
 
         public enum RollerState {
-            kNormal(-0.25),
+            kNormal(-0.5),//note: this does NOT control kicker speed, it controls the intake speed
             kStopped(0),
             kReverse(-RollerState.kNormal.power);
 
