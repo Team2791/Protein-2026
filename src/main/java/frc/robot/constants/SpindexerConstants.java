@@ -11,12 +11,14 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
  */
 public final class SpindexerConstants {
 
-    private SpindexerConstants() {}
+    private SpindexerConstants() {
+    }
 
     /** Motor configuration constants for the spindexer motors. */
     public static final class Motor {
 
-        private Motor() {}
+        private Motor() {
+        }
 
         /** Idle mode for the spindexer motors (brake holds position when stopped). */
         public static final IdleMode kIdleMode = IdleMode.kCoast;
@@ -36,5 +38,5 @@ public final class SpindexerConstants {
      * <p>
      * Positive values spin the motor forward. Tune this value on the robot.
      */
-    public static final double kKickerPower = -1;
+    public static final double kKickerPower = -0.8;
 }
