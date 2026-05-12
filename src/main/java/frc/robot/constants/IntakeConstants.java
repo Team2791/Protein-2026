@@ -20,7 +20,7 @@ public final class IntakeConstants {
         private Roller() {}
 
         /** Idle mode for roller motors */
-        public static final IdleMode kIdleMode = IdleMode.kBrake;
+        public static final IdleMode kIdleMode = IdleMode.kCoast;
 
         /** Whether the follower motor should spin opposite to the leader. */
         public static final boolean kInvertFollower = true;
