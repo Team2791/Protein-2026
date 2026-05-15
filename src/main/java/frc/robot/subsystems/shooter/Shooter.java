@@ -18,13 +18,16 @@ import org.littletonrobotics.junction.Logger;
  * Shooter subsystem for controlling the robot's ball-shooting mechanism.
  *
  * <p>
- * This subsystem wraps a {@link ShooterIO} implementation to provide a consistent interface
- * for controlling the shooter regardless of whether running on real hardware, in simulation,
+ * This subsystem wraps a {@link ShooterIO} implementation to provide a
+ * consistent interface
+ * for controlling the shooter regardless of whether running on real hardware,
+ * in simulation,
  * or in log replay.
  *
  * <p>
  * Automatic speed control is handled by the IO layer based on robot position.
- * Manual override is available via {@link #manual(ShooterConstants.Setpoint)} for debugging.
+ * Manual override is available via {@link #manual(ShooterConstants.Setpoint)}
+ * for debugging.
  */
 public class Shooter extends SubsystemBase {
 
@@ -78,11 +81,25 @@ public class Shooter extends SubsystemBase {
      */
     public void manual(ShooterConstants.Setpoint setpoint) {
         this.manual = setpoint != ShooterConstants.Setpoint.kAuto;
-        if (manual) io.setVelocity(setpoint.velocity);
+        if (manual)
+            io.setVelocity(setpoint.velocity);
     }
 
     public boolean inTolerance() {
         return MathPlus.atTolerance(io.data.leader.velocity(), io.data.leader.pid().target(), 50);
+    }
+
+    /**
+     * Returns true if the robot is past the no-shoot X threshold (blue-alliance
+     * frame).
+     * The shooter will spin down if the robot is past this threshold(in the neutral
+     * zone)
+     */
+    @AutoLogOutput(key = "Shooter/InNoShootZone")
+    public boolean inNoShootZone() {
+        Pose2d pose = drive.getPose();
+        Pose2d blue = AllianceUtil.autoflip(pose).orElse(pose);
+        return blue.getX() > ShooterConstants.kSpinUpThreshold;
     }
 
     /** Calls {@link ShooterIO#update()} every robot loop to refresh sensor data. */
@@ -98,7 +115,8 @@ public class Shooter extends SubsystemBase {
         Vec2 delta = hub.sub(new Vec2(blue));
         double dist = delta.mag();
 
-        if (manual) return;
+        if (manual)
+            return;
 
         if (blue.getX() > ShooterConstants.kSpinUpThreshold) {
             io.setVelocity(ShooterConstants.Setpoint.kSpinDown.velocity);
