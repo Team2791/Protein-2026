@@ -11,17 +11,22 @@ import edu.wpi.first.math.util.Units;
  */
 public final class ShooterConstants {
 
-    private ShooterConstants() {}
+    private ShooterConstants() {
+    }
 
     /** Motor configuration constants for the shooter flywheel motors. */
     public static final class Motor {
 
-        private Motor() {}
+        private Motor() {
+        }
 
         /** Whether the follower motor should spin opposite to the leader. */
         public static final boolean kInvertFollower = true;
 
-        /** Idle mode for the shooter motors (coast allows wheels to spin freely when stopped). */
+        /**
+         * Idle mode for the shooter motors (coast allows wheels to spin freely when
+         * stopped).
+         */
         public static final IdleMode kIdleMode = IdleMode.kCoast;
     }
 
@@ -42,10 +47,12 @@ public final class ShooterConstants {
     }
 
     /**
-     * Distance-to-velocity regression coefficients for automatic shooter speed control.
+     * Distance-to-velocity regression coefficients for automatic shooter speed
+     * control.
      *
      * <p>
-     * The regression formula is: {@code velocity = kSq * dist² + kLin * dist + kConst}
+     * The regression formula is:
+     * {@code velocity = kSq * dist² + kLin * dist + kConst}
      * where {@code dist} is the distance from the robot to the hub in meters.
      *
      * <p>
@@ -53,7 +60,8 @@ public final class ShooterConstants {
      */
     public static final class Regression {
 
-        private Regression() {}
+        private Regression() {
+        }
 
         /** Linear coefficient for the distance regression. */
         public static final double kLin = 39.964;
@@ -62,7 +70,8 @@ public final class ShooterConstants {
         public static final double kConst = 168.311;
 
         /**
-         * Applies the regression to compute the required shooter velocity at a given distance.
+         * Applies the regression to compute the required shooter velocity at a given
+         * distance.
          *
          * @param dist Distance from robot to hub in meters
          * @return The required flywheel velocity in radians/second
@@ -73,23 +82,28 @@ public final class ShooterConstants {
     }
 
     /**
-     * X-position threshold (blue-alliance frame) beyond which the shooter spins down.
+     * X-position threshold (blue-alliance frame) beyond which the shooter spins
+     * down.
      *
      * <p>
      * When the robot's blue-frame X position exceeds this value, the robot is too
      * far from the hub to shoot and the flywheel is commanded to stop.
      */
-    public static final double kSpinUpThreshold = 4.625594; //the x values that defines the robot is no longer in alliance zone
+    public static final double kSpinUpThreshold = 4.625594; // the x values that defines the robot is no longer in
+                                                            // alliance zone
 
     /** Constants for the {@link frc.robot.commands.shooter.Shoot} command. */
     public static final class Shoot {
 
-        private Shoot() {}
+        private Shoot() {
+        }
 
         /** Minimum time (seconds) the spindexer runs before checking for a stall. */
         public static final double kStallTimeout = 1.0;
 
-        /** Velocity threshold (rad/s) below which the spindexer is considered stalled. */
+        /**
+         * Velocity threshold (rad/s) below which the spindexer is considered stalled.
+         */
         public static final double kStallVelocity = 200;
 
         /** Duration (seconds) the spindexer reverses between shots. */
@@ -97,10 +111,9 @@ public final class ShooterConstants {
     }
 
     public static final Transform2d kBotToShooter = new Transform2d(
-        Units.inchesToMeters(-7.5),
-        Units.inchesToMeters(7.195),
-        new Rotation2d()
-    );
+            Units.inchesToMeters(-8.0625),
+            Units.inchesToMeters(8.25),
+            new Rotation2d());
 
     public static final double kAimFactor = 1.0;
     public static final double kWheelRadius = Units.inchesToMeters(2.0);
