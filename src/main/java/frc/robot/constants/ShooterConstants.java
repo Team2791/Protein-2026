@@ -89,8 +89,7 @@ public final class ShooterConstants {
      * When the robot's blue-frame X position exceeds this value, the robot is too
      * far from the hub to shoot and the flywheel is commanded to stop.
      */
-    public static final double kSpinUpThreshold = 4.625594; // the x values that defines the robot is no longer in
-                                                            // alliance zone
+    public static final double kSpinUpThreshold = 5.222494; // the x threshold robot not in alliance zone
 
     /** Constants for the {@link frc.robot.commands.shooter.Shoot} command. */
     public static final class Shoot {
