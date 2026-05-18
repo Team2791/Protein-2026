@@ -114,6 +114,6 @@ public final class ShooterConstants {
             Units.inchesToMeters(8.25),
             new Rotation2d());
 
-    public static final double kAimFactor = 1.0;
+    public static final double kAimFactor = 0.514; // move and shoot
     public static final double kWheelRadius = Units.inchesToMeters(2.0);
 }
