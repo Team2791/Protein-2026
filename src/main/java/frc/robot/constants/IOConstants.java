@@ -137,6 +137,6 @@ public final class IOConstants {
          * Inputs within ±{@code 0.05} of center are treated as zero
          * to prevent unintended movement from controller drift.
          */
-        public static final double kDeadband = 0.1;
+        public static final double kDeadband = 0.05;
     }
 }
