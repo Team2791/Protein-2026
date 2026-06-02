@@ -37,10 +37,9 @@ public class PointAtHub extends Command {
 
     /** PID controller for rotation toward hub. */
     final PIDController ctl = new PIDController(
-        ControlConstants.Nearby.kTurnP,
-        ControlConstants.Nearby.kTurnI,
-        ControlConstants.Nearby.kTurnD
-    );
+            ControlConstants.Nearby.kTurnP,
+            ControlConstants.Nearby.kTurnI,
+            ControlConstants.Nearby.kTurnD);
 
     public PointAtHub(Drive drive, Shooter shooter, CommandXboxController ctl) {
         this.drive = drive;
@@ -59,8 +58,8 @@ public class PointAtHub extends Command {
     }
 
     /**
-     * @param r robot center
-     * @param g goal pose
+     * @param r     robot center
+     * @param g     goal pose
      * @param theta robot heading
      * @return
      */
@@ -89,7 +88,8 @@ public class PointAtHub extends Command {
 
         // shooter velocity
         double shootFactor = -shooter.data().leader.velocity() / 50;
-        if (RuntimeConstants.kCurrentMode == Mode.SIM) shootFactor = 5.7;
+        if (RuntimeConstants.kCurrentMode == Mode.SIM)
+            shootFactor = 5.7;
 
         // distance to hub
         double bot2hub = botBlue.sub(hub).mag();
@@ -99,21 +99,19 @@ public class PointAtHub extends Command {
         Vec2 offset = velBlue.mul(factor);
         Vec2 aimAt = hub.sub(offset);
 
-        double theta = wantedAngle(botBlue, aimAt, botTheta);
+        double theta = wantedAngle(botBlue, aimAt, botTheta) + ShooterConstants.kAimOffset;
         double rot = ctl.calculate(botTheta.getRadians(), theta);
 
         Vec2 linear = jsd == null ? new Vec2(0, 0) : jsd.linear();
 
         // logging
         Logger.recordOutput(
-            "Drive/PointAtHub/Target",
-            botBlue.wpi(new Rotation2d(theta))
-        );
+                "Drive/PointAtHub/Target",
+                botBlue.wpi(new Rotation2d(theta)));
         Logger.recordOutput("Drive/PointAtHub/Measured", botBlue.wpi(botTheta));
         Logger.recordOutput(
-            "Drive/PointAtHub/HubTarget",
-            aimAt.wpi(new Rotation2d())
-        );
+                "Drive/PointAtHub/HubTarget",
+                aimAt.wpi(new Rotation2d()));
 
         drive.drive(new ChassisSpeeds(linear.x, linear.y, rot));
     }

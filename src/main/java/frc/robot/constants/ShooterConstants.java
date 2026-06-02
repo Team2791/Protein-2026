@@ -46,6 +46,8 @@ public final class ShooterConstants {
         }
     }
 
+    public static final double kAimOffset = Math.toRadians(2.0);
+
     /**
      * Distance-to-velocity regression coefficients for automatic shooter speed
      * control.
@@ -67,7 +69,7 @@ public final class ShooterConstants {
         public static final double kLin = 39.964;
 
         /** Constant (offset) for the distance regression. */
-        public static final double kConst = 168.11; //previous 168.11
+        public static final double kConst = 168.311;
 
         /**
          * Applies the regression to compute the required shooter velocity at a given
