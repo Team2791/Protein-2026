@@ -46,7 +46,7 @@ public final class ShooterConstants {
         }
     }
 
-    public static final double kAimOffset = Math.toRadians(8.0);
+    public static final double kAimOffset = Math.toRadians(-6.0);
 
     /**
      * Distance-to-velocity regression coefficients for automatic shooter speed
