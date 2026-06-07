@@ -25,7 +25,7 @@ public final class ChoreoVars {
     public static final Distance trench_rhs_center = Units.Meters.of(0.634238);
 
     public static final class Poses {
-        public static final Pose2d balls_lhs = new Pose2d(7.772019, 6.8432426, Rotation2d.fromRadians(0));
+        public static final Pose2d balls_lhs = new Pose2d(8.684, 7.418, Rotation2d.fromRadians(0));
         public static final Pose2d balls_rhs = new Pose2d(7.772019, 1.2260326, Rotation2d.fromRadians(3.1415927));
         public static final Pose2d center_lhs = new Pose2d(7.772019, 5.2951126, Rotation2d.fromRadians(0));
         public static final Pose2d center_rhs = new Pose2d(7.772019, 2.7741626, Rotation2d.fromRadians(3.1415927));
