@@ -23,7 +23,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"pos_3.x", "val":3.555619}, "y":{"exp":"pos_3.y", "val":0.634238}, "heading":{"exp":"pos_3.heading", "val":1.5707963267948966}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"balls_rhs.x", "val":7.772019}, "y":{"exp":"balls_rhs.y", "val":1.2260326}, "heading":{"exp":"balls_rhs.heading", "val":3.141592653589793}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"8.405162811279297 m", "val":8.405162811279297}, "y":{"exp":"0.6542797684669495 m", "val":0.6542797684669495}, "heading":{"exp":"balls_rhs.heading", "val":3.141592653589793}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"center_rhs.x", "val":7.772019}, "y":{"exp":"center_rhs.y", "val":2.7741626000000004}, "heading":{"exp":"center_rhs.heading", "val":3.141592653589793}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"shuttle_rhs.x", "val":6.25}, "y":{"exp":"shuttle_rhs.y", "val":2.5}, "heading":{"exp":"shuttle_rhs.heading", "val":3.141592653589793}, "intervals":26, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"trench_score.x", "val":4.2985690000000005}, "y":{"exp":"trench_score.y", "val":0.634238}, "heading":{"exp":"trench_score.heading", "val":1.5707963267948966}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
