@@ -114,7 +114,7 @@ public enum AutoNode {
                 CANCEL,
                 POS2,
                 CENTER_LHS,
-                CENTER_RHS -> Commands.none();
+                CENTER_RHS ->new WaitCommand(1);
         };
     }
 
