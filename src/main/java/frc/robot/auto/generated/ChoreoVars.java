@@ -33,7 +33,7 @@ public final class ChoreoVars {
         public static final Pose2d hub_score = new Pose2d(2.212594, 4.0346376, Rotation2d.fromRadians(0));
         public static final Pose2d outpost = new Pose2d(0.752475, 0.665988, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d outpost_score = new Pose2d(0.94615, 0.869188, Rotation2d.fromRadians(1.5707963));
-        public static final Pose2d pos_1 = new Pose2d(3.555619, 7.435088, Rotation2d.fromRadians(-1.5707963));
+        public static final Pose2d pos_1 = new Pose2d(3.547, 7.418, Rotation2d.fromRadians(-1.5707963));
         public static final Pose2d pos_2 = new Pose2d(3.555619, 4.0346376, Rotation2d.fromRadians(0));
         public static final Pose2d pos_3 = new Pose2d(3.555619, 0.634238, Rotation2d.fromRadians(1.5707963));
         public static final Pose2d shuttle_lhs = new Pose2d(6.25, 5.5, Rotation2d.fromRadians(3.1415927));
