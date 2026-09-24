@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.alerter.Led;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -101,8 +102,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureButtonBindings();
         configureSysId();
+        Led.getInstance().register(() -> true, Led.Mode.rainbow(), Led.Priority.IDLE);
         Rumbler.getInstance().provideControllers(driverctl, operctl);
-
         SmartDashboard.putData("AutoSysId", sysid);
     }
 
